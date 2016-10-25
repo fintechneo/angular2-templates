@@ -8,8 +8,17 @@ The example also shows how to create a single-file, minified bundle for producti
 
 ## Setup
 
-Go into the materials folder if you want an angular2-materials template,
+Go into the materials folder if you want an [angular2-materials](https://material.angular.io/) template,
+
+```
+cd materials
+```
+
 or to the plain folder if you want angular2 without materials.
+
+```
+cd plain
+```
 
 For development remember to run:
 
