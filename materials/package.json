@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "lite": "lite-server",
+    "bundle": "jspm bundle-sfx app/main app-bundle.min.js --minify"
+  },
   "jspm": {
     "dependencies": {
       "@angular/common": "npm:@angular/common@^2.1.0",
@@ -7,12 +11,16 @@
       "@angular/forms": "npm:@angular/forms@^2.1.0",
       "@angular/http": "npm:@angular/http@^2.1.0",
       "@angular/platform-browser": "npm:@angular/platform-browser@^2.1.0",
-      "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynami                                                         c@^2.1.0",
+      "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@^2.1.0",
       "@angular/upgrade": "npm:@angular/upgrade@^2.1.0",
-      "@angular2-material/button": "npm:@angular2-material/button@^2.0.0-alpha.8                                                         -2",
+      "@angular2-material/button": "npm:@angular2-material/button@^2.0.0-alpha.8-2",
+      "@angular2-material/card": "npm:@angular2-material/card@^2.0.0-alpha.8-2",
       "@angular2-material/core": "npm:@angular2-material/core@^2.0.0-alpha.8-2",
       "@angular2-material/icon": "npm:@angular2-material/icon@^2.0.0-alpha.8-2",
-      "@angular2-material/input": "npm:@angular2-material/input@^2.0.0-alpha.8-2                                                         ",
+      "@angular2-material/input": "npm:@angular2-material/input@^2.0.0-alpha.8-2",
+      "@angular2-material/list": "npm:@angular2-material/list@^2.0.0-alpha.8-2",
+      "@angular2-material/sidenav": "npm:@angular2-material/sidenav@^2.0.0-alpha.8-2",
+      "@angular2-material/toolbar": "npm:@angular2-material/toolbar@^2.0.0-alpha.8-2",
       "angular-in-memory-web-api": "npm:angular-in-memory-web-api@^0.1.12",
       "bootstrap": "npm:bootstrap@^3.3.7",
       "core-js": "npm:core-js@^2.4.1",
@@ -26,6 +34,7 @@
     }
   },
   "devDependencies": {
-    "jspm": "^0.16.46"
+    "jspm": "^0.16.46",
+    "lite-server": "^2.2.2"
   }
 }
