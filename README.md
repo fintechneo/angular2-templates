@@ -15,7 +15,7 @@ For development remember to run:
 
 npm install
 
-jspm install
+npm run jspminstall
 
 for installing dependencies.
 
@@ -32,5 +32,7 @@ npm run bundle
 To start a simple web server for testing type:
 
 npm run lite
+
+This will start a webserver at http://localhost:3000
 
 (remember to go to index_dev.html if you're developing)

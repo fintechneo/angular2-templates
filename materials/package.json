@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "jspminstall": "jspm install",
     "lite": "lite-server",
     "bundle": "jspm bundle-sfx app/main app-bundle.min.js --minify"
   },
