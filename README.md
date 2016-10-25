@@ -1,6 +1,6 @@
 #Angular 2 quick start templates
 
-Here are some basic templates for getting angular2 quickly up and running.
+Here are some basic templates for getting [Angular 2](https://angular.io) quickly up and running.
 We've chosen to use [JSPM](http://jspm.io/) for configuring systemjs packages and transpiling,
 which also makes it very easy to add other modules.
 
