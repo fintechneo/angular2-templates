@@ -23,11 +23,11 @@ System.config({
     "@angular/platform-browser": "npm:@angular/platform-browser@2.1.1",
     "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@2.1.1",
     "@angular/upgrade": "npm:@angular/upgrade@2.1.1",
-    "@angular2-material/button": "npm:@angular2-material/button@2.0.0-alpha.8-experimental3",
+    "@angular2-material/button": "npm:@angular2-material/button@2.0.0-alpha.8-2",
     "@angular2-material/card": "npm:@angular2-material/card@2.0.0-alpha.8-2",
-    "@angular2-material/core": "npm:@angular2-material/core@2.0.0-alpha.8-experimental3",
-    "@angular2-material/icon": "npm:@angular2-material/icon@2.0.0-alpha.8-experimental3",
-    "@angular2-material/input": "npm:@angular2-material/input@2.0.0-alpha.8-experimental3",
+    "@angular2-material/core": "npm:@angular2-material/core@2.0.0-alpha.8-2",
+    "@angular2-material/icon": "npm:@angular2-material/icon@2.0.0-alpha.8-2",
+    "@angular2-material/input": "npm:@angular2-material/input@2.0.0-alpha.8-2",
     "@angular2-material/list": "npm:@angular2-material/list@2.0.0-alpha.8-2",
     "@angular2-material/sidenav": "npm:@angular2-material/sidenav@2.0.0-alpha.8-2",
     "@angular2-material/toolbar": "npm:@angular2-material/toolbar@2.0.0-alpha.8-2",
@@ -90,20 +90,10 @@ System.config({
       "rxjs": "npm:rxjs@5.0.0-beta.12",
       "zone.js": "npm:zone.js@0.6.26"
     },
-    "npm:@angular/forms@2.0.0-rc.6": {
-      "@angular/common": "npm:@angular/common@2.1.1",
-      "@angular/core": "npm:@angular/core@2.1.1",
-      "process": "github:jspm/nodelibs-process@0.1.2"
-    },
     "npm:@angular/forms@2.1.1": {
       "@angular/common": "npm:@angular/common@2.1.1",
       "@angular/core": "npm:@angular/core@2.1.1",
       "process": "github:jspm/nodelibs-process@0.1.2"
-    },
-    "npm:@angular/http@2.0.0-rc.6": {
-      "@angular/core": "npm:@angular/core@2.1.1",
-      "@angular/platform-browser": "npm:@angular/platform-browser@2.1.1",
-      "rxjs": "npm:rxjs@5.0.0-beta.11"
     },
     "npm:@angular/http@2.1.1": {
       "@angular/core": "npm:@angular/core@2.1.1",
@@ -127,8 +117,8 @@ System.config({
       "@angular/platform-browser": "npm:@angular/platform-browser@2.1.1",
       "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@2.1.1"
     },
-    "npm:@angular2-material/button@2.0.0-alpha.8-experimental3": {
-      "@angular2-material/core": "npm:@angular2-material/core@2.0.0-alpha.8-experimental3"
+    "npm:@angular2-material/button@2.0.0-alpha.8-2": {
+      "@angular2-material/core": "npm:@angular2-material/core@2.0.0-alpha.8-2"
     },
     "npm:@angular2-material/card@2.0.0-alpha.8-2": {
       "@angular2-material/core": "npm:@angular2-material/core@2.0.0-alpha.8-2"
@@ -137,17 +127,13 @@ System.config({
       "@angular/common": "npm:@angular/common@2.1.1",
       "@angular/core": "npm:@angular/core@2.1.1"
     },
-    "npm:@angular2-material/core@2.0.0-alpha.8-experimental3": {
-      "@angular/common": "npm:@angular/common@2.1.1",
-      "@angular/core": "npm:@angular/core@2.1.1"
+    "npm:@angular2-material/icon@2.0.0-alpha.8-2": {
+      "@angular/http": "npm:@angular/http@2.1.1",
+      "@angular2-material/core": "npm:@angular2-material/core@2.0.0-alpha.8-2"
     },
-    "npm:@angular2-material/icon@2.0.0-alpha.8-experimental3": {
-      "@angular/http": "npm:@angular/http@2.0.0-rc.6",
-      "@angular2-material/core": "npm:@angular2-material/core@2.0.0-alpha.8-experimental3"
-    },
-    "npm:@angular2-material/input@2.0.0-alpha.8-experimental3": {
-      "@angular/forms": "npm:@angular/forms@2.0.0-rc.6",
-      "@angular2-material/core": "npm:@angular2-material/core@2.0.0-alpha.8-experimental3"
+    "npm:@angular2-material/input@2.0.0-alpha.8-2": {
+      "@angular/forms": "npm:@angular/forms@2.1.1",
+      "@angular2-material/core": "npm:@angular2-material/core@2.0.0-alpha.8-2"
     },
     "npm:@angular2-material/list@2.0.0-alpha.8-2": {
       "@angular2-material/core": "npm:@angular2-material/core@2.0.0-alpha.8-2"
@@ -383,11 +369,6 @@ System.config({
     "npm:ripemd160@1.0.1": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.2"
-    },
-    "npm:rxjs@5.0.0-beta.11": {
-      "buffer": "github:jspm/nodelibs-buffer@0.1.0",
-      "process": "github:jspm/nodelibs-process@0.1.2",
-      "symbol-observable": "npm:symbol-observable@1.0.4"
     },
     "npm:rxjs@5.0.0-beta.12": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
