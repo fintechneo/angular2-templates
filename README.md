@@ -4,7 +4,7 @@ Here are some basic templates for getting angular2 quickly up and running.
 We've chosen to use [JSPM](http://jspm.io/) for configuring systemjs packages and transpiling,
 which also makes it very easy to add other modules.
 
-The example also shows how to create a single-file, minified bundle for production use. 
+The example also shows how to create a single-file, minified bundle for production use.
 
 ## Setup
 
@@ -14,6 +14,7 @@ or to the plain folder if you want angular2 without materials.
 For development remember to run:
 
 npm install
+
 jspm install
 
 for installing dependencies.
