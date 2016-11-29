@@ -2,12 +2,14 @@
   "scripts": {
     "jspminstall": "jspm install",
     "lite": "lite-server",
-    "bundle": "jspm bundle-sfx app/main app-bundle.min.js --minify"
+    "bundle-jspm": "jspm bundle-sfx appjs/app/main app-bundle.min.js --minify",
+    "bundle-aot": "ngc && rollup -c rollup-config.js"
   },
   "jspm": {
     "dependencies": {
       "@angular/common": "npm:@angular/common@^2.1.0",
       "@angular/compiler": "npm:@angular/compiler@^2.1.0",
+      "@angular/compiler-cli": "npm:@angular/compiler-cli@^2.2.3",
       "@angular/core": "npm:@angular/core@^2.1.0",
       "@angular/forms": "npm:@angular/forms@^2.1.0",
       "@angular/http": "npm:@angular/http@^2.1.0",
@@ -18,16 +20,35 @@
       "bootstrap": "npm:bootstrap@^3.3.7",
       "core-js": "npm:core-js@^2.4.1",
       "es6-shim": "github:es-shims/es6-shim@^0.35.1",
+      "minimist": "npm:minimist@^1.2.0",
       "reflect-metadata": "npm:reflect-metadata@^0.1.8",
       "rxjs": "npm:rxjs@5.0.0-beta.12",
       "zone.js": "npm:zone.js@^0.6.26"
     },
     "devDependencies": {
-      "typescript": "npm:typescript@^1.6.2"
+      "typescript": "npm:typescript@2.0.10"
     }
   },
   "devDependencies": {
     "jspm": "^0.16.46",
-    "lite-server": "^2.2.2"
+    "lite-server": "^2.2.2",
+    "@angular/compiler-cli": "^2.2.3",
+    "rollup": "^0.36.4",
+    "rollup-plugin-commonjs": "^5.0.5",
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-uglify": "^1.0.1",
+    "reflect-metadata": "^0.1.8",
+    "typescript": "^2.0.10"
+  },
+  "dependencies": {
+    "@angular/common": "^2.2.3",
+    "@angular/compiler": "^2.2.3",
+    "@angular/core": "^2.2.3",
+    "@angular/forms": "^2.2.3",
+    "@angular/http": "^2.2.3",
+    "@angular/platform-browser": "^2.2.3",
+    "@angular/platform-browser-dynamic": "^2.2.3",
+    "rxjs": "5.0.0-beta.12",
+    "zone.js": "^0.6.26"
   }
 }

@@ -1,4 +1,7 @@
 plain/node_modules
 plain/jspm_packages
+plain/aot/
+plain/appjs/
+plain/dist/
 materials/node_modules
 materials/jspm_packages

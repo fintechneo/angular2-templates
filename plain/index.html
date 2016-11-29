@@ -3,9 +3,12 @@
     <title>Fintech Neo - Angular2 templates</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-  </head>
-  <body>
-    <my-app>Loading...</my-app>
-    <script src="app-bundle.min.js"></script>
+    <script src="zone.min.js"></script>
+      <script>window.module = 'aot';</script>
+    </head>
+    <body>
+      <my-app>Loading...</my-app>
+    </body>
+    <script src="dist/build.js"></script>
   </body>
 </html>
