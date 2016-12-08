@@ -23,11 +23,12 @@ import {Component} from '@angular/core';
 
         <span> Fintech Neo - Angular2 materials template</span>
       </md-toolbar>
-      <md-card>
-        Basic card.
-      </md-card>
+      <accountOverview></accountOverview>
+      <accountChart></accountChart>
+      
     </md-sidenav-layout>`
 })
 export class AppComponent {
 
 }
+
