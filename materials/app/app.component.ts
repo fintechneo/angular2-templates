@@ -8,11 +8,15 @@ import {Component} from '@angular/core';
         <md-nav-list>
             <a md-list-item (click)="sidebar.close()">
                 <md-icon md-list-icon>assignment</md-icon>
-                <span md-line>Menu item 1</span>
+                <span md-line>Month report</span>
             </a>
             <a md-list-item (click)="sidebar.close()">
                 <md-icon md-list-icon>assignment</md-icon>
-                <span md-line>Menu item 2</span>
+                <span md-line>Annual report</span>
+            </a>
+             <a md-list-item (click)="sidebar.close()">
+                <md-icon md-list-icon>assignment</md-icon>
+                <span md-line>Tax report</span>
             </a>
         </md-nav-list>
       </md-sidenav>
