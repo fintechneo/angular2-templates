@@ -25,14 +25,16 @@ import { Component,Input,ViewChild,AfterViewInit,ChangeDetectorRef } from '@angu
         
 
         <g class="labels x-labels">
-            <text text-anchor="middle" [attr.x]="p[0]" [attr.y]="getChartBoxBottom()+15" *ngFor="let p of getScaledDataPoints()">{{p[4]}}</text>        
+            <text text-anchor="middle" [attr.x]="p[0]" [attr.y]="getChartBoxBottom()+20" *ngFor="let p of getChartXLabels()">
+                {{p[2]}}
+            </text>        
         </g>
         <g class="labels y-labels">
         <text alignment-baseline="middle" x="10" [attr.y]="yl[1]" *ngFor="let yl of getChartYLabels()">{{yl[0]}}</text>        
         </g>
         <g class="data" data-setname="Our first data set">
         <template ngFor let-p [ngForOf]="getScaledDataPoints()">
-            <circle [attr.cx]="p[0]" [attr.cy]="p[1]" [attr.data-value]="p[1]" r="4"></circle>
+            <circle [attr.cx]="p[0]" [attr.cy]="p[1]" [attr.data-value]="p[1]" r="2"></circle>
             <line *ngIf="p[2] && p[3]" 
             [attr.x1]="p[2]" 
             [attr.y1]="p[3]"
@@ -40,7 +42,7 @@ import { Component,Input,ViewChild,AfterViewInit,ChangeDetectorRef } from '@angu
             [attr.y2]="p[1]" 
             fill="none"
             stroke="#0074d9"
-            stroke-width="3"></line>
+            stroke-width="1"></line>
             </template>
         </g>
     </svg>
@@ -77,7 +79,7 @@ export class SVGLineChartComponent implements AfterViewInit {
     }
 
     public getChartBoxRight() {
-        return this.svgElm.nativeElement.scrollWidth-10;
+        return this.svgElm.nativeElement.scrollWidth-40;
     }
     
     public getChartBoxTop() {
@@ -105,9 +107,18 @@ export class SVGLineChartComponent implements AfterViewInit {
         return this.datapoints.reduce((prev,curr) => curr[1]>prev ? curr[1] : prev,this.datapoints[0][1])
     }
 
-    public getChartXLabels() {
+    public getChartXLabels() : any[] {
+        let minx = this.getDataMinX();
+        let width = this.getDataWidth();
+        let viewLeft = this.getChartBoxLeft();
+        let viewWidth = this.getChartBoxRight()-viewLeft;
 
-    } 
+        return this.datapoints.reduce((prev,d) =>
+            prev.length>0 && viewLeft+((d[0]-minx)*viewWidth/width)-prev[prev.length-1][0] < 100 ? prev : 
+                prev.concat([[viewLeft+((d[0]-minx)*viewWidth/width),d[0],new Date(d[0]).toJSON().substr(0,"yyyy-MM".length)]])
+            ,
+            []);
+    }
 
     public getChartYLabels() : any[] {
         let miny = this.getDataMinY();
@@ -122,7 +133,7 @@ export class SVGLineChartComponent implements AfterViewInit {
             step/=2;
         }    
         let ret : any[] = [];
-        for(let y = miny;y<maxy;y+=step) {
+        for(let y = (1+Math.floor(miny/step))*step;y<maxy;y+=step) {
             ret.push([y,chartBottom-((y-miny)*viewHeight/dataheight)]);
         }
         return ret;
