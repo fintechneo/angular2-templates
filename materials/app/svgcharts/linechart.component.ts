@@ -28,11 +28,7 @@ import { Component,Input,ViewChild,AfterViewInit,ChangeDetectorRef } from '@angu
             <text text-anchor="middle" [attr.x]="p[0]" [attr.y]="getChartBoxBottom()+15" *ngFor="let p of getScaledDataPoints()">{{p[4]}}</text>        
         </g>
         <g class="labels y-labels">
-        <text x="80" y="15">15</text>
-        <text x="80" y="131">10</text>
-        <text x="80" y="248">5</text>
-        <text x="80" y="373">0</text>
-        <text x="50" y="200" class="label-title">Price</text>
+        <text alignment-baseline="middle" x="10" [attr.y]="yl[1]" *ngFor="let yl of getChartYLabels()">{{yl[0]}}</text>        
         </g>
         <g class="data" data-setname="Our first data set">
         <template ngFor let-p [ngForOf]="getScaledDataPoints()">
@@ -101,21 +97,44 @@ export class SVGLineChartComponent implements AfterViewInit {
                     -this.datapoints[0][0];
     }
 
+    public getDataMinY() : number {
+        return this.datapoints.reduce((prev,curr) => curr[1]<prev ? curr[1] : prev,this.datapoints[0][1])
+    }
+
+    public getDataMaxY() : number {
+        return this.datapoints.reduce((prev,curr) => curr[1]>prev ? curr[1] : prev,this.datapoints[0][1])
+    }
+
     public getChartXLabels() {
 
     } 
 
-    public getChartYLabels() {
-
+    public getChartYLabels() : any[] {
+        let miny = this.getDataMinY();
+        let maxy = this.getDataMaxY();
+        let dataheight = maxy-miny;
+        let chartBottom = this.getChartBoxBottom();
+        let viewHeight = chartBottom-this.getChartBoxTop();
+        let maxYlabels = viewHeight / 20; // Min 20 pixels between y labels
+        let step = dataheight/maxYlabels;
+        step = Math.pow(10.0, 1+Math.floor(Math.log(step)/Math.log(10.0)));
+        if(dataheight/step<maxYlabels/2) {
+            step/=2;
+        }    
+        let ret : any[] = [];
+        for(let y = miny;y<maxy;y+=step) {
+            ret.push([y,chartBottom-((y-miny)*viewHeight/dataheight)]);
+        }
+        return ret;
     }
-    
+
     public getScaledDataPoints() : any[] {
         let minx = this.getDataMinX();
         let width = this.getDataWidth();
         let viewLeft = this.getChartBoxLeft();
         let viewWidth = this.getChartBoxRight()-viewLeft;
-        let miny = this.datapoints.reduce((prev,curr) => curr[1]<prev ? curr[1] : prev,this.datapoints[0][1]);
-        let maxy = this.datapoints.reduce((prev,curr) => curr[1]>prev ? curr[1] : prev,this.datapoints[0][1]);
+        let miny = this.getDataMinY();
+        let maxy = this.getDataMaxY();
         let dataheight = maxy-miny;
         let chartBottom = this.getChartBoxBottom();
         let viewHeight = chartBottom-this.getChartBoxTop();
