@@ -1,4 +1,7 @@
 import { Component,Input,ViewChild,AfterViewInit,ChangeDetectorRef } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Subscriber } from 'rxjs/Subscriber';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
     selector: "svg-linechart",
@@ -6,6 +9,7 @@ import { Component,Input,ViewChild,AfterViewInit,ChangeDetectorRef } from '@angu
     <div style="width: 100%; height: 100%; border: red solid 1px">
     <svg #svgelement [attr.viewBox]="getViewbox()" preserveAspectRatio="none">                
         
+        <!-- Y axis line -->
         <line 
             [attr.x1]="getChartBoxLeft()" 
             [attr.x2]="getChartBoxLeft()"
@@ -14,6 +18,7 @@ import { Component,Input,ViewChild,AfterViewInit,ChangeDetectorRef } from '@angu
             stroke="#000"
             stroke-width="1"></line>
                 
+        <!-- X axis line -->
         <line   
             [attr.x1]="getChartBoxLeft()" 
             [attr.x2]="getChartBoxRight()"
@@ -23,6 +28,37 @@ import { Component,Input,ViewChild,AfterViewInit,ChangeDetectorRef } from '@angu
             stroke-width="1"
             ></line>
         
+        <!-- X axis navigator line -->
+
+        <line   
+            [attr.x1]="getChartBoxLeft()" 
+            [attr.x2]="getChartBoxRight()"
+            [attr.y1]="getChartHorizNavY()"            
+            [attr.y2]="getChartHorizNavY()" 
+            stroke="#000"
+            stroke-width="1"
+            ></line>
+
+        
+        <circle [attr.cx]="getChartHorizNavLeft()" [attr.cy]="getChartHorizNavY()" 
+            r="15" 
+            stroke="#000"
+            stroke-width="1"
+            fill-opacity="0"
+            (mousedown)="dragHorizNavLeft()"
+            >
+        </circle>
+
+        <circle [attr.cx]="getChartHorizNavRight()" [attr.cy]="getChartHorizNavY()" 
+            r="15" 
+            stroke="#000"
+            stroke-width="1"
+            fill-opacity="0"
+            (mousedown)="dragHorizNavRight()"
+            >
+        </circle>
+        
+        <!-- X axis labels -->
 
         <g class="labels x-labels">
             <text text-anchor="middle" [attr.x]="p[0]" [attr.y]="getChartBoxBottom()+20" *ngFor="let p of getChartXLabels()">
@@ -49,7 +85,9 @@ import { Component,Input,ViewChild,AfterViewInit,ChangeDetectorRef } from '@angu
     </div>`
 })
 export class SVGLineChartComponent implements AfterViewInit {
-    @Input() datapoints : any[] = [];
+    _datapoints : any[] = [];
+    mouseMoveSubject : Subject<any> = new Subject();
+    mouseUpSubject : Subject<any> = new Subject();
 
     @ViewChild("svgelement") svgElm : any;
    
@@ -57,10 +95,35 @@ export class SVGLineChartComponent implements AfterViewInit {
 
    }
 
+
    ngAfterViewInit() {
-       window.addEventListener("resize",() => {           
-           this.ref.detectChanges();
-       });
+       window.addEventListener("resize",() =>            
+           this.ref.detectChanges()
+       );
+       new Observable<any>((observer : Subscriber) =>
+            window.addEventListener("mousemove",(evt) =>
+                observer.next(evt)
+       )).subscribe(this.mouseMoveSubject);
+       
+       new Observable<any>((observer : Subscriber) =>
+            window.addEventListener("mouseup",(evt) =>
+                observer.next(evt)
+       )).subscribe(this.mouseUpSubject);
+   }
+
+   @Input() 
+   public set datapoints(datapoints : any[]) {
+       if(!this.horizNavLeft) {
+           this.horizNavLeft = datapoints[0][0];
+       }
+       if(!this.horizNavRight) {
+           this.horizNavRight = datapoints[datapoints.length-1][0];
+       }
+       this._datapoints = datapoints;
+   }
+
+   public get datapoints() : any[] {
+       return this._datapoints;
    }
 
     public getNativeElement() {
@@ -74,6 +137,75 @@ export class SVGLineChartComponent implements AfterViewInit {
         return "0 0 "+this.svgElm.nativeElement.scrollWidth+" "+this.svgElm.nativeElement.scrollHeight;
     }
 
+    // ----------- X axis navigator functions
+
+    public horizNavLeft : number;
+    public horizNavRight : number;
+        
+    public getChartHorizNavY() : number {
+        return this.svgElm.nativeElement.scrollHeight-30;
+    }
+
+    public getChartHorizNavLeft() : number {
+        let minx = this.getDataMinX();
+        let width = this.getDataWidth();
+        let viewLeft = this.getChartBoxLeft();
+        let viewWidth = this.getChartBoxRight()-viewLeft;
+        return viewLeft+((this.horizNavLeft-minx)*viewWidth/width)
+    }
+
+    public getChartHorizNavRight() : number {
+        let minx = this.getDataMinX();
+        let width = this.getDataWidth();
+        let viewLeft = this.getChartBoxLeft();
+        let viewWidth = this.getChartBoxRight()-viewLeft;
+        return viewLeft+((this.horizNavRight-minx)*viewWidth/width)
+    }
+
+    public dragHorizNavLeft() {
+        let minx = this.getDataMinX();
+        let width = this.getDataWidth();
+        let viewLeft = this.getChartBoxLeft();
+        let viewWidth = this.getChartBoxRight()-viewLeft;
+        let svgLeft = this.svgElm.nativeElement.getBoundingClientRect().left;
+
+        let movesubscription = this.mouseMoveSubject
+            .map((evt : any) => minx+((evt.clientX-
+                viewLeft-
+                svgLeft)/viewWidth)*this.getDataWidth())
+            .filter((d : number) => d<this.horizNavRight)
+            .filter((d : number) => d>=minx)
+            .subscribe((d : number) => this.horizNavLeft = d);
+
+        let upsubscription = this.mouseUpSubject.subscribe((evt : any) => {
+            movesubscription.unsubscribe();
+            upsubscription.unsubscribe();
+        });
+    }
+
+    public dragHorizNavRight() {
+        let minx = this.getDataMinX();
+        let width = this.getDataWidth();
+        let viewLeft = this.getChartBoxLeft();
+        let viewWidth = this.getChartBoxRight()-viewLeft;
+        let svgLeft = this.svgElm.nativeElement.getBoundingClientRect().left;
+
+        let movesubscription = this.mouseMoveSubject
+            .map((evt : any) => 
+                minx+((evt.clientX-
+                viewLeft-
+                svgLeft)/viewWidth)*this.getDataWidth()
+            )
+            .filter((d : number) => d<=minx+width)
+            .filter((d : number) => d>this.horizNavLeft)
+            .subscribe((d : number) => this.horizNavRight = d);
+        let upsubscription = this.mouseUpSubject.subscribe((evt : any) => {
+            movesubscription.unsubscribe();
+            upsubscription.unsubscribe();
+        });
+    }
+
+    // ------------ Chart box functions
     public getChartBoxLeft() {
         return 50;
     }
@@ -87,8 +219,9 @@ export class SVGLineChartComponent implements AfterViewInit {
     }
 
     public getChartBoxBottom() {
-        return this.svgElm.nativeElement.scrollHeight-40;
+        return this.getChartHorizNavY()-50;
     }
+
 
     public getDataMinX() : number {
         return this.datapoints[0][0];
@@ -140,8 +273,8 @@ export class SVGLineChartComponent implements AfterViewInit {
     }
 
     public getScaledDataPoints() : any[] {
-        let minx = this.getDataMinX();
-        let width = this.getDataWidth();
+        let minx = this.horizNavLeft;
+        let width = this.horizNavRight-minx;
         let viewLeft = this.getChartBoxLeft();
         let viewWidth = this.getChartBoxRight()-viewLeft;
         let miny = this.getDataMinY();
@@ -150,15 +283,18 @@ export class SVGLineChartComponent implements AfterViewInit {
         let chartBottom = this.getChartBoxBottom();
         let viewHeight = chartBottom-this.getChartBoxTop();
         
-        return this.datapoints.map((d,ndx,arr) => 
-            [
-            viewLeft+((d[0]-minx)*viewWidth/width), // scaled x
-            chartBottom-((d[1]-miny)*viewHeight/dataheight), // scaled y
-            ndx>0 ? viewLeft+((arr[ndx-1][0]-minx)*viewWidth/width) : null, // scaled x previous (for lines)
-            ndx>0 ? chartBottom-((arr[ndx-1][1]-miny)*viewHeight/dataheight) : null, // scaled y previous (for lines)
-            d[0], // original x
-            d[1] // original y
-            ]             
+        return this.datapoints
+            .filter((d)=>d[0]>=minx)
+            .filter((d)=>d[0]<=this.horizNavRight)
+            .map((d,ndx,arr) => 
+                [
+                viewLeft+((d[0]-minx)*viewWidth/width), // scaled x
+                chartBottom-((d[1]-miny)*viewHeight/dataheight), // scaled y
+                ndx>0 ? viewLeft+((arr[ndx-1][0]-minx)*viewWidth/width) : null, // scaled x previous (for lines)
+                ndx>0 ? chartBottom-((arr[ndx-1][1]-miny)*viewHeight/dataheight) : null, // scaled y previous (for lines)
+                d[0], // original x
+                d[1] // original y
+                ]             
         );
     }
     

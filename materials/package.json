@@ -24,7 +24,6 @@
   },
   "devDependencies": {
     "jspm": "^0.16.46",
-    "lite-server": "^2.2.2",
-    "@angular/core": ""
+    "lite-server": "^2.2.2"
   }
 }
