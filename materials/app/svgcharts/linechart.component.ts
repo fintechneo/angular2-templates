@@ -62,6 +62,7 @@ import { Subject } from 'rxjs/Subject';
             stroke-width="1"
             fill="#fff"
             (mousedown)="dragHorizNavLeft()"
+            (touchstart)="dragHorizNavLeft()"
             class="dragHandle"
             >
         </circle>
@@ -72,6 +73,7 @@ import { Subject } from 'rxjs/Subject';
             stroke-width="1"
             fill="#fff"
             (mousedown)="dragHorizNavRight()"
+            (touchend)="dragHorizNavLeft()"
             class="dragHandle"
             >
         </circle>
@@ -121,14 +123,26 @@ export class SVGLineChartComponent implements AfterViewInit {
            this.ref.detectChanges()
        );
        new Observable<any>((observer : Subscriber) =>
-            window.addEventListener("mousemove",(evt) =>
-                observer.next(evt)
-       )).subscribe(this.mouseMoveSubject);
+        {
+            window.addEventListener("mousemove",(evt : any) =>
+                observer.next({clientX: evt.clientX,clientY: evt.clientY})
+            );
+            window.addEventListener("touchmove",(evt : any) =>
+                observer.next(
+                    {clientX: evt.targetTouches[0].clientX,
+                    clientY: evt.targetTouches[0].clientY
+                        })
+            );
+        }
+       ).subscribe(this.mouseMoveSubject);
        
-       new Observable<any>((observer : Subscriber) =>
+       new Observable<any>((observer : Subscriber) => {
             window.addEventListener("mouseup",(evt) =>
-                observer.next(evt)
-       )).subscribe(this.mouseUpSubject);       
+                observer.next(evt));
+            window.addEventListener("touchend",(evt) =>
+                observer.next(evt));
+        }
+       ).subscribe(this.mouseUpSubject);       
    }
 
    @Input() 
