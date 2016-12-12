@@ -73,7 +73,7 @@ import { Subject } from 'rxjs/Subject';
             stroke-width="1"
             fill="#fff"
             (mousedown)="dragHorizNavRight()"
-            (touchend)="dragHorizNavLeft()"
+            (touchstart)="dragHorizNavRight()"
             class="dragHandle"
             >
         </circle>
