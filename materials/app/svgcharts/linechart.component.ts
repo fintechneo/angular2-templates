@@ -6,13 +6,29 @@ import { Subject } from 'rxjs/Subject';
 @Component({
     selector: "svg-linechart",
     template: `
-    <div style="width: 100%; height: 100%; border: red solid 1px">
+    <style>
+        svg text {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            cursor: default;
+        }
+        svg text::selection {
+            background: none;
+        }
+        .dragHandle:hover {
+            fill: #ff0;
+            cursor: pointer;
+        } 
+    </style>
+    <div style="width: 100%; height: 100%;">
     <svg #svgelement [attr.viewBox]="getViewbox()" preserveAspectRatio="none">                
         
         <!-- Y axis line -->
         <line 
-            [attr.x1]="getChartBoxLeft()" 
-            [attr.x2]="getChartBoxLeft()"
+            [attr.x1]="chartBoxLeft" 
+            [attr.x2]="chartBoxLeft"
             [attr.y1]="getChartBoxTop()"            
             [attr.y2]="getChartBoxBottom()" 
             stroke="#000"
@@ -20,7 +36,7 @@ import { Subject } from 'rxjs/Subject';
                 
         <!-- X axis line -->
         <line   
-            [attr.x1]="getChartBoxLeft()" 
+            [attr.x1]="chartBoxLeft" 
             [attr.x2]="getChartBoxRight()"
             [attr.y1]="getChartBoxBottom()"            
             [attr.y2]="getChartBoxBottom()" 
@@ -31,7 +47,7 @@ import { Subject } from 'rxjs/Subject';
         <!-- X axis navigator line -->
 
         <line   
-            [attr.x1]="getChartBoxLeft()" 
+            [attr.x1]="chartBoxLeft" 
             [attr.x2]="getChartBoxRight()"
             [attr.y1]="getChartHorizNavY()"            
             [attr.y2]="getChartHorizNavY()" 
@@ -44,8 +60,9 @@ import { Subject } from 'rxjs/Subject';
             r="15" 
             stroke="#000"
             stroke-width="1"
-            fill-opacity="0"
+            fill="#fff"
             (mousedown)="dragHorizNavLeft()"
+            class="dragHandle"
             >
         </circle>
 
@@ -53,8 +70,9 @@ import { Subject } from 'rxjs/Subject';
             r="15" 
             stroke="#000"
             stroke-width="1"
-            fill-opacity="0"
+            fill="#fff"
             (mousedown)="dragHorizNavRight()"
+            class="dragHandle"
             >
         </circle>
         
@@ -88,13 +106,15 @@ export class SVGLineChartComponent implements AfterViewInit {
     _datapoints : any[] = [];
     mouseMoveSubject : Subject<any> = new Subject();
     mouseUpSubject : Subject<any> = new Subject();
+    viewChangeSubject : Subject<any> = new Subject();
+
+    public chartBoxLeft : number = 50;
 
     @ViewChild("svgelement") svgElm : any;
    
    constructor(private ref: ChangeDetectorRef) {
 
    }
-
 
    ngAfterViewInit() {
        window.addEventListener("resize",() =>            
@@ -108,7 +128,7 @@ export class SVGLineChartComponent implements AfterViewInit {
        new Observable<any>((observer : Subscriber) =>
             window.addEventListener("mouseup",(evt) =>
                 observer.next(evt)
-       )).subscribe(this.mouseUpSubject);
+       )).subscribe(this.mouseUpSubject);       
    }
 
    @Input() 
@@ -134,7 +154,9 @@ export class SVGLineChartComponent implements AfterViewInit {
      * Get viewbox based on element width / height
      */
     public getViewbox() : string {    
-        return "0 0 "+this.svgElm.nativeElement.scrollWidth+" "+this.svgElm.nativeElement.scrollHeight;
+        return "0 0 "+
+            this.svgElm.nativeElement.scrollWidth+" "+
+            this.svgElm.nativeElement.scrollHeight;
     }
 
     // ----------- X axis navigator functions
@@ -149,7 +171,7 @@ export class SVGLineChartComponent implements AfterViewInit {
     public getChartHorizNavLeft() : number {
         let minx = this.getDataMinX();
         let width = this.getDataWidth();
-        let viewLeft = this.getChartBoxLeft();
+        let viewLeft = this.chartBoxLeft;
         let viewWidth = this.getChartBoxRight()-viewLeft;
         return viewLeft+((this.horizNavLeft-minx)*viewWidth/width)
     }
@@ -157,7 +179,7 @@ export class SVGLineChartComponent implements AfterViewInit {
     public getChartHorizNavRight() : number {
         let minx = this.getDataMinX();
         let width = this.getDataWidth();
-        let viewLeft = this.getChartBoxLeft();
+        let viewLeft = this.chartBoxLeft;
         let viewWidth = this.getChartBoxRight()-viewLeft;
         return viewLeft+((this.horizNavRight-minx)*viewWidth/width)
     }
@@ -165,7 +187,7 @@ export class SVGLineChartComponent implements AfterViewInit {
     public dragHorizNavLeft() {
         let minx = this.getDataMinX();
         let width = this.getDataWidth();
-        let viewLeft = this.getChartBoxLeft();
+        let viewLeft = this.chartBoxLeft;
         let viewWidth = this.getChartBoxRight()-viewLeft;
         let svgLeft = this.svgElm.nativeElement.getBoundingClientRect().left;
 
@@ -186,7 +208,7 @@ export class SVGLineChartComponent implements AfterViewInit {
     public dragHorizNavRight() {
         let minx = this.getDataMinX();
         let width = this.getDataWidth();
-        let viewLeft = this.getChartBoxLeft();
+        let viewLeft = this.chartBoxLeft;
         let viewWidth = this.getChartBoxRight()-viewLeft;
         let svgLeft = this.svgElm.nativeElement.getBoundingClientRect().left;
 
@@ -206,9 +228,7 @@ export class SVGLineChartComponent implements AfterViewInit {
     }
 
     // ------------ Chart box functions
-    public getChartBoxLeft() {
-        return 50;
-    }
+
 
     public getChartBoxRight() {
         return this.svgElm.nativeElement.scrollWidth-40;
@@ -233,24 +253,38 @@ export class SVGLineChartComponent implements AfterViewInit {
     }
 
     public getDataMinY() : number {
-        return this.datapoints.reduce((prev,curr) => curr[1]<prev ? curr[1] : prev,this.datapoints[0][1])
+        return this.datapoints
+            .filter((d : any)=>d[0]>=this.horizNavLeft)
+            .filter((d : any)=>d[0]<=this.horizNavRight)
+            .reduce((prev,curr) => curr[1]<prev ? curr[1] : prev,this.datapoints[0][1])
     }
 
     public getDataMaxY() : number {
-        return this.datapoints.reduce((prev,curr) => curr[1]>prev ? curr[1] : prev,this.datapoints[0][1])
+        return this.datapoints
+            .filter((d : any)=>d[0]>=this.horizNavLeft)
+            .filter((d : any)=>d[0]<=this.horizNavRight)
+            .reduce((prev,curr) => curr[1]>prev ? curr[1] : prev,this.datapoints[0][1])
     }
 
     public getChartXLabels() : any[] {
-        let minx = this.getDataMinX();
-        let width = this.getDataWidth();
-        let viewLeft = this.getChartBoxLeft();
+        let minx = this.horizNavLeft;
+        let width = this.horizNavRight-minx;
+        let viewLeft = this.chartBoxLeft;
         let viewWidth = this.getChartBoxRight()-viewLeft;
 
-        return this.datapoints.reduce((prev,d) =>
-            prev.length>0 && viewLeft+((d[0]-minx)*viewWidth/width)-prev[prev.length-1][0] < 100 ? prev : 
-                prev.concat([[viewLeft+((d[0]-minx)*viewWidth/width),d[0],new Date(d[0]).toJSON().substr(0,"yyyy-MM".length)]])
-            ,
-            []);
+        return this.datapoints
+            .filter((d : any)=>d[0]>=this.horizNavLeft)
+            .filter((d : any)=>d[0]<=this.horizNavRight)
+            .reduce((prev : Array<any>,d : any) =>
+                    prev.length>0 && viewLeft+
+                    ((d[0]-minx)*viewWidth/width)
+                    -prev[prev.length-1][0] < 100 ? 
+                        prev : 
+                        prev.concat(
+                            [[viewLeft+((d[0]-minx)*viewWidth/width),d[0],
+                            new Date(d[0]).toJSON().substr(0,"yyyy-MM".length)]]
+                    )
+                ,[]);
     }
 
     public getChartYLabels() : any[] {
@@ -275,7 +309,7 @@ export class SVGLineChartComponent implements AfterViewInit {
     public getScaledDataPoints() : any[] {
         let minx = this.horizNavLeft;
         let width = this.horizNavRight-minx;
-        let viewLeft = this.getChartBoxLeft();
+        let viewLeft = this.chartBoxLeft;
         let viewWidth = this.getChartBoxRight()-viewLeft;
         let miny = this.getDataMinY();
         let maxy = this.getDataMaxY();
@@ -284,7 +318,7 @@ export class SVGLineChartComponent implements AfterViewInit {
         let viewHeight = chartBottom-this.getChartBoxTop();
         
         return this.datapoints
-            .filter((d)=>d[0]>=minx)
+            .filter((d)=>d[0]>=this.horizNavLeft)
             .filter((d)=>d[0]<=this.horizNavRight)
             .map((d,ndx,arr) => 
                 [
