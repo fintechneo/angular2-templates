@@ -20,7 +20,7 @@ import {Component} from '@angular/core';
             </a>
         </md-nav-list>
       </md-sidenav>
-      <md-toolbar [color]="myColor">
+      <md-toolbar>
         <button md-icon-button (click)="sidebar.open()">
           <md-icon>toc</md-icon>
         </button>

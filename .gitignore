@@ -5,4 +5,7 @@ plain/appjs
 plain/dist
 materials/node_modules
 materials/jspm_packages
+materials/aot
+materials/appjs
+materials/dist
 materials/npm-debug.log

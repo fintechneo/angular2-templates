@@ -12,7 +12,8 @@
     "suppressImplicitAnyIndexErrors": true
   },
 
-  "files": [    
+  "files": [
+    "app/app.module.ts",    
     "app/main.ts",
     "app/main_aot.ts"
   ],

@@ -23,7 +23,30 @@
     }
   },
   "devDependencies": {
-    "jspm": "^0.16.46",
-    "lite-server": "^2.2.2"
+    "@angular/compiler-cli": "^2.2.3",
+    "express": "^4.14.0",
+    "jspm": "^0.16.48",
+    "reflect-metadata": "^0.1.8",
+    "rollup": "^0.36.4",
+    "rollup-plugin-commonjs": "^5.0.5",
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-uglify": "^1.0.1",
+    "typescript": "2.0.10",
+    "lite-server": ""
+  },
+  "dependencies": {
+    "@angular/common": "^2.2.3",
+    "@angular/compiler": "^2.2.3",
+    "@angular/core": "^2.2.3",
+    "@angular/forms": "^2.2.3",
+    "@angular/http": "^2.2.4",
+    "@angular/material": "^2.0.0-alpha.10",
+    "@angular/platform-browser": "^2.2.3",
+    "@angular/platform-browser-dynamic": "^2.2.3",
+    "@angular/platform-server": "^2.3.0",
+    "@angular/router": "^3.2.4",
+    "@types/hammerjs": "",
+    "rxjs": "5.0.0-rc.4",
+    "zone.js": "^0.7.2"
   }
 }

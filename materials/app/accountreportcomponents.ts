@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 
 @Component({    
     selector: 'accountOverview',
-    styleUrls: ["app/accountreportcomponents.css"],
+    styleUrls: ["accountreportcomponents.css"],
     template: `
         <md-card>
         <md-card-header>
@@ -39,7 +39,7 @@ export class AccountOverviewComponent {
 
 @Component({    
     selector: 'accountChart',
-    styleUrls: ["app/accountreportcomponents.css"],
+    styleUrls: ["accountreportcomponents.css"],
     template: `
       <md-card>
         <md-card-header>
