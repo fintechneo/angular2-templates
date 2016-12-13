@@ -124,23 +124,27 @@ export class SVGLineChartComponent implements AfterViewInit {
        );
        new Observable<any>((observer : Subscriber<any>) =>
         {
-            window.addEventListener("mousemove",(evt : any) =>
+            this.svgElm.nativeElement.addEventListener("mousemove",(evt : any) =>                
                 observer.next({clientX: evt.clientX,clientY: evt.clientY})
             );
-            window.addEventListener("touchmove",(evt : any) =>
-                observer.next(
+            this.svgElm.nativeElement.addEventListener("touchmove",(evt : any) => {
+                evt.preventDefault();
+                return observer.next(
                     {clientX: evt.targetTouches[0].clientX,
                     clientY: evt.targetTouches[0].clientY
                         })
+                }
             );
         }
        ).subscribe(this.mouseMoveSubject);
        
        new Observable<any>((observer : Subscriber<any>) => {
-            window.addEventListener("mouseup",(evt) =>
+            this.svgElm.nativeElement.addEventListener("mouseup",(evt : any) => 
                 observer.next(evt));
-            window.addEventListener("touchend",(evt) =>
-                observer.next(evt));
+            this.svgElm.nativeElement.addEventListener("touchend",(evt : any) => {
+                evt.preventDefault();
+                return observer.next(evt);
+            });
         }
        ).subscribe(this.mouseUpSubject);       
    }
@@ -178,6 +182,16 @@ export class SVGLineChartComponent implements AfterViewInit {
     public horizNavLeft : number;
     public horizNavRight : number;
         
+    public getFirstVisibleValue() : number {
+        return this.datapoints
+            .find((d : any)=>d[0]>=this.horizNavLeft)[1];            
+    }
+
+    public getLastVisibleValue() : number {
+        return this.datapoints            
+            .find((d : any)=>d[0]>=this.horizNavRight)[1];         
+    }
+
     public getChartHorizNavY() : number {
         return this.svgElm.nativeElement.scrollHeight-30;
     }
@@ -206,11 +220,11 @@ export class SVGLineChartComponent implements AfterViewInit {
         let svgLeft = this.svgElm.nativeElement.getBoundingClientRect().left;
 
         let movesubscription = this.mouseMoveSubject
-            .map((evt : any) => minx+((evt.clientX-
-                viewLeft-
-                svgLeft)/viewWidth)*this.getDataWidth())
-            .filter((d : number) => d<this.horizNavRight)
-            .filter((d : number) => d>=minx)
+            .map((evt) => evt.clientX-svgLeft)
+            .filter((clientx) => clientx<this.getChartHorizNavRight()-30)
+            .map((clientx : number) => minx+((clientx-
+                viewLeft
+                )/viewWidth)*this.getDataWidth())            
             .subscribe((d : number) => this.horizNavLeft = d);
 
         let upsubscription = this.mouseUpSubject.subscribe((evt : any) => {
@@ -227,13 +241,15 @@ export class SVGLineChartComponent implements AfterViewInit {
         let svgLeft = this.svgElm.nativeElement.getBoundingClientRect().left;
 
         let movesubscription = this.mouseMoveSubject
-            .map((evt : any) => 
-                minx+((evt.clientX-
-                viewLeft-
-                svgLeft)/viewWidth)*this.getDataWidth()
-            )
-            .filter((d : number) => d<=minx+width)
-            .filter((d : number) => d>this.horizNavLeft)
+            .map((evt) => evt.clientX-svgLeft)
+            .filter((clientx) => 
+                    clientx>this.getChartHorizNavLeft()+30
+                    )
+            .map((clientx : number) => 
+                minx+((clientx-
+                viewLeft
+                )/viewWidth)*this.getDataWidth()
+            )           
             .subscribe((d : number) => this.horizNavRight = d);
         let upsubscription = this.mouseUpSubject.subscribe((evt : any) => {
             movesubscription.unsubscribe();

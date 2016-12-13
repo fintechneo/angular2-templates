@@ -25,10 +25,9 @@ import {Component} from '@angular/core';
           <md-icon>toc</md-icon>
         </button>
 
-        <span> Fintech Neo - Angular2 materials template</span>
+        <span>Results report</span>
       </md-toolbar>
       <accountOverview></accountOverview>
-      <accountChart></accountChart>
       
     </md-sidenav-layout>`
 })

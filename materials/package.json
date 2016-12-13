@@ -1,7 +1,8 @@
 {
   "scripts": {
     "jspminstall": "jspm install",
-    "lite": "lite-server",
+    "devserver": "node devserver.js",
+    "dist": "ngc -p tsconfig.json && rollup -c rollup-config.js",
     "bundle": "jspm bundle-sfx app/main app-bundle.min.js --minify"
   },
   "jspm": {
@@ -31,8 +32,7 @@
     "rollup-plugin-commonjs": "^5.0.5",
     "rollup-plugin-node-resolve": "^2.0.0",
     "rollup-plugin-uglify": "^1.0.1",
-    "typescript": "2.0.10",
-    "lite-server": ""
+    "typescript": "2.0.10"
   },
   "dependencies": {
     "@angular/common": "^2.2.3",

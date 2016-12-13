@@ -1,7 +1,0 @@
-.flextable {
-    display: flex;    
-    flex-wrap: wrap;
-}
-.flextable div {
-    padding: 20px;
-}

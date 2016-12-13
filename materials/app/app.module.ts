@@ -6,14 +6,14 @@ import { FormsModule } from '@angular/forms';
 import {MaterialModule} from '@angular/material';
 
 import { AppComponent }   from './app.component';
-import { AccountOverviewComponent,AccountChartComponent } from './accountreportcomponents';
+import { AccountOverviewComponent } from './accountreportcomponents';
 import { SVGLineChartComponent } from './svgcharts/linechart.component';
 
 @NgModule({
   imports:      [ BrowserModule,HttpModule,JsonpModule,FormsModule,
     MaterialModule.forRoot()    
   ],
-  declarations: [ AppComponent,AccountOverviewComponent,AccountChartComponent,SVGLineChartComponent ],
+  declarations: [ AppComponent,AccountOverviewComponent,SVGLineChartComponent ],
   providers: [],
   bootstrap:    [ AppComponent ]
 })
