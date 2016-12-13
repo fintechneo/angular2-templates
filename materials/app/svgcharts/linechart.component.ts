@@ -119,9 +119,9 @@ export class SVGLineChartComponent implements AfterViewInit {
    }
 
    ngAfterViewInit() {
-       window.addEventListener("resize",() =>            
+       /*window.addEventListener("resize",() =>            
            this.ref.detectChanges()
-       );
+       );*/
        new Observable<any>((observer : Subscriber<any>) =>
         {
             this.svgElm.nativeElement.addEventListener("mousemove",(evt : any) =>                
@@ -189,7 +189,9 @@ export class SVGLineChartComponent implements AfterViewInit {
 
     public getLastVisibleValue() : number {
         return this.datapoints            
-            .find((d : any)=>d[0]>=this.horizNavRight)[1];         
+            .reduceRight((prev : any, d : any)=>
+                !prev && d[0]<=this.horizNavRight ? d : prev 
+                ,null)[1];         
     }
 
     public getChartHorizNavY() : number {
@@ -220,11 +222,10 @@ export class SVGLineChartComponent implements AfterViewInit {
         let svgLeft = this.svgElm.nativeElement.getBoundingClientRect().left;
 
         let movesubscription = this.mouseMoveSubject
-            .map((evt) => evt.clientX-svgLeft)
-            .filter((clientx) => clientx<this.getChartHorizNavRight()-30)
-            .map((clientx : number) => minx+((clientx-
-                viewLeft
-                )/viewWidth)*this.getDataWidth())            
+            .map((evt) => evt.clientX-svgLeft-viewLeft)
+            .filter((clientx) => clientx>=0)  
+            .filter((clientx) => clientx+viewLeft<this.getChartHorizNavRight()-30)                      
+            .map((clientx : number) => minx+((clientx)/viewWidth)*this.getDataWidth())            
             .subscribe((d : number) => this.horizNavLeft = d);
 
         let upsubscription = this.mouseUpSubject.subscribe((evt : any) => {
@@ -241,13 +242,13 @@ export class SVGLineChartComponent implements AfterViewInit {
         let svgLeft = this.svgElm.nativeElement.getBoundingClientRect().left;
 
         let movesubscription = this.mouseMoveSubject
-            .map((evt) => evt.clientX-svgLeft)
+            .map((evt) => evt.clientX-svgLeft-viewLeft)
+            .filter((clientx) => clientx<=viewWidth)
             .filter((clientx) => 
-                    clientx>this.getChartHorizNavLeft()+30
+                    clientx+viewLeft>this.getChartHorizNavLeft()+30
                     )
             .map((clientx : number) => 
-                minx+((clientx-
-                viewLeft
+                minx+((clientx
                 )/viewWidth)*this.getDataWidth()
             )           
             .subscribe((d : number) => this.horizNavRight = d);
@@ -350,7 +351,14 @@ export class SVGLineChartComponent implements AfterViewInit {
         return this.datapoints
             .filter((d)=>d[0]>=this.horizNavLeft)
             .filter((d)=>d[0]<=this.horizNavRight)
-            .map((d,ndx,arr) => 
+            .reduce((prev : Array<any>,curr : any) =>
+                    prev.length>0 && 
+                    ((curr[0]-minx)*viewWidth/width)
+                    -((prev[prev.length-1][0]-minx)*viewWidth/width) < 10 ? 
+                        prev : 
+                        prev.concat([curr])
+                    ,[])
+            .map((d : any,ndx : number,arr : any) => 
                 [
                 viewLeft+((d[0]-minx)*viewWidth/width), // scaled x
                 chartBottom-((d[1]-miny)*viewHeight/dataheight), // scaled y
