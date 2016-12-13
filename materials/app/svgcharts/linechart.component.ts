@@ -122,7 +122,7 @@ export class SVGLineChartComponent implements AfterViewInit {
        window.addEventListener("resize",() =>            
            this.ref.detectChanges()
        );
-       new Observable<any>((observer : Subscriber) =>
+       new Observable<any>((observer : Subscriber<any>) =>
         {
             window.addEventListener("mousemove",(evt : any) =>
                 observer.next({clientX: evt.clientX,clientY: evt.clientY})
@@ -136,7 +136,7 @@ export class SVGLineChartComponent implements AfterViewInit {
         }
        ).subscribe(this.mouseMoveSubject);
        
-       new Observable<any>((observer : Subscriber) => {
+       new Observable<any>((observer : Subscriber<any>) => {
             window.addEventListener("mouseup",(evt) =>
                 observer.next(evt));
             window.addEventListener("touchend",(evt) =>
