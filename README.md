@@ -33,10 +33,15 @@ Use index_dev.html for development
 
 ## Production bundle creation
 
-To build a production bundle (app-bundle.min.js) for running in index.html type:
+The production bundle is created using Ahead Of Time compilation ( https://angular.io/docs/ts/latest/cookbook/aot-compiler.html ).
+This way we don't need to include the angular compiler at runtime, neither does the templates need to be compiled
+as they are translated to javascript instructions that generates the page programatically. This is one of the reasons Angular 2 
+is both faster and lighter than many alternative frameworks (and also faster and lighter than not using any framework at all).
+
+To build a production bundle (aot-build.min.js) for running in index.html type:
 
 ```
-npm run bundle
+npm run dist
 ```
 
 ## Test environment
