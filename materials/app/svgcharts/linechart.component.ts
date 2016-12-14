@@ -119,9 +119,9 @@ export class SVGLineChartComponent implements AfterViewInit {
    }
 
    ngAfterViewInit() {
-       /*window.addEventListener("resize",() =>            
+       window.addEventListener("resize",() =>            
            this.ref.detectChanges()
-       );*/
+       );
        new Observable<any>((observer : Subscriber<any>) =>
         {
             this.svgElm.nativeElement.addEventListener("mousemove",(evt : any) =>                
