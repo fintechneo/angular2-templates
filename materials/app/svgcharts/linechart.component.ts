@@ -18,12 +18,14 @@ import { Subject } from 'rxjs/Subject';
             background: none;
         }
         .dragHandle:hover {
-            fill: #ff0;
+            fill: #0050a7;
             cursor: pointer;
         } 
     </style>
-    <div style="width: 100%; height: 100%;">
-    <svg #svgelement [attr.viewBox]="getViewbox()" preserveAspectRatio="none">                
+    
+    <svg #svgelement [attr.viewBox]="getViewbox()"  
+            preserveAspectRatio="none" 
+            style="width: 100%; height: 265px;">                
         
         <!-- Y axis line -->
         <line 
@@ -102,7 +104,7 @@ import { Subject } from 'rxjs/Subject';
             </template>
         </g>
     </svg>
-    </div>`
+    `
 })
 export class SVGLineChartComponent implements AfterViewInit {
     _datapoints : any[] = [];
@@ -195,7 +197,7 @@ export class SVGLineChartComponent implements AfterViewInit {
     }
 
     public getChartHorizNavY() : number {
-        return this.svgElm.nativeElement.scrollHeight-30;
+        return this.svgElm.nativeElement.scrollHeight-20;
     }
 
     public getChartHorizNavLeft() : number {
@@ -270,7 +272,7 @@ export class SVGLineChartComponent implements AfterViewInit {
     }
 
     public getChartBoxBottom() {
-        return this.getChartHorizNavY()-50;
+        return this.getChartHorizNavY()-60;
     }
 
 

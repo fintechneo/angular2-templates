@@ -11,35 +11,33 @@ import {SVGLineChartComponent} from './svgcharts/linechart.component';
           }
           .flextable div {
             padding: 10px;
+            text-align: right;
+            width: 70px;
           }
         </style>
 
-        <md-card>             
+        <md-card style="max-height: 100px;">             
         <md-card-content>
             <div class="flextable">
               <div>
-                <h3>From</h3>
-                {{linechart.horizNavLeft | date:'yyyy-MM'}}
+                <h3>Start</h3>
+                <p>{{linechart.horizNavLeft | date:'MMM yyyy'}}</p>
+                <p>{{linechart.getFirstVisibleValue() | number:'1.2-2'}}</p>
               </div>
               <div>
-                <h3>To</h3>
-                {{linechart.horizNavRight | date:'yyyy-MM'}}
-              </div>
-              <div>
-                <h3>Ingoing value</h3>
-                {{linechart.getFirstVisibleValue() | number:'1.0-0'}}
-              </div>
-              <div>
-                <h3>Outgoing value</h3>
-                {{linechart.getLastVisibleValue() | number:'1.0-0'}}
-              </div>
+                <h3>End</h3>
+                <p>{{linechart.horizNavRight | date:'MMM yyyy'}}</p>
+                <p>{{linechart.getLastVisibleValue() | number:'1.2-2'}}</p>
+              </div>                            
               <div>
                 <h3>Returns</h3>
-                {{
+                <p style="color: #fff">-</p>
+                <p>{{
                   (
                     (linechart.getLastVisibleValue()/
                     linechart.getFirstVisibleValue()) -1.0
                   )*100 | number:'1.0-2'}} %
+                </p>
               </div>
             </div>
         </md-card-content>
@@ -47,12 +45,11 @@ import {SVGLineChartComponent} from './svgcharts/linechart.component';
        <md-card>
         <md-card-header>
             <md-icon md-card-avatar>chart</md-icon>
-            <md-card-title>Chart</md-card-title>
+            <md-card-title><span style="color: #fff">Chart</span></md-card-title>
             <md-card-subtitle>Returns</md-card-subtitle>
         </md-card-header>        
         <md-card-content>
-           <svg-linechart #linechart [datapoints]="datapoints" 
-            >
+           <svg-linechart #linechart [datapoints]="datapoints">
            </svg-linechart>
         </md-card-content>        
       </md-card>

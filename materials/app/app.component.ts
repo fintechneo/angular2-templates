@@ -11,7 +11,7 @@ import {Component} from '@angular/core';
         <md-nav-list>
             <a md-list-item (click)="sidebar.close()">
                 <md-icon md-list-icon>assignment</md-icon>
-                <span md-line>Month report</span>
+                <span md-line>Monthly report</span>
             </a>
             <a md-list-item (click)="sidebar.close()">
                 <md-icon md-list-icon>assignment</md-icon>
