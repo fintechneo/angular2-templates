@@ -1,4 +1,4 @@
-import { Component,Input,ViewChild,AfterViewInit,ChangeDetectorRef } from '@angular/core';
+import { Component,Input,ViewChild,OnInit,AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscriber } from 'rxjs/Subscriber';
 import { Subject } from 'rxjs/Subject';
@@ -24,8 +24,9 @@ import { Subject } from 'rxjs/Subject';
     </style>
     
     <svg #svgelement [attr.viewBox]="getViewbox()"  
-            preserveAspectRatio="none" 
-            style="width: 100%; height: 265px;">                
+            preserveAspectRatio="none"
+            style="width: 100%; height: 100%"          
+            >                
         
         <!-- Y axis line -->
         <line 
@@ -63,8 +64,8 @@ import { Subject } from 'rxjs/Subject';
             stroke="#000"
             stroke-width="1"
             fill="#fff"
-            (mousedown)="dragHorizNavLeft()"
-            (touchstart)="dragHorizNavLeft()"
+            (mousedown)="dragHorizNavLeft($event)"
+            (touchstart)="dragHorizNavLeft($event)"
             class="dragHandle"
             >
         </circle>
@@ -74,8 +75,8 @@ import { Subject } from 'rxjs/Subject';
             stroke="#000"
             stroke-width="1"
             fill="#fff"
-            (mousedown)="dragHorizNavRight()"
-            (touchstart)="dragHorizNavRight()"
+            (mousedown)="dragHorizNavRight($event)"
+            (touchstart)="dragHorizNavRight($event)"
             class="dragHandle"
             >
         </circle>
@@ -106,46 +107,68 @@ import { Subject } from 'rxjs/Subject';
     </svg>
     `
 })
-export class SVGLineChartComponent implements AfterViewInit {
+export class SVGLineChartComponent implements AfterViewInit,OnInit {
     _datapoints : any[] = [];
     mouseMoveSubject : Subject<any> = new Subject();
     mouseUpSubject : Subject<any> = new Subject();
     viewChangeSubject : Subject<any> = new Subject();
 
     public chartBoxLeft : number = 50;
+    public svgLeft : number;
+
+    width : number;
+    height : number;
 
     @ViewChild("svgelement") svgElm : any;
    
-   constructor(private ref: ChangeDetectorRef) {
+   constructor() {
 
    }
 
+   public recalculateBounds() {
+       let bounds : any = this.svgElm.nativeElement.getBoundingClientRect();
+       this.width = bounds.width;
+       this.height = bounds.height;
+       this.svgLeft = bounds.left;
+   }
+
+   ngOnInit() {
+       this.recalculateBounds();       
+   }
+
    ngAfterViewInit() {
-       window.addEventListener("resize",() =>            
-           this.ref.detectChanges()
-       );
+       new Observable<any>((observer : Subscriber<any>) =>
+        window.addEventListener("resize",() =>            
+           observer.next()
+        )
+       ).subscribe(() => this.recalculateBounds());
+
        new Observable<any>((observer : Subscriber<any>) =>
         {
-            this.svgElm.nativeElement.addEventListener("mousemove",(evt : any) =>                
-                observer.next({clientX: evt.clientX,clientY: evt.clientY})
+            this.svgElm.nativeElement.addEventListener("mousemove",(evt : any) =>  {  
+                    evt.preventDefault();                           
+                    observer.next({clientX: evt.clientX,clientY: evt.clientY});                    
+                }
             );
             this.svgElm.nativeElement.addEventListener("touchmove",(evt : any) => {
-                evt.preventDefault();
-                return observer.next(
-                    {clientX: evt.targetTouches[0].clientX,
-                    clientY: evt.targetTouches[0].clientY
-                        })
+                    evt.preventDefault();
+                    observer.next(
+                        {clientX: evt.targetTouches[0].clientX,
+                        clientY: evt.targetTouches[0].clientY
+                            });
                 }
             );
         }
        ).subscribe(this.mouseMoveSubject);
        
        new Observable<any>((observer : Subscriber<any>) => {
-            this.svgElm.nativeElement.addEventListener("mouseup",(evt : any) => 
-                observer.next(evt));
+            this.svgElm.nativeElement.addEventListener("mouseup",(evt : any) => {
+                evt.preventDefault();
+                observer.next(evt);
+            });
             this.svgElm.nativeElement.addEventListener("touchend",(evt : any) => {
                 evt.preventDefault();
-                return observer.next(evt);
+                observer.next(evt);
             });
         }
        ).subscribe(this.mouseUpSubject);       
@@ -165,18 +188,14 @@ export class SVGLineChartComponent implements AfterViewInit {
    public get datapoints() : any[] {
        return this._datapoints;
    }
-
-    public getNativeElement() {
-        return this.svgElm.nativeElement;
-    }
-
+   
     /** 
      * Get viewbox based on element width / height
      */
-    public getViewbox() : string {    
+    public getViewbox() : string {           
         return "0 0 "+
-            this.svgElm.nativeElement.scrollWidth+" "+
-            this.svgElm.nativeElement.scrollHeight;
+            this.width+" "+
+            this.height;
     }
 
     // ----------- X axis navigator functions
@@ -197,7 +216,7 @@ export class SVGLineChartComponent implements AfterViewInit {
     }
 
     public getChartHorizNavY() : number {
-        return this.svgElm.nativeElement.scrollHeight-20;
+        return this.height-20;
     }
 
     public getChartHorizNavLeft() : number {
@@ -216,15 +235,16 @@ export class SVGLineChartComponent implements AfterViewInit {
         return viewLeft+((this.horizNavRight-minx)*viewWidth/width)
     }
 
-    public dragHorizNavLeft() {
+    public dragHorizNavLeft(evt : Event) {
+        evt.preventDefault();
         let minx = this.getDataMinX();
         let width = this.getDataWidth();
         let viewLeft = this.chartBoxLeft;
         let viewWidth = this.getChartBoxRight()-viewLeft;
-        let svgLeft = this.svgElm.nativeElement.getBoundingClientRect().left;
+        
 
         let movesubscription = this.mouseMoveSubject
-            .map((evt) => evt.clientX-svgLeft-viewLeft)
+            .map((evt) => evt.clientX-this.svgLeft-viewLeft)
             .filter((clientx) => clientx>=0)  
             .filter((clientx) => clientx+viewLeft<this.getChartHorizNavRight()-30)                      
             .map((clientx : number) => minx+((clientx)/viewWidth)*this.getDataWidth())            
@@ -236,15 +256,15 @@ export class SVGLineChartComponent implements AfterViewInit {
         });
     }
 
-    public dragHorizNavRight() {
+    public dragHorizNavRight(evt : Event) {
+        evt.preventDefault();
         let minx = this.getDataMinX();
         let width = this.getDataWidth();
         let viewLeft = this.chartBoxLeft;
-        let viewWidth = this.getChartBoxRight()-viewLeft;
-        let svgLeft = this.svgElm.nativeElement.getBoundingClientRect().left;
+        let viewWidth = this.getChartBoxRight()-viewLeft;        
 
         let movesubscription = this.mouseMoveSubject
-            .map((evt) => evt.clientX-svgLeft-viewLeft)
+            .map((evt) => evt.clientX-this.svgLeft-viewLeft)
             .filter((clientx) => clientx<=viewWidth)
             .filter((clientx) => 
                     clientx+viewLeft>this.getChartHorizNavLeft()+30
@@ -256,7 +276,7 @@ export class SVGLineChartComponent implements AfterViewInit {
             .subscribe((d : number) => this.horizNavRight = d);
         let upsubscription = this.mouseUpSubject.subscribe((evt : any) => {
             movesubscription.unsubscribe();
-            upsubscription.unsubscribe();
+            upsubscription.unsubscribe();            
         });
     }
 
@@ -264,7 +284,7 @@ export class SVGLineChartComponent implements AfterViewInit {
 
 
     public getChartBoxRight() {
-        return this.svgElm.nativeElement.scrollWidth-40;
+        return this.width-40;
     }
     
     public getChartBoxTop() {

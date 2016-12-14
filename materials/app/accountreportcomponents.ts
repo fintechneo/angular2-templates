@@ -49,8 +49,10 @@ import {SVGLineChartComponent} from './svgcharts/linechart.component';
             <md-card-subtitle>Returns</md-card-subtitle>
         </md-card-header>        
         <md-card-content>
-           <svg-linechart #linechart [datapoints]="datapoints">
-           </svg-linechart>
+          <div style="width: 100%; height: 265px">
+            <svg-linechart #linechart [datapoints]="datapoints">
+            </svg-linechart>
+          </div>
         </md-card-content>        
       </md-card>
     `
