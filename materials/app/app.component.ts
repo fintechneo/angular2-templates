@@ -5,7 +5,7 @@ import {Component} from '@angular/core';
   template: `
     <md-sidenav-layout fullscreen>
       <md-sidenav #sidebar>
-        <p style="padding-top: 10px; padding-left: 20px">
+        <p style="padding: 10px;">
           <img src="companylogo.png" style="height: 40px; width: auto" alt="companylogo" />
         </p>
         <md-nav-list>
@@ -25,7 +25,7 @@ import {Component} from '@angular/core';
       </md-sidenav>
       <md-toolbar>
         <button md-icon-button (click)="sidebar.open()">
-          <img src="companyicon.png" style="width: 40px; height: 40px" alt="company" />
+          <img src="companyicon.png" style="width: 36px; height: 36px" alt="company" />
         </button>
 
         <span style="margin-left: 20px">Results report</span>

@@ -1,23 +1,18 @@
 #Angular 2 quick start templates
 
-Here are some basic templates for getting [Angular 2](https://angular.io) quickly up and running.
-We've chosen to use [JSPM](http://jspm.io/) for configuring systemjs packages and transpiling,
-which also makes it very easy to add other modules.
+Here's a simple example [Angular 2](https://angular.io) application with [angular2-materials](https://material.angular.io/).
+We've chosen to use [JSPM](http://jspm.io/) for development setup since transpiling in the browser is convenient when developing,
+and JSPM is straightforward to configure.
 
-The example also shows how to create a single-file, minified bundle for production use.
+The example also shows how to create an [Ahead Of Time](https://angular.io/docs/ts/latest/cookbook/aot-compiler.html) production bundle,
+that ensures fast loading in production.
 
 ## Setup
 
-Go into the materials folder if you want an [angular2-materials](https://material.angular.io/) template,
+Go into the materials folder:
 
 ```
 cd materials
-```
-
-or to the plain folder if you want angular2 without materials.
-
-```
-cd plain
 ```
 
 For development remember to run:
@@ -49,7 +44,7 @@ npm run dist
 To start a simple web server for testing type:
 
 ```
-npm run lite
+npm run devserver
 ```
 
 This will start a webserver at http://localhost:3000
