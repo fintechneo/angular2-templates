@@ -2,51 +2,49 @@
   "scripts": {
     "jspminstall": "jspm install",
     "devserver": "node devserver.js",
-    "dist": "ngc -p tsconfig.json && rollup -c rollup-config.js",
-    "bundle": "jspm bundle-sfx app/main app-bundle.min.js --minify"
+    "dist": "ngc -p tsconfig.json && rollup -c rollup-config.js"
   },
   "jspm": {
     "dependencies": {
-      "@angular/common": "npm:@angular/common@^2.3.0",
-      "@angular/core": "npm:@angular/core@^2.3.0",
-      "@angular/forms": "npm:@angular/forms@^2.3.0",
-      "@angular/http": "npm:@angular/http@^2.3.0",
-      "@angular/material": "npm:@angular/material@2.0.0-alpha.11-3",
-      "@angular/platform-browser": "npm:@angular/platform-browser@^2.3.0",
-      "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@^2.3.0",
-      "@angular/upgrade": "npm:@angular/upgrade@^2.3.0",
-      "reflect-metadata": "npm:reflect-metadata@^0.1.8",
-      "rxjs": "npm:rxjs@5.0.0-rc.4",
-      "zone.js": "npm:zone.js@^0.7.2"
+      "@angular/common": "npm:@angular/common",
+      "@angular/core": "npm:@angular/core",
+      "@angular/forms": "npm:@angular/forms",
+      "@angular/http": "npm:@angular/http",
+      "@angular/material": "npm:@angular/material",
+      "@angular/platform-browser": "npm:@angular/platform-browser",
+      "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic",
+      "reflect-metadata": "npm:reflect-metadata",
+      "rxjs": "npm:rxjs",
+      "zone.js": "npm:zone.js"
     },
     "devDependencies": {
-      "typescript": "npm:typescript@^2.0.10"
+      "typescript": "npm:typescript"
     }
   },
   "devDependencies": {
-    "@angular/compiler-cli": "^2.2.3",
+    "@angular/compiler-cli": "",
     "express": "^4.14.0",
+    "compression": "^1.6.2",
     "jspm": "^0.16.48",
     "reflect-metadata": "^0.1.8",
     "rollup": "^0.36.4",
     "rollup-plugin-commonjs": "^5.0.5",
     "rollup-plugin-node-resolve": "^2.0.0",
     "rollup-plugin-uglify": "^1.0.1",
-    "typescript": "2.0.10"
+    "typescript": ""
   },
   "dependencies": {
-    "@angular/common": "^2.2.3",
-    "@angular/compiler": "^2.2.3",
-    "@angular/core": "^2.2.3",
-    "@angular/forms": "^2.2.3",
-    "@angular/http": "^2.2.4",
-    "@angular/material": "^2.0.0-alpha.10",
-    "@angular/platform-browser": "^2.2.3",
-    "@angular/platform-browser-dynamic": "^2.2.3",
-    "@angular/platform-server": "^2.3.0",
-    "@angular/router": "^3.2.4",
+    "@angular/common": "",
+    "@angular/compiler": "",
+    "@angular/core": "",
+    "@angular/forms": "",
+    "@angular/http": "",
+    "@angular/material": "",
+    "@angular/platform-browser": "",
+    "@angular/platform-browser-dynamic": "",
+    "@angular/router": "",
     "@types/hammerjs": "",
-    "rxjs": "5.0.0-rc.4",
-    "zone.js": "^0.7.2"
+    "rxjs": "",
+    "zone.js": ""
   }
 }
