@@ -11,7 +11,7 @@ import { SVGLineChartComponent } from './svgcharts/linechart.component';
 
 @NgModule({
   imports:      [ BrowserModule,HttpModule,JsonpModule,FormsModule,
-    MaterialModule.forRoot()    
+    MaterialModule
   ],
   declarations: [ AppComponent,AccountOverviewComponent,SVGLineChartComponent ],
   providers: [],

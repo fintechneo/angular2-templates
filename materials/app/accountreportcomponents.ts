@@ -22,20 +22,20 @@ import {SVGLineChartComponent} from './svgcharts/linechart.component';
               <div>
                 <h3>Start</h3>
                 <p>{{linechart.horizNavLeft | date:'MMM yyyy'}}</p>
-                <p>{{linechart.getFirstVisibleValue() | number:'1.2-2'}}</p>
+                <p>{{linechart.firstVisibleValue | number:'1.2-2'}}</p>
               </div>
               <div>
                 <h3>End</h3>
                 <p>{{linechart.horizNavRight | date:'MMM yyyy'}}</p>
-                <p>{{linechart.getLastVisibleValue() | number:'1.2-2'}}</p>
+                <p>{{linechart.lastVisibleValue| number:'1.2-2'}}</p>
               </div>                            
               <div>
                 <h3>Returns</h3>
                 <p style="color: #fff">-</p>
                 <p>{{
                   (
-                    (linechart.getLastVisibleValue()/
-                    linechart.getFirstVisibleValue()) -1.0
+                    (linechart.lastVisibleValue/
+                    linechart.firstVisibleValue) -1.0
                   )*100 | number:'1.0-2'}} %
                 </p>
               </div>
@@ -46,11 +46,11 @@ import {SVGLineChartComponent} from './svgcharts/linechart.component';
         <md-card-header>
             <md-icon md-card-avatar>chart</md-icon>
             <md-card-title><span style="color: #fff">Chart</span></md-card-title>
-            <md-card-subtitle>Returns</md-card-subtitle>
+            <md-card-subtitle>Equity</md-card-subtitle>
         </md-card-header>        
         <md-card-content>
           <div style="width: 100%; height: 265px">
-            <svg-linechart #linechart [datapoints]="datapoints">
+            <svg-linechart #linechart [datapoints]="datapoints" mode="standard">
             </svg-linechart>
           </div>
         </md-card-content>        

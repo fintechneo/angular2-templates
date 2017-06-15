@@ -1,0 +1,148 @@
+<style>
+    svg text {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        cursor: default;
+    }
+    svg text::selection {
+        background: none;
+    }
+    .dragHandle:hover {
+        fill: #0050a7;
+        cursor: pointer;
+    } 
+</style>
+
+<svg #svgelement [attr.viewBox]="viewBox"  
+        preserveAspectRatio="none"
+        style="width: 100%; height: 100%"  
+        (mousemove)="handleHover($event)"  
+        (mouseout)="hoverX=null"      
+        >                
+    
+    <!-- Y axis line -->
+    <line 
+        [attr.x1]="chartBoxLeft" 
+        [attr.x2]="chartBoxLeft"
+        [attr.y1]="chartBoxTop"            
+        [attr.y2]="getChartBoxBottom()" 
+        stroke="#000"
+        stroke-width="1"></line>
+
+    <!-- Zero point line -->     
+    <line   
+        [attr.x1]="chartBoxLeft" 
+        [attr.x2]="chartBoxRight"
+        [attr.y1]="zeropointcharty"            
+        [attr.y2]="zeropointcharty" 
+        stroke="#C5CAE9"
+        stroke-width="1"
+        ></line>
+
+
+    <!-- X axis line -->
+    <line   
+        [attr.x1]="chartBoxLeft" 
+        [attr.x2]="chartBoxRight"
+        [attr.y1]="getChartBoxBottom()"            
+        [attr.y2]="getChartBoxBottom()" 
+        stroke="#000"
+        stroke-width="1"
+        ></line>
+    
+    <!-- X axis navigator line -->
+
+    <line   
+        [attr.x1]="chartBoxLeft" 
+        [attr.x2]="chartBoxRight"
+        [attr.y1]="getChartHorizNavY()"            
+        [attr.y2]="getChartHorizNavY()" 
+        stroke="#000"
+        stroke-width="1"
+        ></line>
+
+    
+    <circle [attr.cx]="getChartHorizNavLeft()" [attr.cy]="getChartHorizNavY()" 
+        r="15" 
+        stroke="#000"
+        stroke-width="1"
+        fill="#fff"
+        (mousedown)="dragHorizNavLeft($event)"
+        (touchstart)="dragHorizNavLeft($event)"
+        class="dragHandle"
+        >
+    </circle>
+
+    <circle [attr.cx]="getChartHorizNavRight()" [attr.cy]="getChartHorizNavY()" 
+        r="15" 
+        stroke="#000"
+        stroke-width="1"
+        fill="#fff"
+        (mousedown)="dragHorizNavRight($event)"
+        (touchstart)="dragHorizNavRight($event)"
+        class="dragHandle"
+        >
+    </circle>
+    
+    <!-- X axis labels -->
+
+    <g class="labels x-labels">
+        <text text-anchor="middle" [attr.x]="p[0]" [attr.y]="getChartBoxBottom()+20" *ngFor="let p of chartXLabels">
+            {{p[2]}}
+        </text>        
+    </g>
+    <g class="labels y-labels">
+    <text [attr.fill]="yl[1]<zeropointcharty ? '#4CAF50' : '#F44336'" alignment-baseline="middle" x="10" [attr.y]="yl[1]" *ngFor="let yl of chartYLabels">
+        {{yl[0] | number:'1.2-2'}}
+    </text>        
+    </g>
+    <g class="data" data-setname="Our first data set">
+    <ng-template ngFor let-p [ngForOf]="scaledDataPoints">
+        <circle [attr.cx]="p[0]" [attr.cy]="p[1]" [attr.data-value]="p[1]" r="2"></circle>
+        <line *ngIf="p[2] && p[3]" 
+        [attr.x1]="p[2]" 
+        [attr.y1]="p[3]"
+        [attr.x2]="p[0]"  
+        [attr.y2]="p[1]" 
+        fill="none"
+        [attr.stroke]="p[1]<zeropointcharty ? '#43A047' : '#E53935'"
+        stroke-width="1"></line>
+        <circle *ngIf="hoverX && p===hoverPt" [attr.cx]="p[0]" [attr.cy]="p[1]" [attr.data-value]="p[1]" r="6"></circle>
+        </ng-template>
+    </g>
+
+     <!-- Hover line and text -->
+
+    <g *ngIf="hoverX && hoverX>=chartBoxLeft && hoverX<=chartBoxRight">
+        <line 
+            [attr.x1]="hoverX" 
+            [attr.x2]="hoverX"
+            [attr.y1]="chartBoxTop"            
+            [attr.y2]="getChartBoxBottom()" 
+            stroke="rgba(0,0,100,0.5)"
+            stroke-width="1"></line>
+        <g [attr.transform]="'translate('+hoverX+','+hoverTextY+')'">            
+            <rect [attr.fill]="hoverYvalue>zeropoint ? '#43A047' : '#E53935'" rx="3" ry="3" 
+                x="-75" y="0" 
+                width="150" height="25">
+            </rect>
+            <text style="font-size: 15px" text-anchor="middle" y="18" fill="white"
+                >
+                {{hoverYvalue-zeropoint | number:'1.2-2'}}
+            </text>        
+        </g>
+        <g [attr.transform]="'translate('+hoverX+','+(getChartBoxBottom()+7)+')'">            
+            <rect fill="#FFC107" rx="3" ry="3" 
+                x="-75" y="-5" 
+                width="150" height="25">
+            </rect>
+            <text style="font-size: 15px" text-anchor="middle" y="12" fill="black"
+                >
+                {{hoverXvalue | date:'yyyy-MM-dd'}}
+            </text>        
+        </g>
+    </g>
+   
+</svg>

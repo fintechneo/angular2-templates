@@ -3,7 +3,7 @@ import {Component} from '@angular/core';
 @Component({
   selector: 'my-app',
   template: `
-    <md-sidenav-layout fullscreen>
+    <md-sidenav-container fullscreen>
       <md-sidenav #sidebar>
         <p style="padding: 10px;">
           <img src="companylogo.png" style="height: 40px; width: auto" alt="companylogo" />
@@ -32,7 +32,7 @@ import {Component} from '@angular/core';
       </md-toolbar>
       <accountOverview></accountOverview>
       
-    </md-sidenav-layout>`
+    </md-sidenav-container>`
 })
 export class AppComponent {
 

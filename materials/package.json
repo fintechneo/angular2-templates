@@ -6,45 +6,37 @@
   },
   "jspm": {
     "dependencies": {
-      "@angular/common": "npm:@angular/common",
-      "@angular/core": "npm:@angular/core",
-      "@angular/forms": "npm:@angular/forms",
-      "@angular/http": "npm:@angular/http",
-      "@angular/material": "npm:@angular/material",
-      "@angular/platform-browser": "npm:@angular/platform-browser",
-      "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic",
-      "reflect-metadata": "npm:reflect-metadata",
-      "rxjs": "npm:rxjs",
-      "zone.js": "npm:zone.js"
+      "reflect-metadata": "npm:reflect-metadata@^0.1.10",
+      "typescript": "npm:typescript@^2.3.4"
     },
-    "devDependencies": {
-      "typescript": "npm:typescript"
-    }
+    "devDependencies": {}
   },
   "devDependencies": {
-    "@angular/compiler-cli": "",
-    "express": "^4.14.0",
-    "compression": "^1.6.2",
-    "jspm": "^0.16.48",
-    "reflect-metadata": "^0.1.8",
-    "rollup": "^0.36.4",
-    "rollup-plugin-commonjs": "^5.0.5",
-    "rollup-plugin-node-resolve": "^2.0.0",
-    "rollup-plugin-uglify": "^1.0.1",
+    "@angular/compiler-cli": "4.1.3",
+    "express": "",
+    "compression": "",
+    "jspm": "",
+    "rollup": "",
+    "rollup-plugin-commonjs": "",
+    "rollup-plugin-node-resolve": "",
+    "rollup-plugin-uglify": "",
     "typescript": ""
   },
   "dependencies": {
-    "@angular/common": "",
-    "@angular/compiler": "",
-    "@angular/core": "",
-    "@angular/forms": "",
-    "@angular/http": "",
+    "@angular/animations": "4.1.3",
+    "@angular/common": "4.1.3",
+    "@angular/compiler": "4.1.3",
+    "@angular/core": "4.1.3",
+    "@angular/forms": "4.1.3",
+    "@angular/http": "4.1.3",
+    "@angular/platform-browser": "4.1.3",
+    "@angular/platform-browser-dynamic": "4.1.3",
+    "@angular/upgrade": "4.1.3",
     "@angular/material": "",
-    "@angular/platform-browser": "",
-    "@angular/platform-browser-dynamic": "",
-    "@angular/router": "",
-    "@types/hammerjs": "",
-    "rxjs": "",
+    "angular2-prettyjson": "",
+    "hammerjs": "",
+    "reflect-metadata": "",
+    "rxjs": "^5.0.1",
     "zone.js": ""
   }
 }
