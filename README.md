@@ -9,12 +9,6 @@ that ensures fast loading in production.
 
 ## Setup
 
-Go into the materials folder:
-
-```
-cd materials
-```
-
 For development remember to run:
 
 ```

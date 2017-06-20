@@ -55,7 +55,7 @@ export class SVGLineChartComponent implements AfterViewInit,OnInit,OnDestroy,DoC
 
     chartBoxTop : number = 5;
 
-    prevBounds : number[] = [0,0,0,0];
+    prevBounds : number[] = [0,0,500,500];
     
     @ViewChild("svgelement") svgElm : any;
    
@@ -172,8 +172,10 @@ export class SVGLineChartComponent implements AfterViewInit,OnInit,OnDestroy,DoC
     }
 
     public set horizNavLeft(horizNavLeft : number) {
-        this._horizNavLeft = horizNavLeft;
-        this.updateScaledDataPoints();
+        if(horizNavLeft) {
+            this._horizNavLeft = horizNavLeft;
+            this.updateScaledDataPoints();
+        }    
     }
 
     public get horizNavRight() : number {
@@ -181,8 +183,10 @@ export class SVGLineChartComponent implements AfterViewInit,OnInit,OnDestroy,DoC
     }
 
     public set horizNavRight(horizNavRight : number) {
-        this._horizNavRight = horizNavRight;
-        this.updateScaledDataPoints();
+        if(horizNavRight) {
+            this._horizNavRight = horizNavRight;
+            this.updateScaledDataPoints();
+        }
     }
             
     public getChartHorizNavY() : number {
@@ -328,6 +332,7 @@ export class SVGLineChartComponent implements AfterViewInit,OnInit,OnDestroy,DoC
         if(!this.datapoints || this.datapoints.length===0) {
             return;
         }        
+       
         let minx = this.horizNavLeft;
         let width = this.horizNavRight-minx;
         let viewLeft = this.chartBoxLeft;
@@ -391,7 +396,7 @@ export class SVGLineChartComponent implements AfterViewInit,OnInit,OnDestroy,DoC
         
         this.dataMinY = min;
         this.dataMaxY = max;
-
+        
         this.deposits = deposits;
         this.withdrawals = withdrawals;
         this.firstVisibleValue = this.scaledDataPoints[0][5];
