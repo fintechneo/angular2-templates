@@ -13,10 +13,6 @@ import { SVGLineChartComponent } from './svgcharts/linechart.component';
 import { TableComponent } from './pages/table.component';
 import { DataService } from './data.service';
 
-export function appBaseHrefFactory() {
-    return location.pathname.substr(0,location.pathname.indexOf("index")>-1 ? 
-        location.pathname.indexOf("index") : location.pathname.length);
-}
 
 @NgModule({
   imports:      [ BrowserModule,HttpModule,JsonpModule,FormsModule,
@@ -42,9 +38,7 @@ export function appBaseHrefFactory() {
     ])
   ],
   declarations: [ AppComponent,AccountOverviewComponent,SVGLineChartComponent,TableComponent ],
-  providers: [{provide: APP_BASE_HREF, 
-      useFactory: appBaseHrefFactory},
-        DataService], 
+  providers: [ DataService ], 
   bootstrap:    [ AppComponent ]
 })
 export class AppModule { }
