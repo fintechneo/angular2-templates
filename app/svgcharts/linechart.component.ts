@@ -66,7 +66,7 @@ export class SVGLineChartComponent implements AfterViewInit,OnInit,OnDestroy,DoC
     }
    
 
-   ngDoCheck() {
+   ngDoCheck() {       
         let bounds : any = this.svgElm.nativeElement.getBoundingClientRect();
         if(
             bounds.x!==this.prevBounds[0] ||
@@ -124,7 +124,9 @@ export class SVGLineChartComponent implements AfterViewInit,OnInit,OnDestroy,DoC
         this.destroyTasks.push(this.renderer.listen('window',"touchend",(evt : any) => {
             evt.preventDefault();
             this.mouseUpSubject.next(evt);
-        }));               
+        }));   
+
+        this.updateScaledDataPoints();            
    }
 
    @Input() 
