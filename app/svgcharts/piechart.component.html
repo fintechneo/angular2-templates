@@ -1,0 +1,48 @@
+<style>
+    .font {
+        font-family: "Open Sans"
+    }
+</style>
+
+<svg id="pie" height="200px" viewBox="-1 -1 2 2" style="transform: rotate(-90deg)"></svg>
+<svg height="100" width="100">
+    <text class="font" x="10" y="15" fill="black">Firma 1</text>
+    <text class="font" x="10" y="30" fill="black">Firma 2</text>
+    <text class="font" x="10" y="45" fill="black">Firma 3</text>
+</svg>
+
+<script>
+    // Compute the (x,y)-coordinate of a percentage beginning from the top.
+    function getXYCoord(percent) {
+        return [Math.cos(2*Math.PI * percent), Math.sin(2*Math.PI * percent)];
+    }
+
+    // Get the pie element.
+    const pie = document.getElementById('pie');
+    // Pie slice.
+    slices = [
+        { percent: 0.1, color: 'Coral' },
+        { percent: 0.2, color: '#00ab6b' },
+        { percent: 0.5, color: 'CornflowerBlue' },
+    ];
+    cumulativePercent = 0;
+
+    // Draw pie slices.
+    slices.forEach(slice => {
+      const [startX, startY] = getXYCoord(cumulativePercent);
+      // Each slice starts where the last slice ended, so keep a cumulative percent
+      cumulativePercent += slice.percent;
+      const [endX, endY] = getXYCoord(cumulativePercent);
+    
+      // If the slice is more than 50%, take the large arc way.
+      const largeArcFlag = slice.percent > .5 ? 1 : 0;
+      const data         = `M ${startX} ${startY} A 1 1 0 ${largeArcFlag} 1 ${endX} ${endY} L 0 0`;
+    
+      // Create a <path> and append it to the <svg>.
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', data);
+      path.setAttribute('fill', slice.color);
+      pie.appendChild(path);
+    });
+</script>
+<!-- https://hackernoon.com/a-simple-pie-chart-in-svg-dbdd653b6936 -->
