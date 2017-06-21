@@ -285,7 +285,7 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
     this.canv.addEventListener('touchend',(event : TouchEvent) => {
       event.preventDefault();
       if(!touchMoved) {
-        this.handleClick(event.changedTouches[0].clientX,event.changedTouches[0].clientY);
+        this.selectRow(event.changedTouches[0].clientX,event.changedTouches[0].clientY);
       }
       if(this.scrollbardrag) {        
         this.scrollbardrag = false;        
@@ -311,7 +311,10 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
         newHoverRowIndex = null;
       }
       if(this.hoverRowIndex!==newHoverRowIndex) {
-        this.hoverRowIndex = newHoverRowIndex;        
+        this.hoverRowIndex = newHoverRowIndex;         
+        if(this.lastMouseDownEvent && event.shiftKey) {        
+          this.selectRow(this.lastMouseDownEvent.clientX,event.clientY);
+        }       
       }
     };
     this.canv.onmouseout = (event : MouseEvent) => {      
@@ -334,8 +337,9 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
           this.lastMouseDownEvent &&
           event.clientX===this.lastMouseDownEvent.clientX &&
           event.clientY===this.lastMouseDownEvent.clientY) {
-          this.handleClick(event.clientX,event.clientY);
+          this.selectRow(event.clientX,event.clientY);
         }
+        this.lastMouseDownEvent = null;
     };    
 
     this.renderer.listenGlobal('window', 'resize', () => true);
@@ -364,7 +368,7 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
     this.enforceScrollLimit();   
   }
 
-  public handleClick(clientX:number, clientY:number) {    
+  public selectRow(clientX:number, clientY:number) {    
     let canvrect = this.canv.getBoundingClientRect();
     clientX-=canvrect.left;
     
