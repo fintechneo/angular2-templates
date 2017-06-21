@@ -18,6 +18,10 @@ import { MdSidenav} from '@angular/material';
                 <md-icon md-list-icon>list</md-icon>
                 <span md-line>Table</span>
             </a>            
+            <a md-list-item routerLink="dactable" (click)="sidemenuClose()">
+                <md-icon md-list-icon>list</md-icon>
+                <span md-line>DAC CRS codes</span>
+            </a>            
         </md-nav-list>
       </md-sidenav>
       <md-toolbar>
@@ -25,7 +29,7 @@ import { MdSidenav} from '@angular/material';
           <img src="companyicon.png" style="width: 36px; height: 36px" alt="company" />
         </button>
 
-        <span style="margin-left: 20px">Results report</span>
+        <span style="margin-left: 20px"></span>
       </md-toolbar>
       <router-outlet></router-outlet>
       

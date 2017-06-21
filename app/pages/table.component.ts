@@ -34,7 +34,7 @@ export class TableComponent implements CanvasTableSelectListener, OnInit {
                 getValue: (r) => r[1],
                 getFormattedValue: (val) => val.toLocaleString(undefined,{minimumFractionDigits: 2}),
                 width: 200,
-                textAlign: 2,
+                textAlign: 1,
                 sortColumn: 1
             }
         ]; 
