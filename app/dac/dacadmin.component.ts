@@ -133,6 +133,7 @@ export class DACAdminComponent implements CanvasTableSelectListener,OnInit,DoChe
                 getValue: getValue,
                 setValue: setValue,
                 checkbox: setValue ? true : false,
+                tooltipText: setValue ? "Click to toggle DAC sector for thematic area": null,                
                 backgroundColor: backgroundColor
             };
             colIndex++;

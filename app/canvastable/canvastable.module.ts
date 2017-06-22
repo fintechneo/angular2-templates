@@ -5,10 +5,10 @@
 
 import { NgModule,Component,QueryList,AfterViewInit,
   Input,Output,Renderer,
-  ElementRef,ChangeDetectionStrategy,
+  ElementRef,
   DoCheck,NgZone,EventEmitter,OnInit,ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MaterialModule } from '@angular/material';
+import { MaterialModule,MdTooltip } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 export class AnimationFrameThrottler {
@@ -42,9 +42,9 @@ export class AnimationFrameThrottler {
 }
 
 export interface CanvasTableSelectListener {
-  rowSelected(rowIndex : number, colIndex : number,rowContent: any) : void;  
-  isSelectedRow(rowObj : any) : boolean;
-  isBoldRow(rowObj : any) : boolean;
+    rowSelected(rowIndex : number, colIndex : number,rowContent: any) : void;  
+    isSelectedRow(rowObj : any) : boolean;
+    isBoldRow(rowObj : any) : boolean;
 }
 
 export interface CanvasTableColumn {
@@ -54,6 +54,7 @@ export interface CanvasTableColumn {
   footerSumReduce? (prev : number,curr : number) : number;
   width: number;
   backgroundColor?: string,
+  tooltipText?: string,
   sortColumn: number;  
   excelCellAttributes?: any,
   rowWrapModeHidden?: boolean;
@@ -65,6 +66,16 @@ export interface CanvasTableColumn {
   getValue(rowobj : any) : any;
   setValue?: (rowobj : any,val : any) => void;
   getFormattedValue? (val : any) : string;
+}
+
+export class FloatingTooltip {
+  constructor(public top : number, 
+    public left : number,
+    public width : number,
+    public height : number,
+    public tooltipText : string) {
+
+  }
 }
 
 export class CanvasTableColumnSection {
@@ -79,10 +90,18 @@ export class CanvasTableColumnSection {
 
 @Component({
   selector: 'canvastable',
-  template: `
-    <canvas [attr.id]="elementId" style="width: 100%; height: 100%; user-select: none;" 
-        tabindex="0"></canvas>`,
-    changeDetection: ChangeDetectionStrategy.OnPush
+  template: `    
+    <canvas #thecanvas style="position: absolute; width: 100%; height: 100%; user-select: none;" 
+        tabindex="0"></canvas>
+    <div #columnOverlay [mdTooltip]="floatingTooltip.tooltipText" style="position: absolute; 
+      pointer-events: none;" 
+              [style.top.px]="floatingTooltip.top" 
+              [style.left.px]="floatingTooltip.left"
+              [style.width.px]="floatingTooltip.width"
+              [style.height.px]="floatingTooltip.height"
+                *ngIf="floatingTooltip"              
+              >
+    </div>`    
 })
 export class CanvasTableComponent implements AfterViewInit,DoCheck {
   static incrementalId: number = 1;
@@ -96,7 +115,12 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
     }
   }
   
-  private canv : any;
+  @ViewChild("thecanvas") canvRef : ElementRef;
+  
+  @ViewChild(MdTooltip) columnOverlay : MdTooltip;  
+
+  private canv : HTMLCanvasElement;
+
   private ctx : any;
   private _rowheight:number = 25;
   private fontheight:number = 14;
@@ -164,11 +188,13 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
   
   public scrollLimitHit : BehaviorSubject<number> = new BehaviorSubject(0);
 
+  public floatingTooltip : FloatingTooltip;
+  
   @Input() selectListener : CanvasTableSelectListener;
   @Output() touchscroll = new EventEmitter();
 
   constructor(elementRef: ElementRef,private renderer : Renderer, private _ngZone : NgZone) {
-    this.elementId = "canvasTable"+(CanvasTableComponent.incrementalId++);
+    //this.elementId = "canvasTable"+(CanvasTableComponent.incrementalId++);
     //console.log("Creating canvas table with id "+this.elementId);    
   }
 
@@ -197,7 +223,7 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
   }
   
   ngAfterViewInit() {
-    this.canv = document.getElementById(this.elementId);
+    this.canv = this.canvRef.nativeElement;
     this.ctx = this.canv.getContext("2d");    
     
     
@@ -314,7 +340,24 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
         this.hoverRowIndex = newHoverRowIndex;         
         if(this.lastMouseDownEvent && event.shiftKey) {        
           this.selectRow(this.lastMouseDownEvent.clientX,event.clientY);
-        }       
+        }        
+      }
+      if(this.hoverRowIndex!==null) {
+        let clientX = event.clientX-canvrect.left;
+        let colIndex = this.getColIndexByClientX(clientX);
+        let colStartX = this.columns.reduce((prev,curr,ndx) => ndx<colIndex ? prev+curr.width : prev,0);
+        if(this.columns[colIndex] && this.columns[colIndex].tooltipText) {
+            this.floatingTooltip = new FloatingTooltip(
+                (this.hoverRowIndex-this.topindex)*this.rowheight,
+                colStartX-this.horizScroll,
+                this.columns[colIndex].width,
+                this.rowheight,this.columns[colIndex].tooltipText);            
+            setTimeout(() => this.columnOverlay.show(500),0);
+        } else {
+          this.floatingTooltip = null;
+        }
+      } else {
+        this.floatingTooltip = null;
       }
     };
     this.canv.onmouseout = (event : MouseEvent) => {      
@@ -368,12 +411,7 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
     this.enforceScrollLimit();   
   }
 
-  public selectRow(clientX:number, clientY:number) {    
-    let canvrect = this.canv.getBoundingClientRect();
-    clientX-=canvrect.left;
-    
-    let selectedRowIndex = Math.floor(this.topindex+(clientY-canvrect.top)/this.rowheight);
-    
+  public getColIndexByClientX(clientX : number) {
     let x = -this.horizScroll;
     let selectedColIndex=0;
     for(;selectedColIndex<this.columns.length;selectedColIndex++) {
@@ -383,7 +421,17 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
       }
       x+=col.width;
     }
-    this.selectListener.rowSelected(selectedRowIndex, selectedColIndex, this.rows[selectedRowIndex]);              
+    return selectedColIndex;
+  }
+
+  public selectRow(clientX:number, clientY:number) {    
+    let canvrect = this.canv.getBoundingClientRect();
+    clientX-=canvrect.left;
+    
+    let selectedRowIndex = Math.floor(this.topindex+(clientY-canvrect.top)/this.rowheight);
+    
+    
+    this.selectListener.rowSelected(selectedRowIndex, this.getColIndexByClientX(clientX), this.rows[selectedRowIndex]);              
     this.hasChanges = true;
   }
 
@@ -848,8 +896,12 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
               <md-icon *ngIf="sortColumn===col.sortColumn" style="font-size: 12px;">{{sortDescending ? 'arrow_upward' : 'arrow_downward'}}</md-icon>{{col.name}}          
           </div>        
         </div>
-        <div #tablebodycontainer style="position: absolute; top: 25px; bottom: 25px; width: 100%;" 
-            [style.left]="canvastable.horizScroll+'px'">
+        
+        <div #tablebodycontainer style="position: absolute; 
+          top: 25px; 
+          bottom: 25px; 
+          width: 100%;" 
+            [style.left]="canvastable.horizScroll+'px'">          
           <canvastable [selectListener]="canvastableselectlistener"
             (touchscroll)="tablecontainer.scrollLeft=$event;tablebodycontainer.style.left=$event+'px'">
           </canvastable>
