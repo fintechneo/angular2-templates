@@ -96,22 +96,22 @@
     </g>
     <g class="labels y-labels">
     <text [attr.fill]="yl[1]<zeropointcharty ? '#4CAF50' : '#F44336'" alignment-baseline="middle" x="10" [attr.y]="yl[1]" *ngFor="let yl of chartYLabels">
-        {{yl[0] | number:'1.0-0'}}
+        {{yl[0] | largenumber}}
     </text>        
     </g>
     <g class="data" data-setname="Our first data set">
-    <ng-template ngFor let-p [ngForOf]="scaledDataPoints">
-        <circle [attr.cx]="p[0]" [attr.cy]="p[1]" [attr.data-value]="p[1]" r="2"></circle>
-        <line *ngIf="p[2] && p[3]" 
-        [attr.x1]="p[2]" 
-        [attr.y1]="p[3]"
-        [attr.x2]="p[0]"  
-        [attr.y2]="p[1]" 
-        fill="none"
-        [attr.stroke]="p[1]<zeropointcharty ? '#43A047' : '#E53935'"
-        stroke-width="1"></line>
-        <circle *ngIf="hoverX && p===hoverPt" [attr.cx]="p[0]" [attr.cy]="p[1]" [attr.data-value]="p[1]" r="6"></circle>
-        </ng-template>
+        <g *ngFor="let p of scaledDataPoints">
+            <circle [attr.cx]="p[0]" [attr.cy]="p[1]" [attr.data-value]="p[1]" r="2"></circle>
+            <line *ngIf="p[2] && p[3]" 
+            [attr.x1]="p[2]" 
+            [attr.y1]="p[3]"
+            [attr.x2]="p[0]"  
+            [attr.y2]="p[1]" 
+            fill="none"
+            [attr.stroke]="p[1]<zeropointcharty ? '#43A047' : '#E53935'"
+            stroke-width="1"></line>
+            <circle *ngIf="hoverX && p===hoverPt" [attr.cx]="p[0]" [attr.cy]="p[1]" [attr.data-value]="p[1]" r="6"></circle>
+        </g>
     </g>
 
      <!-- Hover line and text -->
@@ -141,7 +141,7 @@
             </rect>
             <text style="font-size: 15px" text-anchor="middle" y="12" fill="black"
                 >
-                {{hoverXvalue | date:'yyyy-MM-dd'}}
+                {{hoverXvalue | date}}
             </text>        
         </g>
     </g>

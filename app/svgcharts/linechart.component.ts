@@ -370,10 +370,10 @@ export class SVGLineChartComponent implements AfterViewInit,OnInit,OnDestroy,DoC
                 
                 // Find min && max
                 if(!min || d[3]<min) {
-                    min = d[3];
+                    min = d[3]-1;
                 }
                 if(!max || d[3]>max) {
-                    max = d[3];
+                    max = d[3]+1;
                 }
                 return d;
             })        
@@ -406,11 +406,18 @@ export class SVGLineChartComponent implements AfterViewInit,OnInit,OnDestroy,DoC
         
         this.deposits = deposits;
         this.withdrawals = withdrawals;
-        this.firstVisibleValue = this.scaledDataPoints[0][5];
-        this.lastVisibleValue = this.scaledDataPoints[this.scaledDataPoints.length-1][5];
-        let lastAdjustedValue = this.scaledDataPoints[this.scaledDataPoints.length-1][6];
-        this.netGrowth = lastAdjustedValue-this.firstVisibleValue;
-        this.chartYLabels = this.createChartYLabels();
+        if(this.scaledDataPoints.length>0) {
+            this.firstVisibleValue = this.scaledDataPoints[0][5];
+            this.lastVisibleValue = this.scaledDataPoints[this.scaledDataPoints.length-1][5];
+            let lastAdjustedValue = this.scaledDataPoints[this.scaledDataPoints.length-1][6];
+            this.netGrowth = lastAdjustedValue-this.firstVisibleValue;
+            this.chartYLabels = this.createChartYLabels();            
+        } else {
+            this.firstVisibleValue = 0;
+            this.lastVisibleValue = 0;
+            this.netGrowth = 0;
+            this.chartYLabels = [];            
+        }
         this.updateChartXLabels();
     }        
 } 
