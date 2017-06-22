@@ -71,27 +71,29 @@ export class SVGLineChartComponent implements AfterViewInit,OnInit,OnDestroy,DoC
 
    ngDoCheck() {       
         let bounds : any = this.svgElm.nativeElement.getBoundingClientRect();
+        
         if(
-            bounds.x!==this.prevBounds[0] ||
-            bounds.y!==this.prevBounds[1] ||
+            bounds.left!==this.prevBounds[0] ||
+            bounds.top!==this.prevBounds[1] ||
             bounds.width!==this.prevBounds[2] ||
             bounds.height!==this.prevBounds[3]
-        ) {
-            this.prevBounds[0] = bounds.x;
-            this.prevBounds[1] = bounds.y;
+        ) {            
+            this.prevBounds[0] = bounds.left;
+            this.prevBounds[1] = bounds.top;
             this.prevBounds[2] = bounds.width;
             this.prevBounds[3] = bounds.height;
             
             this.width = bounds.width;
             this.height = bounds.height;
             this.svgLeft = bounds.left;
-            this.updateScaledDataPoints();
-
+            
             this.viewBox = "0 0 "+
                         this.width+" "+
                         this.height;
 
             this.chartBoxRight = this.width-40;
+
+            this.updateScaledDataPoints();
         }
    }
 
