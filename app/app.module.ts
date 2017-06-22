@@ -37,7 +37,7 @@ import { DataService } from './data.service';
       },
       {
         path: "index_dev.html",
-        component: DACAdminComponent
+        component: AccountOverviewComponent
       },
       {
         path: "",

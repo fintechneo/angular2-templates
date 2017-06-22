@@ -22,6 +22,7 @@ export class SVGLineChartComponent implements AfterViewInit,OnInit,OnDestroy,DoC
     chartYLabels : any[] = [];
 
     @Input() mode : string = "growth";
+    @Input() xaxisnav : boolean = true;
 
     public chartBoxLeft : number = 50;
     public chartBoxRight : number = 200;
@@ -54,6 +55,8 @@ export class SVGLineChartComponent implements AfterViewInit,OnInit,OnDestroy,DoC
     dataMaxY : number;
 
     chartBoxTop : number = 5;
+
+    
 
     prevBounds : number[] = [0,0,500,500];
     
@@ -271,7 +274,7 @@ export class SVGLineChartComponent implements AfterViewInit,OnInit,OnDestroy,DoC
 
         
     public getChartBoxBottom() {
-        return this.getChartHorizNavY()-60;
+        return this.getChartHorizNavY()-(this.xaxisnav ? 60 : 10);
     }
 
 

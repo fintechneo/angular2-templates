@@ -54,38 +54,39 @@
     
     <!-- X axis navigator line -->
 
-    <line   
-        [attr.x1]="chartBoxLeft" 
-        [attr.x2]="chartBoxRight"
-        [attr.y1]="getChartHorizNavY()"            
-        [attr.y2]="getChartHorizNavY()" 
-        stroke="#000"
-        stroke-width="1"
-        ></line>
+    <g *ngIf="xaxisnav">
+        <line   
+            [attr.x1]="chartBoxLeft" 
+            [attr.x2]="chartBoxRight"
+            [attr.y1]="getChartHorizNavY()"            
+            [attr.y2]="getChartHorizNavY()" 
+            stroke="#000"
+            stroke-width="1"
+            ></line>
 
-    
-    <circle [attr.cx]="getChartHorizNavLeft()" [attr.cy]="getChartHorizNavY()" 
-        r="15" 
-        stroke="#000"
-        stroke-width="1"
-        fill="#fff"
-        (mousedown)="dragHorizNavLeft($event)"
-        (touchstart)="dragHorizNavLeft($event)"
-        class="dragHandle"
-        >
-    </circle>
+        
+        <circle [attr.cx]="getChartHorizNavLeft()" [attr.cy]="getChartHorizNavY()" 
+            r="15" 
+            stroke="#000"
+            stroke-width="1"
+            fill="#fff"
+            (mousedown)="dragHorizNavLeft($event)"
+            (touchstart)="dragHorizNavLeft($event)"
+            class="dragHandle"
+            >
+        </circle>
 
-    <circle [attr.cx]="getChartHorizNavRight()" [attr.cy]="getChartHorizNavY()" 
-        r="15" 
-        stroke="#000"
-        stroke-width="1"
-        fill="#fff"
-        (mousedown)="dragHorizNavRight($event)"
-        (touchstart)="dragHorizNavRight($event)"
-        class="dragHandle"
-        >
-    </circle>
-    
+        <circle [attr.cx]="getChartHorizNavRight()" [attr.cy]="getChartHorizNavY()" 
+            r="15" 
+            stroke="#000"
+            stroke-width="1"
+            fill="#fff"
+            (mousedown)="dragHorizNavRight($event)"
+            (touchstart)="dragHorizNavRight($event)"
+            class="dragHandle"
+            >
+        </circle>
+    </g>    
     <!-- X axis labels -->
 
     <g class="labels x-labels">

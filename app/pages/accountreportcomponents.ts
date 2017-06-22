@@ -51,7 +51,7 @@ import { DataService } from '../data.service';
         </md-card-header>        
         <md-card-content>
           <div style="width: 100%; height: 265px">
-            <svg-linechart #linechart [datapoints]="dataservice.datapoints" mode="standard">
+            <svg-linechart #linechart [xaxisnav]="true" [datapoints]="dataservice.datapoints" mode="standard">
             </svg-linechart>
           </div>
         </md-card-content>        
