@@ -14,7 +14,8 @@ import { AccountOverviewComponent } from './pages/accountreportcomponents';
 import { SVGLineChartComponent } from './svgcharts/linechart.component';
 import { TableComponent } from './pages/table.component';
 import { DataService } from './data.service';
-
+import { PDFService } from './pdfmake/pdf.service';
+import { LargeNumberPipe } from './svgcharts/largenumber.pipe';
 
 @NgModule({
   imports:      [ BrowserModule,HttpModule,JsonpModule,FormsModule,
@@ -45,8 +46,9 @@ import { DataService } from './data.service';
       }
     ])
   ],
-  declarations: [ AppComponent,AccountOverviewComponent,SVGLineChartComponent,TableComponent ],
-  providers: [ DataService ], 
+  declarations: [ AppComponent,AccountOverviewComponent,SVGLineChartComponent,
+      TableComponent,LargeNumberPipe ],
+  providers: [ DataService,PDFService ], 
   bootstrap:    [ AppComponent ]
 })
 export class AppModule { }

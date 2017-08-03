@@ -1,6 +1,9 @@
 import {Component,ViewChild} from '@angular/core';
 import {SVGLineChartComponent} from '../svgcharts/linechart.component';
 import { DataService } from '../data.service';
+import { PDFService } from '../pdfmake/pdf.service';
+import { DatePipe } from '@angular/common';
+import 'rxjs/add/operator/mergeMap';
 
 @Component({    
     selector: 'accountOverview',
@@ -40,7 +43,11 @@ import { DataService } from '../data.service';
                   )*100 | number:'1.0-2'}} %
                 </p>
               </div>
+              <div>
+                  <h3>Report</h3>
+                  <button md-raised-button (click)="createPDF()">Download as PDF</button>
             </div>
+            </div>            
         </md-card-content>
       </md-card>
        <md-card>
@@ -55,14 +62,76 @@ import { DataService } from '../data.service';
             </svg-linechart>
           </div>
         </md-card-content>        
-      </md-card>
-    `
+      </md-card>      
+    `,
+    providers: [DatePipe]
 })
 export class AccountOverviewComponent {
   @ViewChild("linechart") linechart : SVGLineChartComponent;
   
-  constructor(public dataservice : DataService) {
+  constructor(public dataservice : DataService,
+    public pdfservice : PDFService,
+    private datepipe : DatePipe) {
   
   }
   
+  public createPDF() {    
+    let chartImage : string;
+    this.pdfservice.convertSVGElementToDataURLviaCanvas(document.getElementsByTagName("svg")[0],"image/png")
+        .mergeMap((res) => {
+          chartImage = res;          
+          return this.pdfservice.convertImgToDataURLviaCanvas(
+            "/companylogo.png","image/png");
+        })
+        .mergeMap((companyLogoDataURI) => {              
+              let docDefinition = {
+                pageSize: 'A4',
+                pageOrientation: 'landscape',                
+                header: {
+                    
+                },
+                footer: (currentPage : number, pageCount: number) => {
+                    return {
+                        text: "Page"+                            
+                        currentPage.toString() + ' / ' + pageCount,
+                        alignment: "right",
+                        margin: [40, 10] 
+                  };
+                },                                    
+                content: 
+                  [
+                    {
+                      table: {
+                          widths: [300, '*'],
+                          body: [
+                              [{
+                                  // if you specify both width and height - image will be stretched
+                                  image: companyLogoDataURI,
+                                  width: 150                             
+                              },
+                                  [{ 
+                                      paddingTop: 10,
+                                      text: "Report",                                
+                                      fontSize: 20
+                                  },
+                                  {
+                                      text: this.datepipe.transform(this.linechart.horizNavLeft,'MMM yyyy')+" - "+
+                                        this.datepipe.transform(this.linechart.horizNavRight,'MMM yyyy')
+                                  }
+                                  ]
+                              ]
+                          ]
+                      }, 
+                      layout: 'noBorders'		
+                  },
+                  {
+                    image: chartImage,                    
+                    width: 750               
+                  }
+                ]
+          };          
+
+          return this.pdfservice.createPDF(docDefinition,"report.pdf");            
+      }).subscribe();
+  }  
 }

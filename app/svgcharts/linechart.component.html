@@ -15,13 +15,12 @@
     } 
 </style>
 
-<svg #svgelement [attr.viewBox]="viewBox"  
+<svg xmlns="http://www.w3.org/2000/svg" #svgelement [attr.viewBox]="viewBox"  
         preserveAspectRatio="none"
         style="width: 100%; height: 100%"  
         (mousemove)="handleHover($event)"  
-        (mouseout)="hoverX=null"      
-        >                
-    
+        (mouseout)="hoverX=null"              
+        >                    
     <!-- Y axis line -->
     <line 
         [attr.x1]="chartBoxLeft" 
