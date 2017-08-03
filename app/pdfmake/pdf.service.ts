@@ -37,8 +37,8 @@ export class PDFService {
             return this.scriptLoadedSubject;
         }
         this.scriptLoadedSubject = new AsyncSubject();
-        this.loadScript("/js/pdfmake.min.js")
-            .mergeMap(() => this.loadScript("/js/vfs_fonts.js"))
+        this.loadScript("js/pdfmake.min.js")
+            .mergeMap(() => this.loadScript("js/vfs_fonts.js"))
             .subscribe(() => {
                 this.scriptLoadedSubject.next(true);                    
                 this.scriptLoadedSubject.complete();    
