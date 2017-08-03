@@ -81,7 +81,7 @@ export class AccountOverviewComponent {
         .mergeMap((res) => {
           chartImage = res;          
           return this.pdfservice.convertImgToDataURLviaCanvas(
-            "/companylogo.png","image/png");
+            "companylogo.png","image/png");
         })
         .mergeMap((companyLogoDataURI) => {              
               let docDefinition = {
