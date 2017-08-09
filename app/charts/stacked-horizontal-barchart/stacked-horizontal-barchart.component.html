@@ -1,0 +1,22 @@
+<svg [attr.height]="inputheight" width="100%" viewBox="0 0 535 400" style="background-color: none;">
+  <g *ngIf = "tot > 0">
+    <rect  [attr.x] = "yAxisPos" [attr.y] = "xAxisPos" [attr.width] = '""+(width-yAxisPos)+""'[attr.height] = '""+(height-xAxisPos)+""' fill = "white"/>
+    <g *ngFor="let lh of lineHeight" >
+      <line [attr.y1]='""+(xAxisPos-3)+""' [attr.y2]='""+(xAxisPos+3)+""'
+      [attr.x1] = "lh.nr" [attr.x2] = "lh.nr" style="stroke:rgb(0,0,0);stroke-width:2"/>
+      <line [attr.y1]='""+(xAxisPos+3)+""' y2 ="400"
+      [attr.x1] = "lh.nr" [attr.x2] = "lh.nr" style="stroke:rgb(200,200,220);stroke-width:1"/>
+      <text [attr.y]='""+(xAxisPos/2)+""' [attr.x] = '""+(lh.nr)+""' fill="black" text-anchor="middle">{{lh.name}}</text>
+    </g>
+    <g *ngFor="let rect of rectangles">
+      <g *ngFor="let stat of rect.stat">
+        <rect  [attr.y]= "stat.x1" [attr.x]="stat.y1"  [attr.height]="step"
+        [attr.width]="stat.usedValue" [attr.fill] = "stat.color"/>
+      </g>
+      <text [attr.y]= "rect.labelpos" [attr.x]='""+(yAxisPos-3)+""' fill="black" text-anchor="end"> {{rect.label}}</text>
+    </g>
+    <line [attr.x1]="yAxisPos" [attr.y1]="xAxisPos" [attr.x2]="yAxisPos" y2="400" style="stroke:rgb(0,0,0);stroke-width:3" />
+    <line [attr.x1]='""+(yAxisPos-1.5)+""' [attr.y1]="xAxisPos" [attr.x2]="width" [attr.y2]="xAxisPos" style="stroke:rgb(0,0,0);stroke-width:3" />
+  </g>
+  <text *ngIf = "tot == 0" x= "200" y="200" fill="black" text-anchor="middle"> Nothing to chart yet...</text>
+</svg>

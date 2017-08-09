@@ -4,6 +4,8 @@ import { Subscriber } from 'rxjs/Subscriber';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/throttle';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/of';
 
 const SPACE_BETWEEN_POINTS : number = 5;    
 
