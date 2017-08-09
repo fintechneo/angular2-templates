@@ -5,8 +5,8 @@ import { COLORS } from '../color-database';
 
 @Component({
   selector: 'stacked-barchart',
-  templateUrl: './stacked-barchart.component.html',
-  styleUrls: ['./stacked-barchart.component.css']
+  templateUrl: './app/charts/stacked-barchart/stacked-barchart.component.html',
+  styleUrls: ['./app/charts/stacked-barchart/stacked-barchart.component.css']
 })
 export class StackedBarchartComponent {
   //attributes
@@ -90,9 +90,8 @@ export class StackedBarchartComponent {
   chart() {
     //this.rectangles = this.data
     this.data.forEach(element => {
-      console.log(element);
       let label = element.label
-      let stat = [];
+      let stat: any[] = [];
       element.stat.forEach(item => {
         let name = item.name
         let value = item.value
@@ -100,8 +99,6 @@ export class StackedBarchartComponent {
       })
       this.rectangles.push({label: label, stat: stat});
     });
-    console.log("data: ", this.data);
-
     this.lineHeight = []
     for (var i in this.rectangles) {
       this.rectangles[i].stat = this.sortByValue(this.rectangles[i].stat);
@@ -149,6 +146,5 @@ export class StackedBarchartComponent {
       }
     }
     this.step = this.step * 5
-    console.log("data = ", this.data)
   }
 }

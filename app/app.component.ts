@@ -13,7 +13,7 @@ import { MdSidenav} from '@angular/material';
             <a md-list-item routerLink="chart" (click)="sidemenuClose()">
                 <md-icon md-list-icon>show_chart</md-icon>
                 <span md-line>Chart</span>
-            </a>            
+            </a>           
             <a md-list-item routerLink="table" (click)="sidemenuClose()">
                 <md-icon md-list-icon>list</md-icon>
                 <span md-line>Table</span>
@@ -21,7 +21,15 @@ import { MdSidenav} from '@angular/material';
             <a md-list-item routerLink="dactable" (click)="sidemenuClose()">
                 <md-icon md-list-icon>list</md-icon>
                 <span md-line>DAC CRS codes</span>
-            </a>            
+            </a>     
+            <a md-list-item routerLink="piechart" (click)="sidemenuClose()">
+                <md-icon md-list-icon>pie_chart</md-icon>
+                <span md-line>Piechart</span>
+            </a>   
+            <a md-list-item routerLink="barcharts" (click)="sidemenuClose()">
+                <md-icon md-list-icon>insert_chart</md-icon>
+                <span md-line>Barcharts</span>
+            </a>         
         </md-nav-list>
       </md-sidenav>
       <md-toolbar>

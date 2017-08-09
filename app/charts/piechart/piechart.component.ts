@@ -5,7 +5,7 @@ import { Stat } from '../stat'
 
 @Component ({
   selector: 'piechart',
-  templateUrl: './piechart.component.html'
+  templateUrl: './app/charts/piechart/piechart.component.html'
 })
 export class PiechartComponent implements OnInit {
 

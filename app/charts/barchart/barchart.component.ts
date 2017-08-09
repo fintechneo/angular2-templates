@@ -4,8 +4,8 @@ import { COLORS } from '../color-database';
 
 @Component({
   selector: 'barchart',
-  templateUrl: './barchart.component.html',
-  styleUrls: ['./barchart.component.css']
+  templateUrl: './app/charts/barchart/barchart.component.html',
+  styleUrls: ['./app/charts/barchart/barchart.component.css']
 })
 export class BarchartComponent implements OnChanges {
   //attributes

@@ -1,4 +1,4 @@
-<svg [attr.height]="inputheight" width="100%" viewBox="0 0 400 400" style="background-color: none;">
+<svg [attr.height]="inputheight" viewBox="0 0 400 400" style="background-color: none;">
   <rect *ngIf = "tot > 0" [attr.x] = "yAxisPos" y = "0" [attr.width] = '""+(width-yAxisPos)+""'[attr.height] = "xAxisPos" fill = "white"/>
   <g *ngFor="let lh of lineHeight" >
     <line [attr.x1]='""+(yAxisPos-3)+""' [attr.x2]='""+(yAxisPos+3)+""'

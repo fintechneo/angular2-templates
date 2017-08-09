@@ -4,8 +4,8 @@ import { COLORS } from '../color-database';
 
 @Component({
   selector: 'stacked-horizontal-barchart',
-  templateUrl: './stacked-horizontal-barchart.component.html',
-  styleUrls: ['./stacked-horizontal-barchart.component.css']
+  templateUrl: './app/charts/stacked-horizontal-barchart/stacked-horizontal-barchart.component.html',
+  styleUrls: ['./app/charts/stacked-horizontal-barchart/stacked-horizontal-barchart.component.css']
 })
 export class StackedHorizontalBarchartComponent  {
   //attributes
@@ -89,9 +89,8 @@ export class StackedHorizontalBarchartComponent  {
 chart() {
  // this.rectangles = this.data
     this.data.forEach(element => {
-      console.log(element);
       let label = element.label
-      let stat = [];
+      let stat: any[] = [];
       element.stat.forEach(item => {
         let name = item.name
         let value = item.value
@@ -99,7 +98,6 @@ chart() {
       })
       this.rectangles.push({label: label, stat: stat});
     });
-  console.log("data: ",this.data);
   this.lineHeight = []
   for (var i in this.rectangles) {
     this.rectangles[i].stat = this.sortByValue(this.rectangles[i].stat);
@@ -147,6 +145,5 @@ chart() {
     }
   }
   this.step = this.step * 5
-  console.log("data = ", this.data)
 }
 }
