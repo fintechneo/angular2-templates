@@ -52,7 +52,7 @@ import { ShowPiechartComponent } from './charts/show-piechart.component'
       },
       {
         path: "index_dev.html",
-        component: AccountOverviewComponent
+        component: DACAdminComponent
       },
       {
         path: "",

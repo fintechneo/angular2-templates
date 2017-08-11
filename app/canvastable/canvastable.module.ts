@@ -42,7 +42,7 @@ export class AnimationFrameThrottler {
 }
 
 export interface CanvasTableSelectListener {
-    rowSelected(rowIndex : number, colIndex : number,rowContent: any) : void;  
+    rowSelected(rowIndex : number, colIndex : number,rowContent: any,multiSelect? : boolean) : void;  
     isSelectedRow(rowObj : any) : boolean;
     isBoldRow(rowObj : any) : boolean;
 }
@@ -93,15 +93,20 @@ export class CanvasTableColumnSection {
   template: `    
     <canvas #thecanvas style="position: absolute; width: 100%; height: 100%; user-select: none;" 
         tabindex="0"></canvas>
-    <div #columnOverlay [mdTooltip]="floatingTooltip.tooltipText" style="position: absolute; 
-      pointer-events: none;" 
+    <div #columnOverlay draggable="true" [mdTooltip]="floatingTooltip.tooltipText" style="position: absolute;"               
+              (DOMMouseScroll)="floatingTooltip=null"
+              (mousewheel)="floatingTooltip=null"
+              (mousemove)="canv.onmousemove($event)"
+              (click)="columnOverlayClicked($event)"
               [style.top.px]="floatingTooltip.top" 
               [style.left.px]="floatingTooltip.left"
               [style.width.px]="floatingTooltip.width"
               [style.height.px]="floatingTooltip.height"
-                *ngIf="floatingTooltip"              
-              >
-    </div>`    
+                *ngIf="floatingTooltip" 
+              (dragstart)="dragColumnOverlay($event)"
+              >              
+    </div>
+    `    
 })
 export class CanvasTableComponent implements AfterViewInit,DoCheck {
   static incrementalId: number = 1;
@@ -122,8 +127,8 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
   private canv : HTMLCanvasElement;
 
   private ctx : any;
-  private _rowheight:number = 25;
-  private fontheight:number = 14;
+  private _rowheight:number = 30;
+  private fontheight:number = 16;
   
   public fontFamily : string = 'Roboto, "Helvetica Neue", sans-serif';
   
@@ -157,8 +162,8 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
   }
       
 
-  public hoverRowColor : string = "#FF8800";
-  public selectedRowColor : string = "#155D97";
+  public hoverRowColor : string = "rgba(0, 0, 0, 0.04)";
+  public selectedRowColor : string = "rgba(225, 238, 255, 1)";
 
   public colpaddingleft = 10;
   public colpaddingright = 10;
@@ -338,21 +343,26 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
       }
       if(this.hoverRowIndex!==newHoverRowIndex) {
         this.hoverRowIndex = newHoverRowIndex;         
-        if(this.lastMouseDownEvent && event.shiftKey) {        
-          this.selectRow(this.lastMouseDownEvent.clientX,event.clientY);
+        if(this.lastMouseDownEvent && event.shiftKey) {                  
+          this.selectRow(this.lastMouseDownEvent.clientX,event.clientY,true);
         }        
       }
       if(this.hoverRowIndex!==null) {
         let clientX = event.clientX-canvrect.left;
         let colIndex = this.getColIndexByClientX(clientX);
         let colStartX = this.columns.reduce((prev,curr,ndx) => ndx<colIndex ? prev+curr.width : prev,0);
-        if(this.columns[colIndex] && this.columns[colIndex].tooltipText) {
+        
+        if(!event.shiftKey && this.columns[colIndex] && this.columns[colIndex].tooltipText) {
             this.floatingTooltip = new FloatingTooltip(
                 (this.hoverRowIndex-this.topindex)*this.rowheight,
                 colStartX-this.horizScroll,
                 this.columns[colIndex].width,
                 this.rowheight,this.columns[colIndex].tooltipText);            
-            setTimeout(() => this.columnOverlay.show(500),0);
+            setTimeout(() => {
+                if(this.columnOverlay) {
+                  this.columnOverlay.show(500);
+                }
+              },0);
         } else {
           this.floatingTooltip = null;
         }
@@ -380,10 +390,11 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
           this.lastMouseDownEvent &&
           event.clientX===this.lastMouseDownEvent.clientX &&
           event.clientY===this.lastMouseDownEvent.clientY) {
-          this.selectRow(event.clientX,event.clientY);
+          this.selectRow(event.clientX,event.clientY);          
         }
         this.lastMouseDownEvent = null;
-    };    
+    };  
+      
 
     this.renderer.listenGlobal('window', 'resize', () => true);
 
@@ -403,6 +414,22 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
         window.requestAnimationFrame(() => paintLoop())
     );                    
   } 
+
+  public dragColumnOverlay(event : DragEvent) {
+    console.log("Dragstart",event);
+    let canvrect = this.canv.getBoundingClientRect();
+        
+    let selectedRowIndex = Math.floor(this.topindex+(event.clientY-canvrect.top)/this.rowheight);    
+    
+    this.selectListener.rowSelected(selectedRowIndex, -1, this.rows[selectedRowIndex]);              
+    this.hasChanges = true;    
+            
+    event.dataTransfer.setData("text/plain", "rowIndex:"+selectedRowIndex);
+  }
+
+  public columnOverlayClicked(event : MouseEvent) {        
+    this.selectRow(event.clientX,event.clientY);          
+  }
 
   public doScrollBarDrag(clientY : number) {
     let canvrect = this.canv.getBoundingClientRect();
@@ -424,14 +451,16 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
     return selectedColIndex;
   }
 
-  public selectRow(clientX:number, clientY:number) {    
+  public selectRow(clientX:number, clientY:number, multiSelect? : boolean) {    
     let canvrect = this.canv.getBoundingClientRect();
     clientX-=canvrect.left;
     
     let selectedRowIndex = Math.floor(this.topindex+(clientY-canvrect.top)/this.rowheight);
-    
-    
-    this.selectListener.rowSelected(selectedRowIndex, this.getColIndexByClientX(clientX), this.rows[selectedRowIndex]);              
+        
+    this.selectListener.rowSelected(selectedRowIndex, 
+          this.getColIndexByClientX(clientX), 
+          this.rows[selectedRowIndex],
+          multiSelect);              
     this.hasChanges = true;
   }
 
@@ -614,7 +643,10 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
         var rowy = (rowIndex-this.topindex) * this.rowheight;
         if(rowobj) {
           // Clear row area
-          let rowBgColor : string = (rowIndex%2===0 ? "#e8e8e8" : "rgba(255,255,255,0.7)");
+          // Alternating row colors:
+          // let rowBgColor : string = (rowIndex%2===0 ? "#e8e8e8" : "rgba(255,255,255,0.7)");
+          // Single row color:
+          let rowBgColor : string = "#fff";
           
           let isBoldRow = this.selectListener.isBoldRow(rowobj);
           let isSelectedRow = this.selectListener.isSelectedRow(rowobj);
@@ -648,11 +680,11 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
             } else if(this.rowWrapMode && col.rowWrapModeChipCounter && parseInt(val)>1) {              
               this.ctx.save();
 
-              this.ctx.strokeStyle = "#0d5c99";
+              this.ctx.strokeStyle = "#01579B";
               if(isSelectedRow) {                
-                this.ctx.fillStyle = "#fff";                
+                this.ctx.fillStyle = "#000";
               } else {
-                this.ctx.fillStyle = "#0d5c99";                
+                this.ctx.fillStyle = "#01579B";                
               }
               this.roundRect(this.ctx,
                 canvwidth-50,
@@ -663,9 +695,9 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
                 
               this.ctx.strokeStyle = "#000";
               if(isSelectedRow) {
-                this.ctx.fillStyle = "#0d5c99";
+                this.ctx.fillStyle = "#01579B";
               } else {
-                this.ctx.fillStyle = "#fff";
+                this.ctx.fillStyle = "#000";
               }
               this.ctx.textAlign="center";               
               this.ctx.fillText(formattedVal+"",canvwidth-36,rowy+halfrowheight-15);
@@ -685,19 +717,19 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
             if ((x - this.horizScroll + col.width) >= 0 && formattedVal.length>0) {
                 this.ctx.fillStyle="#000";
                 if(isSelectedRow) {
-                  this.ctx.fillStyle="#fff";
+                  this.ctx.fillStyle="#000";
                 }
                 if(this.rowWrapMode) {
                   // Wrap rows if in row wrap mode
                   if(colindex>=this.rowWrapModeWrapColumn) {   
                     this.ctx.save();
-                    this.ctx.font ="11px "+this.fontFamily;
-                    this.ctx.fillStyle = "#0d5c99";
+                    this.ctx.font ="14px "+this.fontFamily;
+                    this.ctx.fillStyle = "#01579B";
                     this.ctx.fillText(formattedVal,x,rowy+halfrowheight+12);  
                     this.ctx.restore();
                   } else if(col.rowWrapModeMuted) {
                     this.ctx.save();
-                    this.ctx.font ="10px "+this.fontFamily;
+                    this.ctx.font ="12px "+this.fontFamily;
                     this.ctx.fillStyle = "#777";
                     this.ctx.fillText(formattedVal,x,rowy+halfrowheight-15); 
                     this.ctx.restore();
@@ -799,7 +831,7 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
            height: scrollbarheight-scrollbarverticalpadding};
 
         if(this.scrollbardrag) {
-          this.ctx.fillStyle="rbga(200,200,255,0.5)";
+          this.ctx.fillStyle="rgba(200,200,255,0.5)";
           this.roundRect(this.ctx,
               this.scrollBarRect.x-4,
               this.scrollBarRect.y-4,
@@ -830,7 +862,7 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
             bottom: 0px;
             user-select: none;
             -webkit-user-select: none;
-            color: #0d5c99;                        
+            color: #01579B;                        
             white-space: nowrap;
             height: 25px;
             padding-top: 5px;            
@@ -861,7 +893,7 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
               top: 0px;
               user-select: none;
               -webkit-user-select: none;
-              color: #0d5c99;          
+              color: #01579B;          
               padding-left: 5px;
               white-space: nowrap;
               height: 25px;
@@ -889,8 +921,8 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
                 user-select: none;
                 -webkit-user-select: none;
               "
-              [style.backgroundColor]="sortColumn!==col.sortColumn ? 'inherit' : '#0d5c99'"
-              [style.color]="sortColumn===col.sortColumn ? '#fff' : '#0d5c99'"
+              [style.backgroundColor]="sortColumn!==col.sortColumn ? 'inherit' : '#01579B'"
+              [style.color]="sortColumn===col.sortColumn ? '#fff' : '#01579B'"
               [style.cursor]="col.sortColumn!==null ? 'pointer' : 'default'"
               >
               <md-icon *ngIf="sortColumn===col.sortColumn" style="font-size: 12px;">{{sortDescending ? 'arrow_upward' : 'arrow_downward'}}</md-icon>{{col.name}}          
