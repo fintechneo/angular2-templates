@@ -1,43 +1,44 @@
 {
-    "scripts": {
-        "jspminstall": "jspm install",
-        "devserver": "node devserver.js",
-        "dist": "ngc -p tsconfig.json && rollup -c rollup-config.js"
-    },
-    "jspm": {
-        "dependencies": {
-            "reflect-metadata": "npm:reflect-metadata@^0.1.10",
-            "typescript": "npm:typescript@^2.3.4"
-        },
-        "devDependencies": {}
-    },
-    "devDependencies": {
-        "@angular/compiler-cli": "4.1.3",
-        "express": "",
-        "compression": "",
-        "jspm": "",
-        "rollup": "",
-        "rollup-plugin-commonjs": "",
-        "rollup-plugin-node-resolve": "",
-        "rollup-plugin-uglify": "",
-        "typescript": ""
-    },
+  "scripts": {
+    "jspminstall": "jspm install",
+    "devserver": "node devserver.js",
+    "dist": "ngc -p tsconfig.json && rollup -c rollup-config.js",
+    "lib": "ngc -p tsconfig-lib.json && rollup -c rollup-config-lib.js"
+  },
+  "jspm": {
     "dependencies": {
-        "@angular/animations": "4.1.3",
-        "@angular/cdk": "^2.0.0-beta.8",
-        "@angular/common": "4.1.3",
-        "@angular/compiler": "4.1.3",
-        "@angular/core": "4.1.3",
-        "@angular/forms": "4.1.3",
-        "@angular/http": "4.1.3",
-        "@angular/material": "",
-        "@angular/platform-browser": "4.1.3",
-        "@angular/platform-browser-dynamic": "4.1.3",
-        "@angular/router": "4.1.3",
-        "angular2-prettyjson": "",
-        "hammerjs": "",
-        "reflect-metadata": "",
-        "rxjs": "^5.0.1",
-        "zone.js": ""
-    }
+      "reflect-metadata": "npm:reflect-metadata@^0.1.10",
+      "typescript": "npm:typescript@^2.3.4"
+    },
+    "devDependencies": {}
+  },
+  "devDependencies": {
+    "@angular/compiler-cli": "4.1.3",
+    "express": "",
+    "compression": "",
+    "jspm": "",
+    "rollup": "",
+    "rollup-plugin-commonjs": "",
+    "rollup-plugin-node-resolve": "",
+    "rollup-plugin-uglify": "",
+    "typescript": ""
+  },
+  "dependencies": {
+    "@angular/animations": "4.1.3",
+    "@angular/cdk": "^2.0.0-beta.8",
+    "@angular/common": "4.1.3",
+    "@angular/compiler": "4.1.3",
+    "@angular/core": "4.1.3",
+    "@angular/forms": "4.1.3",
+    "@angular/http": "4.1.3",
+    "@angular/material": "",
+    "@angular/platform-browser": "4.1.3",
+    "@angular/platform-browser-dynamic": "4.1.3",
+    "@angular/router": "4.1.3",
+    "angular2-prettyjson": "",
+    "hammerjs": "",
+    "reflect-metadata": "",
+    "rxjs": "^5.0.1",
+    "zone.js": ""
+  }
 }

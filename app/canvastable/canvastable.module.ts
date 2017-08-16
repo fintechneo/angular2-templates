@@ -542,19 +542,19 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
    * Draws a rounded rectangle using the current state of the canvas.
    * If you omit the last three params, it will draw a rectangle
    * outline with a 5 pixel border radius
-   * @param {CanvasRenderingContext2D} ctx
-   * @param {Number} x The top left x coordinate
-   * @param {Number} y The top left y coordinate
-   * @param {Number} width The width of the rectangle
-   * @param {Number} height The height of the rectangle
-   * @param {Number} [radius = 5] The corner radius; It can also be an object
+   * @param ctx
+   * @param x The top left x coordinate
+   * @param y The top left y coordinate
+   * @param width The width of the rectangle
+   * @param height The height of the rectangle
+   * @param [radius = 5] The corner radius; It can also be an object
    *                 to specify different radii for corners
-   * @param {Number} [radius.tl = 0] Top left
-   * @param {Number} [radius.tr = 0] Top right
-   * @param {Number} [radius.br = 0] Bottom right
-   * @param {Number} [radius.bl = 0] Bottom left
-   * @param {Boolean} [fill = false] Whether to fill the rectangle.
-   * @param {Boolean} [stroke = true] Whether to stroke the rectangle.
+   * @param [radius.tl = 0] Top left
+   * @param [radius.tr = 0] Top right
+   * @param [radius.br = 0] Bottom right
+   * @param [radius.bl = 0] Bottom left
+   * @param [fill = false] Whether to fill the rectangle.
+   * @param [stroke = true] Whether to stroke the rectangle.
    */
   private roundRect(ctx : CanvasRenderingContext2D, x : number, y : number, width : number, height : number, radius? : any, fill? : boolean, stroke? : boolean) {
     if (typeof stroke == 'undefined') {
