@@ -4,9 +4,10 @@ import { COLORS } from '../color-database';
 
 
 @Component({
+  moduleId: "app/charts/stacked-barchart/",
   selector: 'stacked-barchart',
-  templateUrl: './app/charts/stacked-barchart/stacked-barchart.component.html',
-  styleUrls: ['./app/charts/stacked-barchart/stacked-barchart.component.css']
+  templateUrl: 'stacked-barchart.component.html',
+  styleUrls: ['stacked-barchart.component.css']
 })
 export class StackedBarchartComponent {
   //attributes
@@ -92,11 +93,11 @@ export class StackedBarchartComponent {
     this.data.forEach(element => {
       let label = element.label
       let stat: any[] = [];
-      element.stat.forEach(item => {
-        let name = item.name
-        let value = item.value
+      for(let i = 0; i < element.stat.length; i++){
+        let name = element.stat[i].name
+        let value = element.stat[i].value
         stat.push({name: name, value: value})
-      })
+      }
       this.rectangles.push({label: label, stat: stat});
     });
     this.lineHeight = []

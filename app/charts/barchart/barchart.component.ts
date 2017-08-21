@@ -3,9 +3,10 @@ import { Stat } from '../stat'
 import { COLORS } from '../color-database';
 
 @Component({
+  moduleId: "app/charts/barchart/",
   selector: 'barchart',
-  templateUrl: './app/charts/barchart/barchart.component.html',
-  styleUrls: ['./app/charts/barchart/barchart.component.css']
+  templateUrl: 'barchart.component.html',
+  styleUrls: ['barchart.component.css']
 })
 export class BarchartComponent implements OnChanges {
   //attributes

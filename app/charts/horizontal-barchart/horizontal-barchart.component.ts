@@ -3,9 +3,10 @@ import { Stat } from '../stat'
 import { COLORS } from '../color-database';
 
 @Component({
+  moduleId: "app/charts/horizontal-barchart/",
   selector: 'horizontal-barchart',
-  templateUrl: './app/charts/horizontal-barchart/horizontal-barchart.component.html',
-  styleUrls: ['./app/charts/horizontal-barchart/horizontal-barchart.component.css']
+  templateUrl: 'horizontal-barchart.component.html',
+  styleUrls: ['horizontal-barchart.component.css']
 })
 export class HorizontalBarchartComponent implements OnChanges {
   //attributes
