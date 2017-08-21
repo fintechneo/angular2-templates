@@ -21,6 +21,10 @@ import { MdSidenav} from '@angular/material';
             <a md-list-item routerLink="dactable" (click)="sidemenuClose()">
                 <md-icon md-list-icon>list</md-icon>
                 <span md-line>DAC CRS codes</span>
+            </a>   
+            <a md-list-item routerLink="qlyzetable" (click)="sidemenuClose()">
+                <md-icon md-list-icon>list</md-icon>
+                <span md-line>Qlyze table</span>
             </a>     
             <a md-list-item routerLink="piechart" (click)="sidemenuClose()">
                 <md-icon md-list-icon>pie_chart</md-icon>

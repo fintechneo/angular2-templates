@@ -1,0 +1,27 @@
+<md-sidenav-container fullscreen>
+    <md-sidenav #sidenav mode="side" [opened]="true" style="max-width: 80%">
+        <md-nav-list dense>
+            <ng-container>
+                <h3 md-subheader>Available Markets</h3>
+                <md-list-item *ngFor="let tag of availableMarkets">
+                    <md-checkbox [(ngModel)]="tag.id" (change)="reloadTopList">{{tag.name}}</md-checkbox>
+                </md-list-item>
+            </ng-container>
+        </md-nav-list>
+    </md-sidenav>
+
+    <md-toolbar style="display: flex; padding-top: 20px;">
+        <button md-icon-button (click)="sidenav.toggle()">
+            <md-icon>menu</md-icon>              
+        </button>
+        <md-input-container style="flex-grow: 1; margin-right: 20px;">
+            <input mdInput placeholder="search" [(ngModel)]="searchtext" />
+        </md-input-container>
+    </md-toolbar>
+    <div style="position: fixed; top: 80px; bottom: 5px; left: 8px; right: 8px; overflow-x: auto; -webkit-user-select: none; user-select: none;">
+        <canvastablecontainer [canvastableselectlistener]="this" (sortToggled)="sort()"></canvastablecontainer>
+    </div>
+    <div *ngIf="!dataReady" style="position: fixed; display: flex; justify-content: center; align-items: center; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1000; background-color: rgba(255,255,255,0.5)">
+        <md-spinner></md-spinner>
+    </div>
+</md-sidenav-container>

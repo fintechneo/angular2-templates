@@ -23,6 +23,9 @@ import { StackedBarchartComponent } from './charts/stacked-barchart/stacked-barc
 import { StackedHorizontalBarchartComponent } from './charts/stacked-horizontal-barchart/stacked-horizontal-barchart.component';
 import { ShowBarchartComponent } from './charts/show-barchart.component'
 import { ShowPiechartComponent } from './charts/show-piechart.component'
+import { QlyzeTableComponent } from './qlyze/qlyze-table.component';
+import { QlyzeService } from './qlyze/qlyze.service';
+
 @NgModule({
   imports:      [ BrowserModule,HttpModule,JsonpModule,FormsModule,
     MaterialModule,
@@ -51,6 +54,10 @@ import { ShowPiechartComponent } from './charts/show-piechart.component'
         component: DACAdminComponent
       },
       {
+        path: "qlyzetable",
+        component: QlyzeTableComponent
+      },
+      {
         path: "index_dev.html",
         component: DACAdminComponent
       },
@@ -68,8 +75,9 @@ import { ShowPiechartComponent } from './charts/show-piechart.component'
       StackedBarchartComponent,
       StackedHorizontalBarchartComponent,
       ShowBarchartComponent,
-      ShowPiechartComponent ],
-  providers: [ DataService,PDFService ], 
+      ShowPiechartComponent,
+      QlyzeTableComponent ],
+  providers: [ DataService,PDFService, QlyzeTableComponent ], 
   bootstrap:    [ AppComponent ]
 })
 export class AppModule { }
