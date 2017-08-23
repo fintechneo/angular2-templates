@@ -77,7 +77,7 @@ import { QlyzeService } from './qlyze/qlyze.service';
       ShowBarchartComponent,
       ShowPiechartComponent,
       QlyzeTableComponent ],
-  providers: [ DataService,PDFService, QlyzeTableComponent ], 
+  providers: [ DataService,PDFService, QlyzeService ], 
   bootstrap:    [ AppComponent ]
 })
 export class AppModule { }

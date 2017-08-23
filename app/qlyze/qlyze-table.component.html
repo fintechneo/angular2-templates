@@ -19,9 +19,6 @@
         </md-input-container>
     </md-toolbar>
     <div style="position: fixed; top: 80px; bottom: 5px; left: 8px; right: 8px; overflow-x: auto; -webkit-user-select: none; user-select: none;">
-        <canvastablecontainer [canvastableselectlistener]="this" (sortToggled)="sort()"></canvastablecontainer>
-    </div>
-    <div *ngIf="!dataReady" style="position: fixed; display: flex; justify-content: center; align-items: center; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1000; background-color: rgba(255,255,255,0.5)">
-        <md-spinner></md-spinner>
+        <canvastablecontainer [canvastableselectlistener]="this" (sortToggled)="sortColumn()"></canvastablecontainer>
     </div>
 </md-sidenav-container>
