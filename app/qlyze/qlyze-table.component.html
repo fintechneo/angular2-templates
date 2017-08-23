@@ -1,10 +1,10 @@
 <md-sidenav-container fullscreen>
     <md-sidenav #sidenav mode="side" [opened]="true" style="max-width: 80%">
         <md-nav-list dense>
-            <ng-container>
-                <h3 md-subheader>Available Markets</h3>
-                <md-list-item *ngFor="let tag of availableMarkets">
-                    <md-checkbox [(ngModel)]="tag.id" (change)="reloadTopList">{{tag.name}}</md-checkbox>
+            <ng-container *ngFor="let tag of thematicAreaGroups">
+                <h3 md-subheader>{{tag.groupName}}</h3>
+                <md-list-item *ngFor="let ta of tag.thematicAreas">
+                    <md-checkbox [(ngModel)]="selectedThematicAreaIds[ta.id]" (change)="refreshTableColumns();updateCanvasTableData()">{{ta.name}}</md-checkbox>
                 </md-list-item>
             </ng-container>
         </md-nav-list>
