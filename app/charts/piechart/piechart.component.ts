@@ -10,11 +10,13 @@ import { Stat } from '../stat'
 })
 export class PiechartComponent implements OnInit {
 
-  @Input() data: number[]
+  @Input() data: Stat[]
+  @Input() showLabels: boolean
  
   // Pie slice.
   slices: any[] = [];
   tot = 0
+  height  = 400;
   // Compute the (x,y)-coordinate of a percentage beginning from the top.
   private getXYCoord(percent: number): [number, number] {
     return [Math.cos(2 * Math.PI * percent - Math.PI/2) * 150, Math.sin(2 * Math.PI * percent-Math.PI/2) * 150];
@@ -39,7 +41,7 @@ export class PiechartComponent implements OnInit {
     this.tot = 0
     if (this.data.length > 0  && this.data != null) {
       for (let i = 0; i < this.data.length; i++) {
-         this.tot += this.data[i];
+         this.tot += this.data[i].count;
        }
       if (this.tot > 0) this.chart();
     }
@@ -50,9 +52,10 @@ export class PiechartComponent implements OnInit {
     // create new array to trigger an ngChange
     this.slices = []
     for (let i = 0; i < this.data.length; i++) {
-      let count = this.data[i];
+      let count = this.data[i].count;
+      let name = this.data[i].name
       this.slices.push(
-        {value: count, percent: 0, color: '', cnt: 0}
+        {value: count, percent: 0, color: '', cnt: 0, name: name}
       )
     }
     //sorts by value
@@ -93,7 +96,7 @@ export class PiechartComponent implements OnInit {
       cp += this.slices[i].percent
       this.slices[i].y2 = this.slices[i].y/(0.6+cp/70)
       this.slices[i].x2 = this.slices[i].x/(0.6+cp/70)
-
+      this.slices[i].yText = this.height/(this.slices.length+1)*(i+1)-0.5*this.height
     }
     // https://hackernoon.com/a-simple-pie-chart-in-svg-dbdd653b6936.
   }

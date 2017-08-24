@@ -17,8 +17,8 @@ export class QlyzeTableComponent implements CanvasTableSelectListener, OnInit {
 
     @ViewChild(CanvasTableContainerComponent) canvastablecontainer: CanvasTableContainerComponent;
     canvastable: CanvasTableComponent;
-
-    datapoints: any[];
+    thematicAreas: ThematicArea[] = []
+    datapoints: any[] = []
 
     constructor(dataservice: QlyzeService) {
         this.datapoints = []
@@ -26,7 +26,16 @@ export class QlyzeTableComponent implements CanvasTableSelectListener, OnInit {
             this.datapoints.push([item.name, item.totalScore, item.rsiScore, item.seasonalityScore, item.rocScore, item.volScore])
         }); // Clone array
         this.rowdata = this.datapoints
-
+        this.thematicAreas.push(
+            new ThematicArea(1,"Health","",1999,2099,[]),
+            new ThematicArea(2,"Education","",1999,2099,[]),
+            new ThematicArea(3,"Civil society","",1999,2099,[]),
+            new ThematicArea(4,"Peaceful coexistence","",1999,2099,[]),
+            new ThematicArea(5,"Economic empowerment","",1999,2099,[]),
+            new ThematicArea(6,"Human rights","",1999,2099,[]),
+            new ThematicArea(7,"Gender equality","",1999,2099,[]),
+        );
+        console.log("thematicAreas = ", this.thematicAreas[1])
     }
 
     ngOnInit() {
@@ -163,7 +172,7 @@ export class QlyzeTableComponent implements CanvasTableSelectListener, OnInit {
                         )
                 );
             }
-            /*
+            
             if (this.showUsedRowsOnly) {
                 filteredRows = filteredRows.filter((row) => 
                     Object.keys(row.thematicAreaMap)
@@ -172,7 +181,7 @@ export class QlyzeTableComponent implements CanvasTableSelectListener, OnInit {
                             this.selectedThematicAreaIds[thematicAreaKey])
                             ,false)
                 )
-            }  */
+            } 
 
             this.canvastable.rows = filteredRows;
 
