@@ -54,17 +54,29 @@ export class StackedBarchartComponent {
       }
     }
     if (array.length < 2) {
-      array = this.line(array, log - 1)
-    } else if (array.length < 5) {
+      array = this.line2(array, log - 1)
+    } else if (array.length < 4) {
       array = this.line50(array, log)
     }
 
+    return array
+  }
+  line2(array: any[], log: number) {
+    for (let i = 2; i <= this.biggestValue / (10 ** log); i += 2) {
+      if (i != 10) {
+        let name = i*10**log
+        let nr = this.xAxisPos * (1 - name / (1.1 * this.biggestValue))
+        name = Math.round(10*name)/10
+        array.push({ nr: nr, name: name })
+      }
+    }
     return array
   }
   line50(array: any[], log: number) {
     for (let i = 0.5; i <= this.biggestValue / (10 ** log); i++) {
       let name = i * 10 ** log
       let nr = this.xAxisPos * (1 - name / (1.1 * this.biggestValue))
+      name = Math.round(name*10)/10
       array.push({ nr: nr, name: name })
     }
     return array

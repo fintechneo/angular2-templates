@@ -20,7 +20,7 @@ export class ShowBarchartComponent {
   stat: any[] = [
     {
       label: "English", stat: [
-        { name: "One", value: 100 },
+        { name: "One", value: 300 },
         { name: "Two", value: 2 },
         { name: "Three", value: 3 },
         { name: "Four", value: 8 },
