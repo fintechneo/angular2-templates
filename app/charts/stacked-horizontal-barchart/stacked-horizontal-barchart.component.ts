@@ -3,9 +3,10 @@ import { Stat } from '../stat'
 import { COLORS } from '../color-database';
 
 @Component({
+  moduleId: "app/charts/stacked-horizontal-barchart/",
   selector: 'stacked-horizontal-barchart',
-  templateUrl: './app/charts/stacked-horizontal-barchart/stacked-horizontal-barchart.component.html',
-  styleUrls: ['./app/charts/stacked-horizontal-barchart/stacked-horizontal-barchart.component.css']
+  templateUrl: 'stacked-horizontal-barchart.component.html',
+  styleUrls: ['stacked-horizontal-barchart.component.css']
 })
 export class StackedHorizontalBarchartComponent  {
   //attributes
@@ -52,17 +53,30 @@ export class StackedHorizontalBarchartComponent  {
       }
     }
     if (array.length < 2) {
-      array = this.line(array, log - 1)
-    } else if (array.length < 5) {
+      array = this.line2(array, log - 1)
+    } else if (array.length < 4) {
       array = this.line50(array, log)
     }
 
     return array
   }
+
+  line2(array: any[], log: number) {
+    for (let i = 2; i <= this.biggestValue / (10 ** log); i += 2) {
+      if (i != 10) {
+        let name = i*10**log
+        let nr = (this.width - this.yAxisPos)* (name / (1.1 * this.biggestValue))+this.yAxisPos
+        name = Math.round(10*name)/10
+        array.push({ nr: nr, name: name })
+      }
+    }
+    return array
+  }
   line50(array: any[], log: number) {
     for (let i = 0.5; i <= this.biggestValue / (10 ** log); i++) {
       let name = i * 10 ** log
-      let nr = (this.height - this.xAxisPos) * (1 - name / (1.1 * this.biggestValue))
+      let nr = (this.width - this.yAxisPos)* (name / (1.1 * this.biggestValue))+this.yAxisPos
+      name = Math.round(name*10)/10
       array.push({ nr: nr, name: name })
     }
     return array
@@ -91,11 +105,11 @@ chart() {
     this.data.forEach(element => {
       let label = element.label
       let stat: any[] = [];
-      element.stat.forEach(item => {
-        let name = item.name
-        let value = item.value
+      for(let i = 0; i < element.stat.length; i++){
+        let name = element.stat[i].name
+        let value = element.stat[i].value
         stat.push({name: name, value: value})
-      })
+      }
       this.rectangles.push({label: label, stat: stat});
     });
   this.lineHeight = []

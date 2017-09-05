@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { COLORS } from './color-database';
 import { Stat } from './stat'
 @Component({
+  moduleId: "app/charts/",
   selector: 'show-barchart',
-  templateUrl: './app/charts/show-barchart.component.html'
+  templateUrl: 'show-barchart.component.html'
 })
 export class ShowBarchartComponent {
   statistics: Stat[] = [
@@ -19,7 +20,7 @@ export class ShowBarchartComponent {
   stat: any[] = [
     {
       label: "English", stat: [
-        { name: "One", value: 100 },
+        { name: "One", value: 300 },
         { name: "Two", value: 2 },
         { name: "Three", value: 3 },
         { name: "Four", value: 8 },

@@ -1,0 +1,24 @@
+<md-sidenav-container fullscreen>
+    <md-sidenav #sidenav mode="side" [opened]="true" style="max-width: 80%">
+        <md-nav-list dense>
+            <ng-container *ngFor="let tag of thematicAreaGroups">
+                <h3 md-subheader>{{tag.groupName}}</h3>
+                <md-list-item *ngFor="let ta of tag.thematicAreas">
+                    <md-checkbox [(ngModel)]="selectedThematicAreaIds[ta.id]" (change)="refreshTableColumns();updateCanvasTableData()">{{ta.name}}</md-checkbox>
+                </md-list-item>
+            </ng-container>
+        </md-nav-list>
+    </md-sidenav>
+
+    <md-toolbar style="display: flex; padding-top: 20px;">
+        <button md-icon-button (click)="sidenav.toggle()">
+            <md-icon>menu</md-icon>              
+        </button>
+        <md-input-container style="flex-grow: 1; margin-right: 20px;">
+            <input mdInput placeholder="search" [(ngModel)]="searchtext" />
+        </md-input-container>
+    </md-toolbar>
+    <div style="position: fixed; top: 80px; bottom: 5px; left: 8px; right: 8px; overflow-x: auto; -webkit-user-select: none; user-select: none;">
+        <canvastablecontainer [canvastableselectlistener]="this" (sortToggled)="sortColumn()"></canvastablecontainer>
+    </div>
+</md-sidenav-container>
