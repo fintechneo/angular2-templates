@@ -14,7 +14,7 @@
     },
   
     "files": [
-      "app/index.ts"      
+      "app/fintechneo-angulartemplates.ts"      
     ],
   
     "angularCompilerOptions": {
