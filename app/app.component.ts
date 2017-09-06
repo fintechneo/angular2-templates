@@ -13,7 +13,11 @@ import { MdSidenav} from '@angular/material';
             <a md-list-item routerLink="chart" (click)="sidemenuClose()">
                 <md-icon md-list-icon>show_chart</md-icon>
                 <span md-line>Chart</span>
-            </a>           
+            </a> 
+            <a md-list-item routerLink="linechart" (click)="sidemenuClose()">
+            <md-icon md-list-icon>show_chart</md-icon>
+            <span md-line>Multi-lined linechart</span>
+            </a>             
             <a md-list-item routerLink="table" (click)="sidemenuClose()">
                 <md-icon md-list-icon>list</md-icon>
                 <span md-line>Table</span>
@@ -33,7 +37,8 @@ import { MdSidenav} from '@angular/material';
             <a md-list-item routerLink="barcharts" (click)="sidemenuClose()">
                 <md-icon md-list-icon>insert_chart</md-icon>
                 <span md-line>Barcharts</span>
-            </a>         
+            </a> 
+                 
         </md-nav-list>
       </md-sidenav>
       <md-toolbar>

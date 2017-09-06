@@ -25,7 +25,9 @@ import { ShowBarchartComponent } from './charts/show-barchart.component'
 import { ShowPiechartComponent } from './charts/show-piechart.component'
 import { QlyzeTableComponent } from './qlyze/qlyze-table.component';
 import { QlyzeService } from './qlyze/qlyze.service';
-
+import { ShowChartComponent } from './chart/showchart.component';
+import { LineChartComponent } from './chart/linechart.component';
+import { SINTEFMeasureStationService } from './chart/measurestation/measurestation.service' 
 @NgModule({
   imports:      [ BrowserModule,HttpModule,JsonpModule,FormsModule,
     MaterialModule,
@@ -36,6 +38,10 @@ import { QlyzeService } from './qlyze/qlyze.service';
       {
         path: "chart",
         component: AccountOverviewComponent
+      },
+      {
+        path: "linechart",
+        component: ShowChartComponent
       },
       {
         path: "barcharts",
@@ -76,8 +82,10 @@ import { QlyzeService } from './qlyze/qlyze.service';
       StackedHorizontalBarchartComponent,
       ShowBarchartComponent,
       ShowPiechartComponent,
-      QlyzeTableComponent ],
-  providers: [ DataService,PDFService, QlyzeService ], 
+      QlyzeTableComponent,
+      LineChartComponent,
+      ShowChartComponent ],
+  providers: [ DataService,PDFService, QlyzeService, SINTEFMeasureStationService ], 
   bootstrap:    [ AppComponent ]
 })
 export class AppModule { }

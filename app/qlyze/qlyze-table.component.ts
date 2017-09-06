@@ -23,7 +23,7 @@ export class QlyzeTableComponent implements CanvasTableSelectListener, OnInit {
     constructor(dataservice: QlyzeService) {
         this.datapoints = []
         dataservice.qlyzedata.forEach(item => {
-            this.datapoints.push([item.name, item.totalScore, item.rsiScore, item.seasonalityScore, item.rocScore, item.volScore])
+            this.datapoints.push([item.name ? item.name : item.ticker, item.totalScore, item.rsiScore, item.seasonalityScore, item.rocScore, item.volScore])
         }); // Clone array
         this.rowdata = this.datapoints
         this.thematicAreas.push(
