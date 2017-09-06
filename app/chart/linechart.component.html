@@ -1,0 +1,199 @@
+<style>
+        svg text {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            cursor: default;
+        }
+        svg text::selection {
+            background: none;
+        }
+        .dragHandle:hover {
+            fill: #0050a7;
+            cursor: pointer;
+        }         
+    </style>
+    
+    <svg xmlns="http://www.w3.org/2000/svg" #svgelement [attr.viewBox]="viewBox"  
+            preserveAspectRatio="none"
+            style="width: 100%; height: 100%; border: none;"  
+            (mousemove)="handleHover($event)"  
+            (touchmove)="handleTouchHover($event)"  
+            (mouseout)="hoverOpacity=0.0"              
+
+            >                    
+        <!-- Y axis line -->
+        <line 
+            [attr.x1]="chartBoxLeft" 
+            [attr.x2]="chartBoxLeft"
+            [attr.y1]="chartBoxTop"            
+            [attr.y2]="getChartBoxBottom()" 
+            stroke="#000"
+            stroke-width="1"></line>
+
+        <!-- Y axis line scale 2 -->
+        <line 
+            [attr.x1]="chartBoxRight" 
+            [attr.x2]="chartBoxRight"
+            [attr.y1]="chartBoxTop"            
+            [attr.y2]="getChartBoxBottom()" 
+            stroke="#000"
+            stroke-width="1"></line>
+           
+    
+        <!-- X axis line -->
+        <line   
+            [attr.x1]="chartBoxLeft" 
+            [attr.x2]="chartBoxRight"
+            [attr.y1]="getChartBoxBottom()"            
+            [attr.y2]="getChartBoxBottom()" 
+            stroke="#000"
+            stroke-width="1"
+            ></line>
+        
+        <!-- X axis navigator line -->
+    
+        <g *ngIf="xaxisnav">
+            <line   
+                [attr.x1]="chartBoxLeft" 
+                [attr.x2]="chartBoxRight"
+                [attr.y1]="getChartHorizNavY()"            
+                [attr.y2]="getChartHorizNavY()" 
+                stroke="#000"
+                stroke-width="1"
+                ></line>
+    
+            
+            <circle [attr.cx]="getChartHorizNavLeft()" [attr.cy]="getChartHorizNavY()" 
+                r="15" 
+                stroke="#000"
+                stroke-width="1"
+                fill="#fff"
+                (mousedown)="dragHorizNavLeft($event)"
+                (touchstart)="dragHorizNavLeft($event)"
+                class="dragHandle"
+                >
+            </circle>
+    
+            <circle [attr.cx]="getChartHorizNavRight()" [attr.cy]="getChartHorizNavY()" 
+                r="15" 
+                stroke="#000"
+                stroke-width="1"
+                fill="#fff"
+                (mousedown)="dragHorizNavRight($event)"
+                (touchstart)="dragHorizNavRight($event)"
+                class="dragHandle"
+                >
+            </circle>
+        </g>    
+        <!-- X axis labels -->
+    
+        <g class="labels x-labels">
+            <text text-anchor="middle" style="font-size: 12px" 
+                [attr.x]="p[0]" 
+                [attr.y]="getChartBoxBottom()+20" 
+                *ngFor="let p of chartXLabels">
+                {{p[2]}}
+            </text>        
+        </g>
+
+
+        <!-- Y axis labels (left scale ) -->
+        <text fill="#000" style="font-size: 13px; font-weight: bold" alignment-baseline="middle"  text-anchor="end" 
+            [attr.x]="chartBoxLeft-10" [attr.y]="10" 
+            >
+            {{chartConfig.leftUnit}}
+        </text>      
+        <g class="labels y-labels">        
+        <text fill="#000" style="font-size: 12px" text-anchor="end" alignment-baseline="middle" 
+            [attr.x]="chartBoxLeft-10"
+            [attr.y]="yl[1]" *ngFor="let yl of chartYLabels">
+            {{yl[0] | number:'1.2-2'}}
+        </text>        
+        </g>
+
+        <!-- Y axis labels (right scale) -->
+
+        <text fill="#000" style="font-size: 13px; font-weight: bold" alignment-baseline="middle" 
+            [attr.x]="chartBoxRight+5" [attr.y]="10" 
+            >
+            {{chartConfig.rightUnit}}
+        </text>      
+        <g class="labels y-labels">
+        <text fill="#000" style="font-size: 12px" alignment-baseline="middle" [attr.x]="chartBoxRight+5" 
+            [attr.y]="yl[1]" 
+            *ngFor="let yl of chartYLabelsRight">
+            {{yl[0] | number:'1.2-2'}}
+        </text>        
+        </g>
+
+        <!-- Data lines -->
+
+        <g class="data" data-setname="Our first data set">
+
+            <path [attr.d]="pathString" 
+                *ngFor="let pathString of pathStrings;let ndx=index" 
+                fill="none" [attr.stroke]="chartConfig.lines[ndx].color" />
+            
+            <!--<g *ngFor="let p of scaledDataPoints">
+                <circle [attr.cx]="p[0]" [attr.cy]="p[1]" [attr.data-value]="p[1]" r="2"></circle>
+                <line *ngIf="p[2] && p[3]" 
+                    [attr.x1]="p[2]" 
+                    [attr.y1]="p[3]"
+                    [attr.x2]="p[0]"  
+                    [attr.y2]="p[1]" 
+                    fill="none"
+                    [attr.stroke]="p[1]<zeropointcharty ? '#43A047' : '#E53935'"
+                    stroke-width="1">
+                </line>            
+            </g> -->   
+        </g>
+    
+         <!-- Hover line and text -->
+    
+        <g [attr.opacity]="hoverOpacity" *ngIf="hoverX" [attr.transform]="hoverLineTransform" >
+                
+            <line x1="0" x2="0" [attr.y1]="chartBoxTop" [attr.y2]="getChartBoxBottom()" stroke="rgba(0,0,0,0.2)" />
+            <g *ngFor="let hoverYvalue of hoverYvalues; let ndx=index">                                            
+                <line x1="0" [attr.y1]="hoverYvalue.chartY" 
+                    [attr.x2]="hoverYvalue.labelX>0 ? 20 : -20" 
+                    [attr.y2]="hoverYvalue.labelY"   
+                    [attr.stroke]="chartConfig.lines[ndx].color"                    
+                    />
+
+                <circle cx="0" [attr.cy]="hoverYvalue.chartY" r="3" fill="#fff" 
+                    [attr.stroke]="chartConfig.lines[ndx].color"/>                
+                
+                <rect style="font-size: 15px" text-anchor="middle" 
+                    [attr.x]="hoverYvalue.labelX-40" 
+                    [attr.y]="hoverYvalue.labelY-15"
+                    width="80"
+                    height="20"
+                    fill="#fff"
+                    [attr.stroke]="chartConfig.lines[ndx].color"
+                    rx="3" ry="3"
+                    stroke-width="0.5"
+                /> 
+                                
+                <text style="font-size: 15px" text-anchor="middle" 
+                    [attr.x]="hoverYvalue.labelX" 
+                    [attr.y]="hoverYvalue.labelY" 
+                    [attr.fill]="chartConfig.lines[ndx].color"
+                    >
+                    {{hoverYvalue.originalValue | number:'1.2-2'}} {{chartConfig.lines[ndx].unit}}                    
+                </text>        
+            </g>
+            <g [attr.transform]="'translate(0,'+(getChartBoxBottom()+7)+')'">            
+                <rect fill="#3F51B5" rx="3" ry="3" 
+                    x="-75" y="-5" 
+                    width="150" height="25">
+                </rect>
+                <text style="font-size: 14px; " text-anchor="middle" y="12" fill="white"
+                    >
+                    {{hoverXvalue | date:'short'}}
+                </text>        
+            </g>
+        </g>
+       
+    </svg>

@@ -1,0 +1,36 @@
+<style>
+    md-card {
+        margin: 5px;
+    }
+    
+    md-card-title {
+        text-align: center;
+    }
+</style>
+
+<div style="display: flex; flex-wrap: wrap; width: 100%">
+    <div style="flex-grow: 1">
+
+        <md-card>
+            <md-card-title>
+                Temperature and precipitation
+            </md-card-title>
+            <md-card-content>
+                <div style="height: 300px;">
+                    <linechart #linechart *ngIf="datapoints" [xaxisnav]="true" [datapoints]="datapoints" [chartConfig]="lineChartConfig" mode="standard">
+                    </linechart>
+                </div>
+            </md-card-content>
+        </md-card>
+        <md-card>
+            <md-card-content>
+                <md-list>
+                    <md-list-item *ngFor="let legendItem of legendItems" [style.color]="legendItem.color">
+                        <h4 md-line>{{legendItem.name}}</h4>
+                        <p md-line>{{legendItem.description}}</p>
+                    </md-list-item>
+                </md-list>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>
