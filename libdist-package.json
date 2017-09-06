@@ -1,4 +1,6 @@
 {
+    "name": "fintechneo-angulartemplates",
+    "version": "0.1.0",
     "main": "fintechneo-angulartemplates.umd.js",
     "types": "fintechneo-angulartemplates.d.ts",
     "jsnext:main": "fintechneo-angulartemplates.js"
