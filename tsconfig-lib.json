@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {    
+      "outDir": "dist",
+      "target": "es5",
+      "module": "es2015",
+      "moduleResolution": "node",
+      "sourceMap": true,
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "declaration": true,
+      "lib": ["es2015", "dom"],    
+      "noImplicitAny": true,
+      "suppressImplicitAnyIndexErrors": true
+    },
+  
+    "files": [
+      "app/fintechneo-angulartemplates.ts"      
+    ],
+  
+    "angularCompilerOptions": {
+     "genDir": "build",
+     "skipTemplateCodegen": true,
+     "annotateForClosureCompiler": true,
+     "strictMetadataEmit": true
+   }
+  }
