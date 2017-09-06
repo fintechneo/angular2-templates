@@ -4,6 +4,7 @@ jspm_packages
 aot
 appjs
 dist
+libdist
 build
 npm-debug.log
 .DS_Store

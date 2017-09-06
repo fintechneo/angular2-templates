@@ -1,0 +1,5 @@
+{
+    "main": "fintechneo-angulartemplates.umd.js",
+    "types": "fintechneo-angulartemplates.d.ts",
+    "jsnext:main": "fintechneo-angulartemplates.js"
+}

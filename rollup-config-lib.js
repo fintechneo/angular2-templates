@@ -2,6 +2,14 @@ import rollup from 'rollup'
 import fs from 'fs';
 import path from 'path';
 
+const copyFilePlugin = function (options) {
+  return {
+    ongenerate(){
+      fs.writeFileSync(options.targ, fs.readFileSync(options.src));
+    }
+  };
+}
+
 const removeJSPlugin = function (options) {
   return {
       ongenerate(){
@@ -32,8 +40,8 @@ const removeJSPlugin = function (options) {
 };
 
 export default {
-  entry: 'dist/fintechneo-angulartemplates.js',
-  dest: 'dist/fintechneo-angulartemplates.umd.js',
+  entry: 'libdist/fintechneo-angulartemplates.js',
+  dest: 'libdist/fintechneo-angulartemplates.umd.js',
   sourceMap: false,
   format: 'umd',
   moduleName: 'fintechneo.angulartemplates',
@@ -42,6 +50,8 @@ export default {
     console.warn( warning.message );
   },
   plugins: [
+    copyFilePlugin({src: "libdist-package.json", 
+      targ: "libdist/package.json"})
     /*removeJSPlugin({
         src:  'dist/',
         except: "fintechneo-angulartemplates.umd.js"        
