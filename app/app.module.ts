@@ -28,12 +28,16 @@ import { QlyzeService } from './qlyze/qlyze.service';
 import { ShowChartComponent } from './chart/showchart.component';
 import { LineChartComponent } from './chart/linechart.component';
 import { SINTEFMeasureStationService } from './chart/measurestation/measurestation.service' 
-@NgModule({
+import { OrgComponentsModule } from "./lib.module"
+
+ @NgModule({
   imports:      [ BrowserModule,HttpModule,JsonpModule,FormsModule,
     MaterialModule,
     CanvasTableModule,
     BrowserAnimationsModule,
     DACModule,
+    OrgComponentsModule,
+    
     RouterModule.forRoot([
       {
         path: "chart",

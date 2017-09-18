@@ -3,7 +3,8 @@
     "jspminstall": "jspm install",
     "devserver": "node devserver.js",
     "dist": "ngc -p tsconfig.json && rollup -c rollup-config.js",
-    "lib": "ngc -p tsconfig-lib.json && rollup -c rollup-config-lib.js && cd libdist && tar -zRcvf ../fintechneo-angulartemplates.tar.gz ."
+    "lib": "ngc -p tsconfig-lib.json && rollup -c rollup-config-lib.js",
+    "lib3" : "cd libdist && tar -zRcvf ../fintechneo-angulartemplates.tar.gz ."
   },
   "jspm": {
     "dependencies": {
