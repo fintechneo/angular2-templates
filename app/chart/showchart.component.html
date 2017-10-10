@@ -13,7 +13,7 @@
 
         <mat-card>
             <mat-card-title>
-                Temperature and precipitation
+                Linechart
             </mat-card-title>
             <mat-card-content>
                 <div style="height: 300px;">
@@ -21,16 +21,6 @@
                     </linechart>
                 </div>
             </mat-card-content>
-        </mat-card>
-        <mat-card>
-            <mat-card-content>
-                <mat-list>
-                    <mat-list-item *ngFor="let legendItem of legendItems" [style.color]="legendItem.color">
-                        <h4 mat-line>{{legendItem.name}}</h4>
-                        <p mat-line>{{legendItem.description}}</p>
-                    </mat-list-item>
-                </mat-list>
-            </mat-card-content>
-        </mat-card>
+        </mat-card>        
     </div>
 </div>
