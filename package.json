@@ -7,7 +7,7 @@
   },
   "jspm": {
     "dependencies": {
-      "typescript": "npm:typescript"
+      "typescript": "npm:typescript@^2.5.3"
     },
     "devDependencies": {}
   },

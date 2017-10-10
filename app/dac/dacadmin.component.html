@@ -15,7 +15,7 @@
             <mat-icon>menu</mat-icon>              
         </button>
         <mat-input-container style="flex-grow: 1; margin-right: 20px;">
-            <input mdInput placeholder="search" [(ngModel)]="searchtext" />
+            <input matInput placeholder="search" [(ngModel)]="searchtext" />
         </mat-input-container>      
         <mat-checkbox [(ngModel)]="showUsedRowsOnly" mat-tooltip="Show only DAC sectors in use" (change)="updateCanvasTableData()">
             in use
