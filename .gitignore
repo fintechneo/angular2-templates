@@ -5,6 +5,8 @@ aot
 appjs
 dist
 libdist
+libjs
+tstmp
 build
 npm-debug.log
 .DS_Store

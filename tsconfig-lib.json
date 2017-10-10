@@ -1,11 +1,11 @@
 {
     "compilerOptions": {    
-      "outDir": "libdist",
+      "outDir": "libjs",
       "target": "es5",
       "module": "es2015",
       "moduleResolution": "node",
       "sourceMap": true,
-      "emitDecoratorMetadata": true,
+      "emitDecoratorMetadata": false,
       "experimentalDecorators": true,
       "declaration": true,
       "lib": ["es2015", "dom"],    
@@ -14,13 +14,13 @@
     },
   
     "files": [
-      "app/index.ts"      
+      "tstmp/lib.module.ts"      
     ],
   
     "angularCompilerOptions": {
      "genDir": "build",
-     /*"flatModuleOutFile": "fintechneo-angulartemplates.js",
-     "flatModuleId": "fintechneo-angulartemplates",*/
+     "flatModuleOutFile": "fintechneo-angulartemplates.js",
+     "flatModuleId": "fintechneo-angulartemplates",
      "skipTemplateCodegen": true,
      "annotateForClosureCompiler": true,
      "strictMetadataEmit": true
