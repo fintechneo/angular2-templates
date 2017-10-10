@@ -8,7 +8,7 @@ import { NgModule,Component,QueryList,AfterViewInit,
   ElementRef,
   DoCheck,NgZone,EventEmitter,OnInit,ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MaterialModule,MdTooltip } from '@angular/material';
+import { MatTooltipModule,MatTooltip,MatIconModule } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 export class AnimationFrameThrottler {
@@ -93,10 +93,10 @@ export class CanvasTableColumnSection {
   template: `    
     <canvas #thecanvas style="position: absolute; width: 100%; height: 100%; user-select: none;" 
         tabindex="0"></canvas>
-    <div #columnOverlay draggable="true" [mdTooltip]="floatingTooltip.tooltipText" style="position: absolute;"               
+        <div #columnOverlay draggable="true" [matTooltip]="floatingTooltip.tooltipText" style="position: absolute;"
               (DOMMouseScroll)="floatingTooltip=null"
               (mousewheel)="floatingTooltip=null"
-              (mousemove)="canv.onmousemove($event)"
+              (mousemove)="canv.onmousemove($event)"               
               (click)="columnOverlayClicked($event)"
               [style.top.px]="floatingTooltip.top" 
               [style.left.px]="floatingTooltip.left"
@@ -122,7 +122,7 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
   
   @ViewChild("thecanvas") canvRef : ElementRef;
   
-  @ViewChild(MdTooltip) columnOverlay : MdTooltip;  
+  @ViewChild(MatTooltip) columnOverlay : MatTooltip;  
 
   private canv : HTMLCanvasElement;
 
@@ -341,10 +341,12 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
       if(this.scrollbardrag || checkIfScrollbarArea(event.clientX,event.clientY,true)) {
         newHoverRowIndex = null;
       }
+      
       if(this.hoverRowIndex!==newHoverRowIndex) {
         this.hoverRowIndex = newHoverRowIndex;         
-        if(this.lastMouseDownEvent && event.shiftKey) {                  
-          this.selectRow(this.lastMouseDownEvent.clientX,event.clientY,true);
+        if(this.lastMouseDownEvent) {                  
+          
+          this.selectRow(this.lastMouseDownEvent.clientX,event.clientY);
         }        
       }
       if(this.hoverRowIndex!==null) {
@@ -352,7 +354,7 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
         let colIndex = this.getColIndexByClientX(clientX);
         let colStartX = this.columns.reduce((prev,curr,ndx) => ndx<colIndex ? prev+curr.width : prev,0);
         
-        if(!event.shiftKey && this.columns[colIndex] && this.columns[colIndex].tooltipText) {
+        if(!event.shiftKey && !this.lastMouseDownEvent && this.columns[colIndex] && this.columns[colIndex].tooltipText) {
             this.floatingTooltip = new FloatingTooltip(
                 (this.hoverRowIndex-this.topindex)*this.rowheight,
                 colStartX-this.horizScroll,
@@ -360,7 +362,7 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
                 this.rowheight,this.columns[colIndex].tooltipText);            
             setTimeout(() => {
                 if(this.columnOverlay) {
-                  this.columnOverlay.show(500);
+                  this.columnOverlay.show(1000);
                 }
               },0);
         } else {
@@ -379,6 +381,7 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
 
     this.renderer.listenGlobal('window', 'mouseup',(event : MouseEvent) => {
         this.touchdownxy = undefined;
+        this.lastMouseDownEvent = undefined;
         if(this.scrollbardrag) {
           this.scrollbardrag = false;          
         }
@@ -415,20 +418,26 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
     );                    
   } 
 
-  public dragColumnOverlay(event : DragEvent) {
-    console.log("Dragstart",event);
-    let canvrect = this.canv.getBoundingClientRect();
-        
+  public dragColumnOverlay(event : DragEvent) {    
+    let canvrect = this.canv.getBoundingClientRect();    
+    let selectedColIndex = this.getColIndexByClientX(event.clientX-canvrect.left);    
     let selectedRowIndex = Math.floor(this.topindex+(event.clientY-canvrect.top)/this.rowheight);    
-    
+                    
+    if(!this.columns[selectedColIndex].checkbox) {
+      console.log("Dragstart",event);
+      event.dataTransfer.setData("text/plain", "rowIndex:"+selectedRowIndex);
+    } else {
+      event.preventDefault();
+      this.lastMouseDownEvent = event;
+    }
+
     this.selectListener.rowSelected(selectedRowIndex, -1, this.rows[selectedRowIndex]);              
-    this.hasChanges = true;    
-            
-    event.dataTransfer.setData("text/plain", "rowIndex:"+selectedRowIndex);
+    this.hasChanges = true;        
   }
 
-  public columnOverlayClicked(event : MouseEvent) {        
-    this.selectRow(event.clientX,event.clientY);          
+  public columnOverlayClicked(event : MouseEvent) {    
+      this.lastMouseDownEvent = null;
+      this.selectRow(event.clientX,event.clientY);          
   }
 
   public doScrollBarDrag(clientY : number) {
@@ -542,19 +551,19 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
    * Draws a rounded rectangle using the current state of the canvas.
    * If you omit the last three params, it will draw a rectangle
    * outline with a 5 pixel border radius
-   * @param ctx
-   * @param x The top left x coordinate
-   * @param y The top left y coordinate
-   * @param width The width of the rectangle
-   * @param height The height of the rectangle
-   * @param [radius = 5] The corner radius; It can also be an object
+   * @param {CanvasRenderingContext2D} ctx
+   * @param {Number} x The top left x coordinate
+   * @param {Number} y The top left y coordinate
+   * @param {Number} width The width of the rectangle
+   * @param {Number} height The height of the rectangle
+   * @param {Number} [radius = 5] The corner radius; It can also be an object
    *                 to specify different radii for corners
-   * @param [radius.tl = 0] Top left
-   * @param [radius.tr = 0] Top right
-   * @param [radius.br = 0] Bottom right
-   * @param [radius.bl = 0] Bottom left
-   * @param [fill = false] Whether to fill the rectangle.
-   * @param [stroke = true] Whether to stroke the rectangle.
+   * @param {Number} [radius.tl = 0] Top left
+   * @param {Number} [radius.tr = 0] Top right
+   * @param {Number} [radius.br = 0] Bottom right
+   * @param {Number} [radius.bl = 0] Bottom left
+   * @param {Boolean} [fill = false] Whether to fill the rectangle.
+   * @param {Boolean} [stroke = true] Whether to stroke the rectangle.
    */
   private roundRect(ctx : CanvasRenderingContext2D, x : number, y : number, width : number, height : number, radius? : any, fill? : boolean, stroke? : boolean) {
     if (typeof stroke == 'undefined') {
@@ -717,7 +726,7 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
             if ((x - this.horizScroll + col.width) >= 0 && formattedVal.length>0) {
                 this.ctx.fillStyle="#000";
                 if(isSelectedRow) {
-                  this.ctx.fillStyle="#000";
+                  this.ctx.fillStyle="#01579B";
                 }
                 if(this.rowWrapMode) {
                   // Wrap rows if in row wrap mode
@@ -906,9 +915,9 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
             [style.left]="sumWidthsBefore(colIndex)+'px'"
             [style.cursor]="col.sortColumn!==null ? 'pointer' : 'default'"
             >
-            <md-icon *ngIf="sortColumn===col.sortColumn" style="font-size: 12px;">
+            <mat-icon *ngIf="sortColumn===col.sortColumn" style="font-size: 12px;">
                 {{sortDescending ? 'arrow_upward' : 'arrow_downward'}}
-            </md-icon>
+            </mat-icon>
             {{col.name}}          
         </div>
         <div [style.display]="canvastable.rowWrapMode ? 'flex':'none'">        
@@ -925,7 +934,7 @@ export class CanvasTableComponent implements AfterViewInit,DoCheck {
               [style.color]="sortColumn===col.sortColumn ? '#fff' : '#01579B'"
               [style.cursor]="col.sortColumn!==null ? 'pointer' : 'default'"
               >
-              <md-icon *ngIf="sortColumn===col.sortColumn" style="font-size: 12px;">{{sortDescending ? 'arrow_upward' : 'arrow_downward'}}</md-icon>{{col.name}}          
+              <mat-icon *ngIf="sortColumn===col.sortColumn" style="font-size: 12px;">{{sortDescending ? 'arrow_upward' : 'arrow_downward'}}</mat-icon>{{col.name}}          
           </div>        
         </div>
         
@@ -1073,7 +1082,8 @@ export class CanvasTableContainerComponent implements OnInit {
 @NgModule({
   imports: [
       CommonModule,
-      MaterialModule
+      MatTooltipModule,
+      MatIconModule
   ],
   declarations: [CanvasTableComponent,CanvasTableContainerComponent],
   exports: [CanvasTableComponent,CanvasTableContainerComponent]
