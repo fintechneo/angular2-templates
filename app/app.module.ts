@@ -5,7 +5,7 @@ import { BrowserModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import {MaterialModule} from '@angular/material';
+import { MatSidenavModule,MatToolbarModule,MatInputModule,MatIconModule,MatButtonModule,MatListModule } from '@angular/material';
 import {CanvasTableModule} from './canvastable/canvastable.module';
 import { DACModule } from './dac/dac.module';
 import { DACAdminComponent } from './dac/dacadmin.component';
@@ -30,7 +30,9 @@ import { LineChartComponent } from './chart/linechart.component';
 import { SINTEFMeasureStationService } from './chart/measurestation/measurestation.service' 
 @NgModule({
   imports:      [ BrowserModule,HttpModule,JsonpModule,FormsModule,
-    MaterialModule,
+    MatSidenavModule,
+    MatButtonModule,MatListModule,MatIconModule,MatInputModule,
+    MatToolbarModule,
     CanvasTableModule,
     BrowserAnimationsModule,
     DACModule,
@@ -65,7 +67,7 @@ import { SINTEFMeasureStationService } from './chart/measurestation/measurestati
       },
       {
         path: "index_dev.html",
-        component: DACAdminComponent
+        component: AccountOverviewComponent
       },
       {
         path: "",

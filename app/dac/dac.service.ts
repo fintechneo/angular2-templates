@@ -4,7 +4,7 @@
 
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import { MdDialog } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { AsyncSubject } from 'rxjs/AsyncSubject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { DACSector } from './daccodelists.service';
@@ -27,7 +27,7 @@ export class DACService {
     
     constructor(
         private http : Http,        
-        private dialog : MdDialog) {
+        private dialog : MatDialog) {
 
         this.thematicAreas.next([
             new ThematicArea(1,"Health","",1999,2099,[]),

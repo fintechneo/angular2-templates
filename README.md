@@ -13,7 +13,6 @@ For development remember to run:
 
 ```
 npm install
-npm run jspminstall
 ```
 
 for installing dependencies.

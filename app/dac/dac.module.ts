@@ -5,7 +5,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MaterialModule } from '@angular/material';
+import { MatCheckboxModule,MatListModule,
+  MatSidenavModule,
+  MatButtonModule,
+  MatIconModule,
+  MatInputModule,
+  MatDialogModule } from '@angular/material';
 import { CanvasTableModule } from '../canvastable/canvastable.module';
 import { DACAdminComponent } from './dacadmin.component';
 import { DACService } from './dac.service';
@@ -16,7 +21,14 @@ import { DACCodeListsService } from './daccodelists.service';
       CommonModule,
       FormsModule,
       CanvasTableModule,
-      MaterialModule
+      MatCheckboxModule,
+      MatSidenavModule,
+      MatButtonModule,
+      MatIconModule,
+      MatInputModule,
+      MatListModule,
+      MatDialogModule,
+      
   ],
   declarations: [DACAdminComponent],
   exports: [DACAdminComponent],  

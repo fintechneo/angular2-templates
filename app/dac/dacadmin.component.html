@@ -1,30 +1,30 @@
-<md-sidenav-container fullscreen>    
-    <md-sidenav #sidenav mode="side" [opened]="true" style="max-width: 80%">   
-        <md-nav-list dense>
+<mat-sidenav-container fullscreen>    
+    <mat-sidenav #sidenav mode="side" style="max-width: 80%">   
+        <mat-nav-list dense>
             <ng-container *ngFor="let tag of thematicAreaGroups">                
-                <h3 md-subheader>{{tag.groupName}}</h3>
-                <md-list-item *ngFor="let ta of tag.thematicAreas">
-                    <md-checkbox [(ngModel)]="selectedThematicAreaIds[ta.id]" (change)="refreshTableColumns();updateCanvasTableData()">{{ta.name}}</md-checkbox>
-                </md-list-item>  
+                <h3 mat-subheader>{{tag.groupName}}</h3>
+                <mat-list-item *ngFor="let ta of tag.thematicAreas">
+                    <mat-checkbox [(ngModel)]="selectedThematicAreaIds[ta.id]" (change)="refreshTableColumns();updateCanvasTableData()">{{ta.name}}</mat-checkbox>
+                </mat-list-item>  
             </ng-container>
-        </md-nav-list>
-    </md-sidenav>
+        </mat-nav-list>
+    </mat-sidenav>
     
-    <md-toolbar style="display: flex; padding-top: 20px;">        
-        <button md-icon-button (click)="sidenav.toggle()">
-            <md-icon>menu</md-icon>              
+    <mat-toolbar style="display: flex; padding-top: 20px;">        
+        <button mat-icon-button (click)="sidenav.toggle()">
+            <mat-icon>menu</mat-icon>              
         </button>
-        <md-input-container style="flex-grow: 1; margin-right: 20px;">
+        <mat-input-container style="flex-grow: 1; margin-right: 20px;">
             <input mdInput placeholder="search" [(ngModel)]="searchtext" />
-        </md-input-container>      
-        <md-checkbox [(ngModel)]="showUsedRowsOnly" md-tooltip="Show only DAC sectors in use" (change)="updateCanvasTableData()">
+        </mat-input-container>      
+        <mat-checkbox [(ngModel)]="showUsedRowsOnly" mat-tooltip="Show only DAC sectors in use" (change)="updateCanvasTableData()">
             in use
-        </md-checkbox>
-    </md-toolbar>
+        </mat-checkbox>
+    </mat-toolbar>
     <div style="position: fixed; top: 80px; bottom: 5px; left: 8px; right: 8px; overflow-x: auto; -webkit-user-select: none; user-select: none;">
         <canvastablecontainer [canvastableselectlistener]="this" (sortToggled)="sort()"></canvastablecontainer>
     </div>
     <div *ngIf="!dataReady" style="position: fixed; display: flex; justify-content: center; align-items: center; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1000; background-color: rgba(255,255,255,0.5)">
-        <md-spinner></md-spinner>
+        <!--<mat-spinner></mat-spinner>-->
     </div>    
-</md-sidenav-container>
+</mat-sidenav-container>

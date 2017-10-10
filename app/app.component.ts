@@ -1,66 +1,66 @@
 import {Component,DoCheck,ViewChild} from '@angular/core';
-import { MdSidenav} from '@angular/material';
+import { MatSidenav} from '@angular/material';
 
 @Component({
   selector: 'my-app',
   template: `
-    <md-sidenav-container fullscreen>
-      <md-sidenav #sidebar [mode]="sidenavmode" [opened]="sidenavopened">
+    <mat-sidenav-container fullscreen>
+      <mat-sidenav #sidebar [mode]="sidenavmode">
         <p style="padding: 10px;">
           <img src="companylogo.png" style="height: 40px; width: auto" alt="companylogo" />
         </p>
-        <md-nav-list>
-            <a md-list-item routerLink="chart" (click)="sidemenuClose()">
-                <md-icon md-list-icon>show_chart</md-icon>
-                <span md-line>Chart</span>
+        <mat-nav-list>
+            <a mat-list-item routerLink="chart" (click)="sidemenuClose()">
+                <mat-icon mat-list-icon>show_chart</mat-icon>
+                <span mat-line>Chart</span>
             </a> 
-            <a md-list-item routerLink="linechart" (click)="sidemenuClose()">
-            <md-icon md-list-icon>show_chart</md-icon>
-            <span md-line>Multi-lined linechart</span>
+            <a mat-list-item routerLink="linechart" (click)="sidemenuClose()">
+            <mat-icon mat-list-icon>show_chart</mat-icon>
+            <span mat-line>Multi-lined linechart</span>
             </a>             
-            <a md-list-item routerLink="table" (click)="sidemenuClose()">
-                <md-icon md-list-icon>list</md-icon>
-                <span md-line>Table</span>
+            <a mat-list-item routerLink="table" (click)="sidemenuClose()">
+                <mat-icon mat-list-icon>list</mat-icon>
+                <span mat-line>Table</span>
             </a>            
-            <a md-list-item routerLink="dactable" (click)="sidemenuClose()">
-                <md-icon md-list-icon>list</md-icon>
-                <span md-line>DAC CRS codes</span>
+            <a mat-list-item routerLink="dactable" (click)="sidemenuClose()">
+                <mat-icon mat-list-icon>list</mat-icon>
+                <span mat-line>DAC CRS codes</span>
             </a>   
-            <a md-list-item routerLink="qlyzetable" (click)="sidemenuClose()">
-                <md-icon md-list-icon>list</md-icon>
-                <span md-line>Qlyze table</span>
+            <a mat-list-item routerLink="qlyzetable" (click)="sidemenuClose()">
+                <mat-icon mat-list-icon>list</mat-icon>
+                <span mat-line>Qlyze table</span>
             </a>     
-            <a md-list-item routerLink="piechart" (click)="sidemenuClose()">
-                <md-icon md-list-icon>pie_chart</md-icon>
-                <span md-line>Piechart</span>
+            <a mat-list-item routerLink="piechart" (click)="sidemenuClose()">
+                <mat-icon mat-list-icon>pie_chart</mat-icon>
+                <span mat-line>Piechart</span>
             </a>   
-            <a md-list-item routerLink="barcharts" (click)="sidemenuClose()">
-                <md-icon md-list-icon>insert_chart</md-icon>
-                <span md-line>Barcharts</span>
+            <a mat-list-item routerLink="barcharts" (click)="sidemenuClose()">
+                <mat-icon mat-list-icon>insert_chart</mat-icon>
+                <span mat-line>Barcharts</span>
             </a> 
                  
-        </md-nav-list>
-      </md-sidenav>
-      <md-toolbar>
-        <button md-icon-button (click)="sidebar.toggle()">
+        </mat-nav-list>
+      </mat-sidenav>
+      <mat-toolbar>
+        <button mat-icon-button (click)="sidebar.toggle()">
           <img src="companyicon.png" style="width: 36px; height: 36px" alt="company" />
         </button>
 
         <span style="margin-left: 20px"></span>
-      </md-toolbar>
+      </mat-toolbar>
       <router-outlet></router-outlet>
       
-    </md-sidenav-container>`
+    </mat-sidenav-container>`
 })
 export class AppComponent implements DoCheck {
     public sidenavmode : string = "over";
     public sidenavopened : boolean = false;
-    @ViewChild(MdSidenav) sidemenu : MdSidenav;
+    @ViewChild(MatSidenav) sidemenu : MatSidenav;
 
     public ngDoCheck() {
       if(window.innerWidth>1024) {
         this.sidenavmode = "side";
-        this.sidenavopened = true;
+        this.sidenavopened = true;        
       } else {
         this.sidenavmode = "over";
       }

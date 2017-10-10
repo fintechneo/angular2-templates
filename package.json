@@ -1,6 +1,11 @@
 {
+  "name": "fintechneo-angulartemplates",
+  "version": "0.1.0",
+  "main": "libdist/fintechneo-angulartemplates.umd.js",
+  "types": "libdist/fintechneo-angulartemplates.d.ts",
+  "jsnext:main": "libdist/fintechneo-angulartemplates.js",
   "scripts": {
-    "jspminstall": "jspm install",
+    "postinstall": "jspm install",
     "devserver": "node devserver.js",
     "dist": "ngc -p tsconfig.json && rollup -c rollup-config.js",
     "lib": "ngc -p tsconfig-lib.json && rollup -c rollup-config-lib.js && cd libdist && tar -zRcvf ../fintechneo-angulartemplates.tar.gz ."
@@ -13,32 +18,33 @@
     "devDependencies": {}
   },
   "devDependencies": {
-    "@angular/compiler-cli": "4.1.3",
-    "express": "",
+    "@angular/compiler-cli": "",
     "compression": "",
+    "express": "",
     "jspm": "",
     "rollup": "",
     "rollup-plugin-commonjs": "",
     "rollup-plugin-node-resolve": "",
     "rollup-plugin-uglify": "",
+    "tslint": "^5.7.0",
     "typescript": ""
   },
   "dependencies": {
-    "@angular/animations": "4.1.3",
-    "@angular/cdk": "^2.0.0-beta.8",
-    "@angular/common": "4.1.3",
-    "@angular/compiler": "4.1.3",
-    "@angular/core": "4.1.3",
-    "@angular/forms": "4.1.3",
-    "@angular/http": "4.1.3",
+    "@angular/animations": "",
+    "@angular/cdk": "",
+    "@angular/common": "",
+    "@angular/compiler": "",
+    "@angular/core": "",
+    "@angular/forms": "",
+    "@angular/http": "",
     "@angular/material": "",
-    "@angular/platform-browser": "4.1.3",
-    "@angular/platform-browser-dynamic": "4.1.3",
-    "@angular/router": "4.1.3",
+    "@angular/platform-browser": "",
+    "@angular/platform-browser-dynamic": "",
+    "@angular/router": "",
     "angular2-prettyjson": "",
     "hammerjs": "",
     "reflect-metadata": "",
-    "rxjs": "^5.0.1",
+    "rxjs": "",
     "zone.js": ""
   }
 }

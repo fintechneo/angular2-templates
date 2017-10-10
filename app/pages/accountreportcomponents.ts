@@ -20,8 +20,8 @@ import 'rxjs/add/operator/mergeMap';
           }
         </style>
 
-        <md-card style="max-height: 100px;">             
-        <md-card-content>
+        <mat-card style="max-height: 100px;">             
+        <mat-card-content>
             <div class="flextable">
               <div>
                 <h3>Start</h3>
@@ -45,24 +45,24 @@ import 'rxjs/add/operator/mergeMap';
               </div>
               <div>
                   <h3>Report</h3>
-                  <button md-raised-button (click)="createPDF()">Download as PDF</button>
+                  <button mat-raised-button (click)="createPDF()">Download as PDF</button>
             </div>
             </div>            
-        </md-card-content>
-      </md-card>
-       <md-card>
-        <md-card-header>
-            <md-icon md-card-avatar>chart</md-icon>
-            <md-card-title><span style="color: #fff">Chart</span></md-card-title>
-            <md-card-subtitle>Equity</md-card-subtitle>
-        </md-card-header>        
-        <md-card-content>
+        </mat-card-content>
+      </mat-card>
+       <mat-card>
+        <mat-card-header>
+            <mat-icon mat-card-avatar>chart</mat-icon>
+            <mat-card-title><span style="color: #fff">Chart</span></mat-card-title>
+            <mat-card-subtitle>Equity</mat-card-subtitle>
+        </mat-card-header>        
+        <mat-card-content>
           <div style="width: 100%; height: 265px">
             <svg-linechart #linechart [xaxisnav]="true" [datapoints]="dataservice.datapoints" mode="standard">
             </svg-linechart>
           </div>
-        </md-card-content>        
-      </md-card>      
+        </mat-card-content>        
+      </mat-card>      
     `,
     providers: [DatePipe]
 })

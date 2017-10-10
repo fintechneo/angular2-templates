@@ -8,7 +8,7 @@ import { DACService, DACSocketUpdateMessage } from './dac.service';
 import { ThematicArea } from './thematicarea.class';
 import { AnimationFrameThrottler,CanvasTableSelectListener,CanvasTableColumn,CanvasTableContainerComponent,CanvasTableComponent } from '../canvastable/canvastable.module';
 
-import { MdDialog,MdDialogRef } from '@angular/material';
+import { MatDialog,MatDialogRef } from '@angular/material';
 import { DACSector, DACCodeListsService} from './daccodelists.service';
 
 export class ThematicAreaGroup {
@@ -39,7 +39,7 @@ export class DACAdminComponent implements CanvasTableSelectListener,OnInit,DoChe
     thematicAreaGroups : ThematicAreaGroup[] = [];
     
     constructor(public dacservice : DACService,         
-        public dialog : MdDialog,
+        public dialog : MatDialog,
         public daccodesservice : DACCodeListsService) {
                         
     }
