@@ -1,19 +1,13 @@
 {
-  "name": "fintechneo-angulartemplates",
-  "version": "0.1.0",
-  "main": "libdist/fintechneo-angulartemplates.umd.js",
-  "types": "libdist/fintechneo-angulartemplates.d.ts",
-  "jsnext:main": "libdist/fintechneo-angulartemplates.js",
   "scripts": {
     "postinstall": "jspm install",
     "devserver": "node devserver.js",
     "dist": "ngc -p tsconfig.json && rollup -c rollup-config.js",
-    "lib": "ngc -p tsconfig-lib.json && rollup -c rollup-config-lib.js && cd libdist && tar -zRcvf ../fintechneo-angulartemplates.tar.gz ."
+    "lib": "ngc -p tsconfig-lib.json && cd libdist && cp ../libdist-package.json package.json && tar -zRcvf ../fintechneo-angulartemplates.tar.gz ."
   },
   "jspm": {
     "dependencies": {
-      "reflect-metadata": "npm:reflect-metadata@^0.1.10",
-      "typescript": "npm:typescript@^2.3.4"
+      "typescript": "npm:typescript"
     },
     "devDependencies": {}
   },
@@ -26,10 +20,8 @@
     "rollup-plugin-commonjs": "",
     "rollup-plugin-node-resolve": "",
     "rollup-plugin-uglify": "",
-    "tslint": "^5.7.0",
-    "typescript": ""
-  },
-  "dependencies": {
+    "tslint": "",
+    "typescript": "",
     "@angular/animations": "",
     "@angular/cdk": "",
     "@angular/common": "",
@@ -45,6 +37,7 @@
     "hammerjs": "",
     "reflect-metadata": "",
     "rxjs": "",
-    "zone.js": ""
+    "zone.js": "",
+    "cpx": ""
   }
 }

@@ -14,11 +14,13 @@
     },
   
     "files": [
-      "app/fintechneo-angulartemplates.ts"      
+      "app/index.ts"      
     ],
   
     "angularCompilerOptions": {
      "genDir": "build",
+     /*"flatModuleOutFile": "fintechneo-angulartemplates.js",
+     "flatModuleId": "fintechneo-angulartemplates",*/
      "skipTemplateCodegen": true,
      "annotateForClosureCompiler": true,
      "strictMetadataEmit": true
