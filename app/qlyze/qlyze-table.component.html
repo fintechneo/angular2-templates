@@ -1,24 +1,10 @@
-<mat-sidenav-container fullscreen>
-    <mat-sidenav #sidenav mode="side" style="max-width: 80%">
-        <mat-nav-list dense>
-            <ng-container *ngFor="let tag of thematicAreaGroups">
-                <h3 mat-subheader>{{tag.groupName}}</h3>
-                <mat-list-item *ngFor="let ta of tag.thematicAreas">
-                    <mat-checkbox [(ngModel)]="selectedThematicAreaIds[ta.id]" (change)="refreshTableColumns();updateCanvasTableData()">{{ta.name}}</mat-checkbox>
-                </mat-list-item>
-            </ng-container>
-        </mat-nav-list>
-    </mat-sidenav>
-
-    <mat-toolbar style="display: flex; padding-top: 20px;">
-        <button mat-icon-button (click)="sidenav.toggle()">
-            <mat-icon>menu</mat-icon>              
-        </button>
+<mat-sidenav-container fullscreen>    
+    <mat-toolbar style="display: flex; padding-top: 20px;">        
         <mat-input-container style="flex-grow: 1; margin-right: 20px;">
             <input matInput placeholder="search" [(ngModel)]="searchtext" />
         </mat-input-container>
     </mat-toolbar>
-    <div style="position: fixed; top: 80px; bottom: 5px; left: 8px; right: 8px; overflow-x: auto; -webkit-user-select: none; user-select: none;">
+    <div style="position: absolute; top: 80px; bottom: 5px; left: 8px; right: 8px; overflow-x: auto; -webkit-user-select: none; user-select: none;">
         <canvastablecontainer [canvastableselectlistener]="this" (sortToggled)="sortColumn()"></canvastablecontainer>
     </div>
 </mat-sidenav-container>

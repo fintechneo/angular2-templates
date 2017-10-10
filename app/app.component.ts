@@ -41,12 +41,12 @@ import { MatSidenav} from '@angular/material';
                  
         </mat-nav-list>
       </mat-sidenav>
-      <mat-toolbar>
+      <mat-toolbar style="display: flex">
         <button mat-icon-button (click)="sidebar.toggle()">
-          <img src="companyicon.png" style="width: 36px; height: 36px" alt="company" />
-        </button>
-
-        <span style="margin-left: 20px"></span>
+          <mat-icon>menu</mat-icon>              
+        </button>        
+        <p style="flex-grow: 1"></p>
+        <img src="companyicon.png" style="width: 36px; height: 36px" alt="company" />
       </mat-toolbar>
       <router-outlet></router-outlet>
       

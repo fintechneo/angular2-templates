@@ -1,6 +1,6 @@
 <mat-sidenav-container fullscreen>    
     <mat-sidenav #sidenav mode="side" style="max-width: 80%">   
-        <mat-nav-list dense>
+        <mat-nav-list dense>            
             <ng-container *ngFor="let tag of thematicAreaGroups">                
                 <h3 mat-subheader>{{tag.groupName}}</h3>
                 <mat-list-item *ngFor="let ta of tag.thematicAreas">
@@ -21,7 +21,7 @@
             in use
         </mat-checkbox>
     </mat-toolbar>
-    <div style="position: fixed; top: 80px; bottom: 5px; left: 8px; right: 8px; overflow-x: auto; -webkit-user-select: none; user-select: none;">
+    <div style="position: absolute; top: 80px; bottom: 5px; left: 8px; right: 8px; overflow-x: auto; -webkit-user-select: none; user-select: none;">
         <canvastablecontainer [canvastableselectlistener]="this" (sortToggled)="sort()"></canvastablecontainer>
     </div>
     <div *ngIf="!dataReady" style="position: fixed; display: flex; justify-content: center; align-items: center; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 1000; background-color: rgba(255,255,255,0.5)">
