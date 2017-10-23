@@ -13,6 +13,8 @@ import 'rxjs/add/observable/timer';
  * In production you should use a websocket server instead.
  */
 
+ const CLIENT_ID = new Date().getTime();
+
 @Injectable()
 export class LocalStorageDataService {
     reactiveFormAssistant: AsyncSubject<ReactiveFormAssistant> = new AsyncSubject();
@@ -23,7 +25,7 @@ export class LocalStorageDataService {
 
     constructor() {           
         let nextEventTime: number = 0;
-        const minInterval = 80;
+        const minInterval = 50;
 
         this.reactiveFormAssistant.subscribe((reactiveformsassistant) => {            
             
@@ -51,10 +53,11 @@ export class LocalStorageDataService {
                 })                
                 .subscribe((msg) => {                                    
                     msg.applyToObject(this.currentData); 
-                    this.writedata();               
+                    this.writedata();   
+                    msg['CLIENT_ID']=CLIENT_ID;            
                     localStorage.setItem(this.localStorageKey+"_update",JSON.stringify(msg));                                        
                 });            
-            window.setInterval(() => this.listenForMessages(),40);
+            this.listenForMessages();
         });
     }
 
@@ -72,19 +75,22 @@ export class LocalStorageDataService {
         }
     }
 
-    listenForMessages() {
+    private listenForMessages() {
         const msgdatastring = localStorage.getItem(this.localStorageKey+"_update");
         
         if(msgdatastring && msgdatastring !== this.previousMessage) { 
             this.previousMessage = msgdatastring;               
             try {
                 const msg: FormUpdateEvent = JSON.parse(msgdatastring);                
-                this.reactiveFormAssistant.subscribe((rfa) =>
-                    rfa.patchFormUpdateEvent(msg)
-                );
-                
+                if(msg['CLIENT_ID']!==CLIENT_ID) {                    
+                    this.reactiveFormAssistant.subscribe((rfa) =>
+                        rfa.patchFormUpdateEvent(msg)
+                    );
+                }
             } catch(e) {}            
         }
+
+        setTimeout(() => this.listenForMessages(),10);
     }
 
     writedata() {
