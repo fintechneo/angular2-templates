@@ -19,12 +19,18 @@ export class LocalStorageDataService {
     
     currentData: any = {};
     localStorageKey: string;
-    
+    previousMessage: string;
+
     constructor() {           
         let nextEventTime: number = 0;
-        const minInterval = 51;
+        const minInterval = 80;
 
-        this.reactiveFormAssistant.subscribe((reactiveformsassistant) => {
+        this.reactiveFormAssistant.subscribe((reactiveformsassistant) => {            
+            
+            reactiveformsassistant.patchFormUpdateEvent(
+                new FormUpdateEvent([],this.currentData)
+            );
+            
             reactiveformsassistant                
                 .formUpdatesSubject                
                 .delayWhen(() => {
@@ -43,17 +49,11 @@ export class LocalStorageDataService {
                         return Observable.timer(0);
                     }
                 })                
-                .subscribe((msg) => {                
-                
-                msg.applyToObject(this.currentData);                
-                localStorage.setItem(this.localStorageKey+"_update",JSON.stringify(msg));
-                
-                this.writedata();
-            });
-            this.syncdata();
-            reactiveformsassistant.patchFormUpdateEvent(
-                new FormUpdateEvent([],this.currentData)
-            );
+                .subscribe((msg) => {                                    
+                    msg.applyToObject(this.currentData); 
+                    this.writedata();               
+                    localStorage.setItem(this.localStorageKey+"_update",JSON.stringify(msg));                                        
+                });            
             window.setInterval(() => this.listenForMessages(),40);
         });
     }
@@ -74,11 +74,11 @@ export class LocalStorageDataService {
 
     listenForMessages() {
         const msgdatastring = localStorage.getItem(this.localStorageKey+"_update");
-
-        if(msgdatastring) {    
-            
+        
+        if(msgdatastring && msgdatastring !== this.previousMessage) { 
+            this.previousMessage = msgdatastring;               
             try {
-                const msg: FormUpdateEvent = JSON.parse(msgdatastring);
+                const msg: FormUpdateEvent = JSON.parse(msgdatastring);                
                 this.reactiveFormAssistant.subscribe((rfa) =>
                     rfa.patchFormUpdateEvent(msg)
                 );

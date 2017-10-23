@@ -71,9 +71,11 @@ export class ReactiveFormsDemoComponent implements DoCheck, OnInit {
         );
         this.dataservice.init('_reactiveformsdemo');
         this.reactiveFormAssistant.formGroup = this.formGroup;
+        this.reactiveFormAssistant.controlsubscribe();
+        
         this.dataservice.reactiveFormAssistant.next(reactiveFormAssistant);
         this.dataservice.reactiveFormAssistant.complete();        
-        this.reactiveFormAssistant.controlsubscribe();
+        
     }
 
     ngOnInit() {
