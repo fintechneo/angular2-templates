@@ -14,6 +14,7 @@
 
   "files": [
     "app/app.module.ts",    
+    "app/lib.module.ts",    
     "app/main.ts",
     "app/main_aot.ts"
   ],

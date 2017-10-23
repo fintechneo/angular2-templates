@@ -861,6 +861,7 @@ export class AnimationFrameThrottler {
   }
   
   @Component({
+    moduleId: window['_moduleidroot']+'/canvastable/',
     selector: "canvastablecontainer",
     templateUrl: "canvastablecontainer.component.html"
   })

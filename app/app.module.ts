@@ -3,9 +3,12 @@ import { APP_BASE_HREF} from '@angular/common';
 import { HttpModule,JsonpModule }      from '@angular/http';
 import { BrowserModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { MatSidenavModule,MatToolbarModule,MatInputModule,MatIconModule,MatButtonModule,MatListModule } from '@angular/material';
+import { MatSidenavModule,MatToolbarModule,
+    MatInputModule,MatIconModule,
+    MatExpansionModule,
+    MatButtonModule,MatListModule } from '@angular/material';
 import {CanvasTableModule} from './canvastable/canvastable.module';
 import { DACModule } from './dac/dac.module';
 import { DACAdminComponent } from './dac/dacadmin.component';
@@ -27,6 +30,7 @@ import { QlyzeTableComponent } from './qlyze/qlyze-table.component';
 import { QlyzeService } from './qlyze/qlyze.service';
 import { ShowChartComponent } from './chart/showchart.component';
 import { LineChartComponent } from './chart/linechart.component';
+import { ReactiveFormsDemoComponent } from './reactiveforms/reactiveformsdemo.component';
 import { SINTEFMeasureStationService } from './chart/measurestation/measurestation.service' 
 @NgModule({
   imports:      [ BrowserModule,HttpModule,JsonpModule,FormsModule,
@@ -34,7 +38,9 @@ import { SINTEFMeasureStationService } from './chart/measurestation/measurestati
     MatButtonModule,MatListModule,MatIconModule,MatInputModule,
     MatToolbarModule,
     CanvasTableModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
+    MatExpansionModule,
     DACModule,
     RouterModule.forRoot([
       {
@@ -66,8 +72,12 @@ import { SINTEFMeasureStationService } from './chart/measurestation/measurestati
         component: QlyzeTableComponent
       },
       {
+        path: "reactiveforms",
+        component: ReactiveFormsDemoComponent
+      },
+      {
         path: "index_dev.html",
-        component: AccountOverviewComponent
+        component: ReactiveFormsDemoComponent
       },
       {
         path: "",
@@ -81,6 +91,7 @@ import { SINTEFMeasureStationService } from './chart/measurestation/measurestati
       BarchartComponent,
       HorizontalBarchartComponent,
       StackedBarchartComponent,
+      ReactiveFormsDemoComponent,
       StackedHorizontalBarchartComponent,
       ShowBarchartComponent,
       ShowPiechartComponent,

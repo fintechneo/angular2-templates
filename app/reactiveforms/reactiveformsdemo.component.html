@@ -1,0 +1,108 @@
+<style>
+    .useavailspace {
+        position:absolute;
+        top: 0px;
+        left: 0px;
+        bottom: 0px;
+        right: 0px;   
+    }
+    
+    .dropzone {
+        border: #FF9800 dashed 3px;
+        border-radius: 4px;
+        min-height: 100px;
+        min-width: 100px;
+    }
+
+    .contentarea {
+        padding: 5px;
+    }
+    
+    .agendaItemEdit {
+        display: flex; 
+        flex-direction: column;
+    }
+
+    .agendaItemEdit mat-form-field {
+        width: 100%;
+    }
+</style>
+<mat-drawer-container     
+    class="useavailspace" 
+    >
+    <mat-drawer
+        #sidenav
+         [mode]="sidenavmode" [opened]="editing" position="end">        
+            <mat-selection-list>
+                <h3 mat-subheader>Drag and drop agenda suggestions</h3>
+                <mat-list-option 
+                    *ngFor="let item of agendaSuggestions"                   
+                >
+                    <div md-line draggable="true"
+                        (dragstart)="dragstart($event,item)">
+                        {{item.title}}
+                    </div>
+                </mat-list-option>                
+            </mat-selection-list>        
+    </mat-drawer>
+        
+    <div class="contentarea" [formGroup]="formGroup">
+        <mat-card>
+            <mat-card-title style="display: flex">        
+                <mat-form-field style="flex-grow: 1" *ngIf="editing">
+                    <input matInput formControlName="title" placeholder="Title" />
+                </mat-form-field>                    
+                <div style="flex-grow: 1" *ngIf="!editing">
+                    {{formGroup.value.title}}
+                </div>
+                <button *ngIf="!editing" mat-icon-button (click)="editing=true">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button *ngIf="editing" mat-icon-button (click)="editing=false">
+                    <mat-icon>done</mat-icon>
+                </button>
+            </mat-card-title>
+            <mat-card-content>
+                <div [ngClass]="{'dropzone' : dropzonevisible}"
+                    (drop)="drop($event)"
+                    (dragover)="$event.preventDefault()">
+                    <mat-accordion>
+                        <mat-expansion-panel 
+                            [formGroup]="item"
+                            *ngFor="let item of agendaItems.controls; let ndx = index"
+                        >                                
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>{{item.value.title}}</mat-panel-title>                                    
+                            </mat-expansion-panel-header>
+                        
+                            <ng-container *ngIf="!editing">
+                                <p>{{item.value.description}}</p>
+                            </ng-container>
+                            <div *ngIf="editing" class="agendaItemEdit">
+                                <mat-form-field>
+                                    <input matInput formControlName="title" placeholder="Title">
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <textarea matInput formControlName="description" placeholder="Description">
+                                    </textarea>
+                                </mat-form-field>
+                            </div>
+                            <mat-action-row *ngIf="editing">
+                                <button mat-icon-button>
+                                    <mat-icon>attachment</mat-icon>
+                                </button>                                    
+                                <button mat-icon-button (click)="deleteAgendaItem(ndx)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </mat-action-row>                                
+                        </mat-expansion-panel>                        
+                    </mat-accordion>  
+                </div>
+            </mat-card-content>                  
+        </mat-card>              
+    </div>              
+</mat-drawer-container>
+
+<canvas #dragCanvas width="600" height="30" style="position: absolute; left: -1000px">
+</canvas>
+
