@@ -19,8 +19,7 @@ export class Meeting {
 export class AgendaItem {
     public title: string = null;
     public description: string = null;
-    public agendaItemType: string = null;
-    public attachments: {[key: string]: string} = {};
+    public agendaItemType: string = null;    
 
     public static fromTitle(title: string): AgendaItem {
         const agendaItem = new AgendaItem();

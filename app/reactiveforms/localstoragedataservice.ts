@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ReactiveFormAssistant, FormUpdateEvent } from './reactiveformsassistant';
 import { AsyncSubject } from 'rxjs/AsyncSubject';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/delayWhen';
+import 'rxjs/add/observable/timer';
 
 /**
  * Simple dataservice for testing realtime form updates.
@@ -17,11 +20,32 @@ export class LocalStorageDataService {
     currentData: any = {};
     localStorageKey: string;
     
-    constructor() {        
+    constructor() {           
+        let nextEventTime: number = 0;
+        const minInterval = 51;
+
         this.reactiveFormAssistant.subscribe((reactiveformsassistant) => {
-            reactiveformsassistant.formUpdatesSubject.subscribe((msg) => {
-                msg.applyToObject(this.currentData);
+            reactiveformsassistant                
+                .formUpdatesSubject                
+                .delayWhen(() => {
+                    // Hack since we're using localstorage
+                    // we should make sure there's a minimum time between events
+                    const now = new Date().getTime();
+                    const delay = nextEventTime-now;
+                    if(nextEventTime<now) {
+                        nextEventTime=now+minInterval;
+                    } else {
+                        nextEventTime+=minInterval;
+                    }                    
+                    if(delay>0) {
+                        return Observable.timer(delay);
+                    } else {
+                        return Observable.timer(0);
+                    }
+                })                
+                .subscribe((msg) => {                
                 
+                msg.applyToObject(this.currentData);                
                 localStorage.setItem(this.localStorageKey+"_update",JSON.stringify(msg));
                 
                 this.writedata();
@@ -30,7 +54,7 @@ export class LocalStorageDataService {
             reactiveformsassistant.patchFormUpdateEvent(
                 new FormUpdateEvent([],this.currentData)
             );
-            window.setInterval(() => this.listenForMessages(),100);
+            window.setInterval(() => this.listenForMessages(),40);
         });
     }
 
