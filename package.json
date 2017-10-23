@@ -3,7 +3,7 @@
     "postinstall": "jspm install",
     "devserver": "node devserver.js",
     "dist": "ngc -p tsconfig.json && rollup -c rollup-config.js",
-    "lib": "cp -r app tstmp && node inline-resources.js && ngc -p tsconfig-lib.json && rollup -c rollup-config-lib-es.js && cpx \"libjs/**/*.d.ts\" libdist && cp libjs/fintechneo-angulartemplates.metadata.json libdist/ && cp libdist-package.json libdist/package.json && tar -zRcvf fintechneo-angulartemplates.tar.gz libdist/ && rm -Rf libdist libjs tstmp"
+    "lib": "ngmakelib app/lib.module.ts fintechneo-angulartemplates"
   },
   "jspm": {
     "dependencies": {
@@ -12,20 +12,11 @@
     "devDependencies": {}
   },
   "devDependencies": {
-    "@angular/compiler-cli": "",
-    "compression": "",
-    "express": "",
-    "jspm": "",
-    "rollup": "",
-    "rollup-plugin-commonjs": "",
-    "rollup-plugin-node-resolve": "",
-    "rollup-plugin-uglify": "",
-    "tslint": "",
-    "typescript": "",
     "@angular/animations": "",
     "@angular/cdk": "",
     "@angular/common": "",
     "@angular/compiler": "",
+    "@angular/compiler-cli": "",
     "@angular/core": "",
     "@angular/forms": "",
     "@angular/http": "",
@@ -34,10 +25,20 @@
     "@angular/platform-browser-dynamic": "",
     "@angular/router": "",
     "angular2-prettyjson": "",
+    "compression": "",
+    "cpx": "",
+    "express": "",
     "hammerjs": "",
+    "jspm": "",
+    "ngmakelib": "git+https://github.com/fintechneo/ngmakelib.git",
     "reflect-metadata": "",
+    "rollup": "",
+    "rollup-plugin-commonjs": "",
+    "rollup-plugin-node-resolve": "",
+    "rollup-plugin-uglify": "",
     "rxjs": "",
-    "zone.js": "",
-    "cpx": ""
+    "tslint": "",
+    "typescript": "",
+    "zone.js": ""
   }
 }
