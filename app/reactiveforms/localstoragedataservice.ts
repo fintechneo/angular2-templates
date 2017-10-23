@@ -25,7 +25,7 @@ export class LocalStorageDataService {
 
     constructor() {           
         let nextEventTime: number = 0;
-        const minInterval = 50;
+        const minInterval = 1000;
 
         this.reactiveFormAssistant.subscribe((reactiveformsassistant) => {            
             
@@ -55,7 +55,7 @@ export class LocalStorageDataService {
                     msg.applyToObject(this.currentData); 
                     this.writedata();   
                     msg['CLIENT_ID']=CLIENT_ID;            
-                    localStorage.setItem(this.localStorageKey+"_update",JSON.stringify(msg));                                        
+                    localStorage.setItem(this.localStorageKey+"_update",JSON.stringify(msg));                                                            
                 });            
             this.listenForMessages();
         });
@@ -90,7 +90,7 @@ export class LocalStorageDataService {
             } catch(e) {}            
         }
 
-        setTimeout(() => this.listenForMessages(),10);
+        setTimeout(() => this.listenForMessages(),100);
     }
 
     writedata() {
