@@ -3,10 +3,12 @@
     "postinstall": "jspm install",
     "devserver": "node devserver.js",
     "dist": "ngc -p tsconfig.json && rollup -c rollup-config.js",
-    "lib": "ngmakelib app/lib.module.ts fintechneo-angulartemplates"
+    "lib": "ngmakelib app/lib.module.ts fintechneo-angulartemplates",
+    "jspmdevbundle": "jspm bundle typescript + rxjs jspmdevbundle.js --inject --minify --skip-source-maps"
   },
   "jspm": {
     "dependencies": {
+      "rxjs": "npm:rxjs@^5.5.0",
       "typescript": "npm:typescript@^2.5.3"
     },
     "devDependencies": {}
