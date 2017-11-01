@@ -127,6 +127,17 @@ export class ReactiveFormAssistant {
         }
     }
 
+    /**
+     * Send full array update (useful when reordering)
+     * @param formArray 
+     */
+    sendFullArray(formArray: FormArray) {
+        let path = this.formArrayPaths.find((p) =>
+            this.findControlByPath(p) === formArray
+        );
+        this.formUpdatesSubject.next(new FormUpdateEvent(path, formArray.value));   
+    }
+
     patchFormUpdateEvent(msg: FormUpdateEvent) {
         if (msg.path.length > 0) {
             // Patching of individual controls

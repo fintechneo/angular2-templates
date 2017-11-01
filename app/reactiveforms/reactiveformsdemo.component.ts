@@ -136,4 +136,22 @@ export class ReactiveFormsDemoComponent implements DoCheck, OnInit {
             true
         );
     }
+
+    moveAgendaItemUp(index: number) {
+        const formArray = (this.formGroup.controls['agendaItems'] as FormArray);
+        const current = formArray.at(index);
+        const replaceWith = formArray.at(index-1);
+        formArray.setControl(index-1,current);
+        formArray.setControl(index,replaceWith);
+        this.reactiveFormAssistant.sendFullArray(formArray);
+    }
+
+    moveAgendaItemDown(index: number) {
+        const formArray = (this.formGroup.controls['agendaItems'] as FormArray);
+        const current = formArray.at(index);
+        const replaceWith = formArray.at(index+1);
+        formArray.setControl(index+1,current);
+        formArray.setControl(index,replaceWith);
+        this.reactiveFormAssistant.sendFullArray(formArray);
+    }
 }

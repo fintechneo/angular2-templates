@@ -13,7 +13,8 @@ import 'rxjs/add/observable/timer';
  * In production you should use a websocket server instead.
  */
 
- const CLIENT_ID = new Date().getTime();
+const CLIENT_ID = new Date().getTime();
+const LOCAL_STORAGE_UPDATE_INTERVAL = 100;
 
 @Injectable()
 export class LocalStorageDataService {
@@ -25,7 +26,7 @@ export class LocalStorageDataService {
 
     constructor() {           
         let nextEventTime: number = 0;
-        const minInterval = 1000;
+        
 
         this.reactiveFormAssistant.subscribe((reactiveformsassistant) => {            
             
@@ -41,9 +42,9 @@ export class LocalStorageDataService {
                     const now = new Date().getTime();
                     const delay = nextEventTime-now;
                     if(nextEventTime<now) {
-                        nextEventTime=now+minInterval;
+                        nextEventTime=now+LOCAL_STORAGE_UPDATE_INTERVAL;
                     } else {
-                        nextEventTime+=minInterval;
+                        nextEventTime+=LOCAL_STORAGE_UPDATE_INTERVAL;
                     }                    
                     if(delay>0) {
                         return Observable.timer(delay);
@@ -54,8 +55,10 @@ export class LocalStorageDataService {
                 .subscribe((msg) => {                                    
                     msg.applyToObject(this.currentData); 
                     this.writedata();   
-                    msg['CLIENT_ID']=CLIENT_ID;            
+                    msg['CLIENT_ID']=CLIENT_ID;         
+                    
                     localStorage.setItem(this.localStorageKey+"_update",JSON.stringify(msg));                                                            
+                    
                 });            
             this.listenForMessages();
         });
@@ -75,14 +78,15 @@ export class LocalStorageDataService {
         }
     }
 
-    private listenForMessages() {
+    private listenForMessages() {        
         const msgdatastring = localStorage.getItem(this.localStorageKey+"_update");
         
         if(msgdatastring && msgdatastring !== this.previousMessage) { 
             this.previousMessage = msgdatastring;               
             try {
                 const msg: FormUpdateEvent = JSON.parse(msgdatastring);                
-                if(msg['CLIENT_ID']!==CLIENT_ID) {                    
+                
+                if(msg['CLIENT_ID']!==CLIENT_ID) {                                        
                     this.reactiveFormAssistant.subscribe((rfa) =>
                         rfa.patchFormUpdateEvent(msg)
                     );
@@ -90,7 +94,7 @@ export class LocalStorageDataService {
             } catch(e) {}            
         }
 
-        setTimeout(() => this.listenForMessages(),100);
+        setTimeout(() => this.listenForMessages(),LOCAL_STORAGE_UPDATE_INTERVAL/2);
     }
 
     writedata() {

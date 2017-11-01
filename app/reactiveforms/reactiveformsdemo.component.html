@@ -88,6 +88,16 @@
                                 </mat-form-field>
                             </div>
                             <mat-action-row *ngIf="editing">                                
+                                <button mat-icon-button (click)="moveAgendaItemUp(ndx)" 
+                                *ngIf="ndx>0">
+                                    <mat-icon>keyboard_arrow_up</mat-icon>
+                                </button>
+                                <button mat-icon-button
+                                    (click)="moveAgendaItemDown(ndx)" 
+                                    *ngIf="ndx<agendaItems.controls.length-1"
+                                >
+                                    <mat-icon>keyboard_arrow_down</mat-icon>
+                                </button>
                                 <button mat-icon-button (click)="deleteAgendaItem(ndx)">
                                     <mat-icon>delete</mat-icon>
                                 </button>
