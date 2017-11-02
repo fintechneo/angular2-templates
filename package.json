@@ -9,7 +9,7 @@
   "jspm": {
     "dependencies": {
       "rxjs": "npm:rxjs@^5.5.0",
-      "typescript": "npm:typescript@^2.5.3"
+      "typescript": "npm:typescript@~2.4.2"
     },
     "devDependencies": {}
   },
@@ -40,7 +40,7 @@
     "rollup-plugin-uglify": "",
     "rxjs": "",
     "tslint": "",
-    "typescript": "",
+    "typescript": "~2.4.2",
     "zone.js": ""
   }
 }
