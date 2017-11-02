@@ -5,7 +5,7 @@
     "module": "es2015",
     "moduleResolution": "node",
     "sourceMap": true,
-    "emitDecoratorMetadata": false,
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": ["es2015", "dom"],
     "noImplicitAny": true,
@@ -14,13 +14,13 @@
 
   "files": [
     "app/app.module.ts",    
-    "app/lib.module.ts",    
     "app/main.ts",
     "app/main_aot.ts"
   ],
 
   "angularCompilerOptions": {
-   "genDir": "aot",
-   "skipMetadataEmit" : true
+    "annotationsAs": "decorators",
+    "genDir": "aot",
+    "skipMetadataEmit" : true
  }
 }

@@ -15,6 +15,7 @@ export class LineConfig {
     columnIndex: number;
     scaleIndex: number;
     unit: string;
+    numberformat : string;
 }
 
 export class LineChartConfig {
@@ -34,7 +35,7 @@ export class HoverYValue {
     templateUrl: 'linechart.component.html',
     providers: [DatePipe]
 })
-export class LineChartComponent implements AfterViewInit,OnInit,OnDestroy,DoCheck {
+export class SVGLineChartComponent implements AfterViewInit,OnInit,OnDestroy,DoCheck {
     _datapoints : any[] = [];
     mouseMoveSubject : Subject<any> = new Subject();
     mouseUpSubject : Subject<any> = new Subject();
@@ -80,9 +81,10 @@ export class LineChartComponent implements AfterViewInit,OnInit,OnDestroy,DoChec
     dataRightScaleMinY : number;
     dataRightScaleMaxY : number;
 
-    chartBoxTop : number = 20;    
+    chartBoxTop : number = 25;    
 
     prevBounds : number[] = [0,0,500,500];
+    datapointsChanged : boolean = false;
     
     @ViewChild("svgelement") svgElm : any;
    
@@ -101,11 +103,13 @@ export class LineChartComponent implements AfterViewInit,OnInit,OnDestroy,DoChec
         let bounds : any = this.svgElm.nativeElement.getBoundingClientRect();
         
         if(
+            this.datapointsChanged ||
             bounds.left!==this.prevBounds[0] ||
             bounds.top!==this.prevBounds[1] ||
             bounds.width!==this.prevBounds[2] ||
             bounds.height!==this.prevBounds[3]
         ) {            
+            this.datapointsChanged = false;
             this.prevBounds[0] = bounds.left;
             this.prevBounds[1] = bounds.top;
             this.prevBounds[2] = bounds.width;
@@ -135,14 +139,12 @@ export class LineChartComponent implements AfterViewInit,OnInit,OnDestroy,DoChec
 
    
    ngAfterViewInit() {              
-        this.destroyTasks.push(this.renderer.listen('window',"mousemove",(evt : any) =>  {  
-                evt.preventDefault();                         
+        this.destroyTasks.push(this.renderer.listen('window',"mousemove",(evt : any) =>  {                  
                 this.mouseMoveSubject.next({clientX: evt.clientX,clientY: evt.clientY});                    
             }
         ));
 
-        this.destroyTasks.push(this.renderer.listen('window',"touchmove",(evt : any) => {
-                evt.preventDefault();
+        this.destroyTasks.push(this.renderer.listen('window',"touchmove",(evt : any) => {                
                 this.mouseMoveSubject.next(
                     {clientX: evt.targetTouches[0].clientX,
                     clientY: evt.targetTouches[0].clientY
@@ -150,12 +152,10 @@ export class LineChartComponent implements AfterViewInit,OnInit,OnDestroy,DoChec
             }
         ));
                       
-        this.destroyTasks.push(this.renderer.listen('window',"mouseup",(evt : any) => {
-            evt.preventDefault();
+        this.destroyTasks.push(this.renderer.listen('window',"mouseup",(evt : any) => {            
             this.mouseUpSubject.next(evt);
         }));
-        this.destroyTasks.push(this.renderer.listen('window',"touchend",(evt : any) => {
-            evt.preventDefault();
+        this.destroyTasks.push(this.renderer.listen('window',"touchend",(evt : any) => {            
             this.mouseUpSubject.next(evt);
         }));   
 
@@ -167,13 +167,13 @@ export class LineChartComponent implements AfterViewInit,OnInit,OnDestroy,DoChec
 
    @Input() 
    public set datapoints(datapoints : any[]) {
-       if(!this.horizNavLeft) {
-           this.horizNavLeft = datapoints[0][0];
-       }
-       if(!this.horizNavRight) {
-           this.horizNavRight = datapoints[datapoints.length-1][0];
-       }
-       this._datapoints = datapoints;
+       if(datapoints.length>0) {            
+            this.horizNavLeft = datapoints[0][0];            
+            this.horizNavRight = datapoints[datapoints.length-1][0];            
+        }
+        this._datapoints = datapoints;
+        console.log("Data points changed");
+        this.datapointsChanged = true;
    }
 
    public handleTouchHover(e: TouchEvent) {
@@ -483,28 +483,34 @@ export class LineChartComponent implements AfterViewInit,OnInit,OnDestroy,DoChec
             chartBottom-((row[colIndex]-minimums[scaleIndex])*viewHeight/
             (maximums[scaleIndex]-minimums[scaleIndex]));
 
-        this.scaledDataPoints = this.datapoints
-            .filter((d)=>d[0]>=this.horizNavLeft)
-            .filter((d)=>d[0]<=this.horizNavRight)    
+        let visibleRows = this.datapoints
+            .filter((d)=>d[0]>=this.horizNavLeft 
+                && d[0]<=this.horizNavRight)            
             .map((row) => {      
-
                 const findMinMax = (colIndex : number,scaleIndex : number) => {
                     // Find min && max for given column index and scale index
-                    if(!minimums[scaleIndex] || row[colIndex]<minimums[scaleIndex]) {
-                        minimums[scaleIndex] = row[colIndex]-1;
+                    if(minimums[scaleIndex]===undefined || row[colIndex]<minimums[scaleIndex]) {
+                        minimums[scaleIndex] = row[colIndex];                                                
                     }
-                    if(!maximums[scaleIndex] || row[colIndex]>maximums[scaleIndex]) {
-                        maximums[scaleIndex] = row[colIndex]+1;
+                    if(maximums[scaleIndex]===undefined || row[colIndex]>maximums[scaleIndex]) {
+                        maximums[scaleIndex] = row[colIndex];
                     }
                 };
                   
-                findMinMax(1,0);
-                findMinMax(2,1);
-                findMinMax(3,1);
-                findMinMax(4,1);
+                this.chartConfig.lines.forEach((ln) => 
+                    findMinMax(ln.columnIndex+1,ln.scaleIndex)
+                );                
                 return row;
-            })        
-            .reduce((prev : Array<any>,curr : any,ndx,arr) =>                 
+            });
+        
+        // If minimums === maximums - increase maximums by 1 so that we don't divide by zero
+        for(let n=0;n<minimums.length;n++) {
+            if(minimums[n]===maximums[n]) {
+                maximums[n]+=1;
+            }
+        }
+
+        this.scaledDataPoints = visibleRows.reduce((prev : Array<any>,curr : any,ndx,arr) =>                 
                 // Reduce number of visible points and show only min / max values in range
                 prev.length>0 && 
                     ((curr[0]-minx)*viewWidth/width)
@@ -519,23 +525,20 @@ export class LineChartComponent implements AfterViewInit,OnInit,OnDestroy,DoChec
             )
             .map((row : any,ndx : number,arr : any) => 
                 [
-                viewLeft+((row[0]-minx)*viewWidth/width), // scaled x                
-                row[0], // original x
-                scaledY(row,1,0), // scaled y
-                row[1], // original y
-                scaledY(row,2,1), // scaled y (scale2)
-                row[2], // original y
-                scaledY(row,3,1), // scaled y (scale2)
-                row[3], // original y
-                scaledY(row,4,1), // scaled y (scale2)
-                row[4], // original y
-                ]             
+                    viewLeft+((row[0]-minx)*viewWidth/width), // scaled x                
+                    row[0], // original x
+                ].concat(
+                    this.chartConfig.lines.reduce((arr,ln) => 
+                        arr.concat(scaledY(row,ln.columnIndex+1,ln.scaleIndex))
+                            .concat(row[ln.columnIndex+1])
+                    ,[])
+                )                                
         );
-        
+        //console.log(this.scaledDataPoints);                
         this.dataMinY = minimums[0];
         this.dataMaxY = maximums[0];
         this.dataRightScaleMinY = minimums[1];
-        this.dataRightScaleMaxY = maximums[1];
+        this.dataRightScaleMaxY = maximums[1];        
 
         if(this.scaledDataPoints.length>0) {            
             this.chartYLabels = this.createChartYLabels();   
@@ -549,14 +552,9 @@ export class LineChartComponent implements AfterViewInit,OnInit,OnDestroy,DoChec
                 return pathString;
             };
             
-            
-            this.pathStrings[0] = createPathString(2);
-            
-            // Scale 2 curves
-            this.pathStrings[1] = createPathString(4);
-            this.pathStrings[2] = createPathString(6);
-            this.pathStrings[3] = createPathString(8);                                    
-
+            for(let n=2;n<this.scaledDataPoints[0].length;n+=2) {
+                this.pathStrings[n/2-1] = createPathString(n);                            
+            }              
         } else {
             this.chartYLabels = [];            
         }

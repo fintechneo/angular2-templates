@@ -17,7 +17,8 @@
             </mat-card-title>
             <mat-card-content>
                 <div style="height: 300px;">
-                    <linechart #linechart *ngIf="datapoints" [xaxisnav]="true" [datapoints]="datapoints" [chartConfig]="lineChartConfig" mode="standard">
+                    <linechart #linechart *ngIf="datapoints" [xaxisnav]="true" 
+                    [datapoints]="datapoints" [chartConfig]="lineChartConfig" mode="standard">
                     </linechart>
                 </div>
             </mat-card-content>

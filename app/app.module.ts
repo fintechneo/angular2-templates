@@ -29,9 +29,9 @@ import { ShowPiechartComponent } from './charts/show-piechart.component'
 import { QlyzeTableComponent } from './qlyze/qlyze-table.component';
 import { QlyzeService } from './qlyze/qlyze.service';
 import { ShowChartComponent } from './chart/showchart.component';
-import { LineChartComponent } from './chart/linechart.component';
+import { SVGLineChartComponent as LineChartComponent } from './chart/linechart.component';
 import { ReactiveFormsDemoComponent } from './reactiveforms/reactiveformsdemo.component';
-import { SINTEFMeasureStationService } from './chart/measurestation/measurestation.service' 
+ 
 @NgModule({
   imports:      [ BrowserModule,HttpModule,JsonpModule,FormsModule,
     MatSidenavModule,
@@ -77,7 +77,7 @@ import { SINTEFMeasureStationService } from './chart/measurestation/measurestati
       },
       {
         path: "index_dev.html",
-        component: ReactiveFormsDemoComponent
+        component: LineChartComponent
       },
       {
         path: "",
@@ -98,7 +98,7 @@ import { SINTEFMeasureStationService } from './chart/measurestation/measurestati
       QlyzeTableComponent,
       LineChartComponent,
       ShowChartComponent ],
-  providers: [ DataService,PDFService, QlyzeService, SINTEFMeasureStationService ], 
+  providers: [ DataService,PDFService, QlyzeService ], 
   bootstrap:    [ AppComponent ]
 })
 export class AppModule { }
