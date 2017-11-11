@@ -2,6 +2,14 @@ import rollup      from 'rollup'
 import nodeResolve from 'rollup-plugin-node-resolve'
 import commonjs    from 'rollup-plugin-commonjs';
 import uglify      from 'rollup-plugin-uglify'
+import { buildOptimizer } from '@angular-devkit/build-optimizer';
+
+function angularBuildOptimizer() {
+  return {
+    name: 'angular-optimizer',
+    transform: (content) => buildOptimizer({ content }).content,
+  }
+}
 
 export default {
   input: 'appjs/app/main_aot.js',
@@ -22,7 +30,8 @@ export default {
     console.warn( warning.message );
   },
   plugins: [
-      nodeResolve({jsnext: true, module: true}),
+      angularBuildOptimizer(),
+      nodeResolve({jsnext: true, module: true}),      
       commonjs({
         include: 'node_modules/rxjs/**'
       }),

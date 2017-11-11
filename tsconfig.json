@@ -21,6 +21,7 @@
   "angularCompilerOptions": {
     "annotationsAs": "decorators",
     "genDir": "aot",
+    "preserveWhitespace": false,
     "skipMetadataEmit" : true
  }
 }
