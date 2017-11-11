@@ -9,6 +9,7 @@ import { MatCheckboxModule,MatListModule,
   MatSidenavModule,
   MatButtonModule,
   MatIconModule,
+  MatToolbarModule,
   MatInputModule,
   MatDialogModule } from '@angular/material';
 import { CanvasTableModule } from '../canvastable/canvastable.module';
@@ -23,6 +24,7 @@ import { DACCodeListsService } from './daccodelists.service';
       CanvasTableModule,
       MatCheckboxModule,
       MatSidenavModule,
+      MatToolbarModule,
       MatButtonModule,
       MatIconModule,
       MatInputModule,

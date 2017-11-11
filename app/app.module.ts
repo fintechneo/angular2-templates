@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MatSidenavModule,MatToolbarModule,
+    MatCardModule,
     MatInputModule,MatIconModule,
     MatExpansionModule,
     MatButtonModule,MatListModule } from '@angular/material';
@@ -37,6 +38,7 @@ import { ReactiveFormsDemoComponent } from './reactiveforms/reactiveformsdemo.co
     MatSidenavModule,
     MatButtonModule,MatListModule,MatIconModule,MatInputModule,
     MatToolbarModule,
+    MatCardModule,
     CanvasTableModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
