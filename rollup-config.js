@@ -1,8 +1,9 @@
 import rollup      from 'rollup'
 import nodeResolve from 'rollup-plugin-node-resolve'
-import commonjs    from 'rollup-plugin-commonjs';
+import alias    from 'rollup-plugin-alias';
 import uglify      from 'rollup-plugin-uglify'
 import { buildOptimizer } from '@angular-devkit/build-optimizer';
+const rxPaths = require('rxjs/_esm5/path-mapping');
 
 function angularBuildOptimizer() {
   return {
@@ -30,11 +31,9 @@ export default {
     console.warn( warning.message );
   },
   plugins: [
+      alias(rxPaths()),
       angularBuildOptimizer(),
-      nodeResolve({jsnext: true, module: true}),      
-      commonjs({
-        include: 'node_modules/rxjs/**'
-      }),
+      nodeResolve({jsnext: true, module: true}),            
       uglify()
   ]
 }
