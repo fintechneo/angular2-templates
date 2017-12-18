@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+      "outDir": "../appjsdev",
+      "target": "es5",               
+      "moduleResolution": "node",      
+      "sourceMap": true,    
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "declaration": false,
+      "lib": ["es2017", "dom"],
+      "noImplicitAny": true,
+      "suppressImplicitAnyIndexErrors": true
+    },
+    "files": [
+      "app.module.ts",          
+      "main_aot.ts"
+    ],
+  
+    "angularCompilerOptions": {
+      "annotationsAs": "decorators",      
+      "preserveWhitespace": false,
+      "skipMetadataEmit" : true
+   }
+  }

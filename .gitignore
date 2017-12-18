@@ -3,6 +3,7 @@ node_modules
 jspm_packages
 aot
 appjs
+appjsdev
 dist
 libdist
 libjs

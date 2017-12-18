@@ -57,7 +57,7 @@ export class AppComponent implements DoCheck {
     public sidenavopened : boolean = false;
     @ViewChild(MatSidenav) sidemenu : MatSidenav;
 
-    public ngDoCheck() {
+    public ngDoCheck() {    
       if(window.innerWidth>1024) {
         this.sidenavmode = "side";
         this.sidenavopened = true;        

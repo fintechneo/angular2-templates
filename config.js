@@ -742,10 +742,10 @@ System.config({
     "@angular/platform-browser-dynamic": "node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js",
     "@angular/platform-browser/animations": "node_modules/@angular/platform-browser/bundles/platform-browser-animations.umd.js",
     "@angular/router": "node_modules/@angular/router/bundles/router.umd.js",
-    "tslib": "node_modules/tslib/tslib.js",
     "hammerjs": "node_modules/hammerjs/hammer.min",
     "reflect-metadata": "node_modules/reflect-metadata/Reflect.js",
     "rxjs": "npm:rxjs@5.5.2",
+    "tslib": "node_modules/tslib/tslib.js",
     "typescript": "npm:typescript@2.5.3",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.4.1"

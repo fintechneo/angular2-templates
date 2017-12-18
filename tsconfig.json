@@ -14,13 +14,10 @@
 
   "files": [
     "app/app.module.ts",    
-    "app/main.ts",
     "app/main_aot.ts"
   ],
 
-  "angularCompilerOptions": {
-    "annotationsAs": "decorators",
-    "genDir": "aot",
+  "angularCompilerOptions": {        
     "preserveWhitespace": false,
     "skipMetadataEmit" : true
  }

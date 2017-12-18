@@ -1,6 +1,6 @@
 System.config({
     packages: {
-      'appjs': {
+      'appjsdev': {
         defaultExtension: 'js'
       },
       'node_modules/rxjs': {
