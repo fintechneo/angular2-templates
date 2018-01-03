@@ -13,15 +13,15 @@
     <script src="config.js">
     </script>
 
-    <script src="systemjs-config-aot.js">
-    </script>
+    <!--<script src="systemjs-config-aot.js">
+    </script>-->
 
     <script>
       window['_moduleidroot']='app';
       // JIT
-      //System.import('app').catch(function(err){ console.error(err); });
+      System.import('app').catch(function(err){ console.error(err); });
       // AOT
-      System.import('appjsdev/app/main_aot.js').catch(function(err){ console.error(err); });
+      //System.import('appjsdev/app/main_aot.js').catch(function(err){ console.error(err); });
     </script>
   </head>
   <body>

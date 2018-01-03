@@ -39,6 +39,11 @@ import { MatSidenav} from '@angular/material';
                 <span mat-line>Barcharts</span>
             </a> 
                  
+            <a mat-list-item routerLink="reactiveforms" (click)="sidemenuClose()">
+               <mat-icon mat-list-icon>form</mat-icon>
+                <span mat-line>Form</span>
+            </a> 
+                
         </mat-nav-list>
       </mat-sidenav>
       <mat-toolbar style="display: flex">

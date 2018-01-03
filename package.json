@@ -27,6 +27,7 @@
     "@angular/platform-browser": "",
     "@angular/platform-browser-dynamic": "",
     "@angular/router": "",
+    "@angular-devkit/build-optimizer": "",
     "angular2-prettyjson": "",
     "compression": "",
     "cpx": "",

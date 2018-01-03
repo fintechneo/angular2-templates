@@ -79,7 +79,7 @@ import { ReactiveFormsDemoComponent } from './reactiveforms/reactiveformsdemo.co
       },
       {
         path: "index_dev.html",
-        component: LineChartComponent
+        component: AccountOverviewComponent
       },
       {
         path: "",
