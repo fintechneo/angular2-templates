@@ -34,13 +34,29 @@ export class FormUpdateEvent {
 }
 
 /**
- * Helper service for receiving change notifications on individual form controls
+ * Helper service for receiving realtime change notifications on individual form controls
+ * 
+ * This service is of no use outside the component lifecycle so it can be provided directly
+ * on the component (add to providers array of the @Component decorator)
+ * 
+ * Start by setting the formGroup property to the formGroup of your component. Then call 
+ * controlSubscribe() to add value change listeners to all the form controls.
+ * 
+ * A dataservice should subscribe to formUpdatesSubject to listen for changes made by the user,
+ * and use patchFormUpdateEvent to patch the form with changes coming from the backend.
+ * 
+ * 
  */
 @Injectable()
 export class ReactiveFormAssistant {
     formGroup: FormGroup;
 
     formArrayPaths: string[][] = [];
+
+    /**
+     * A dataservice should subscribe to this subject to get changes made by the front-end user
+     * and pass on these to the backend server.
+     */
     formUpdatesSubject: Subject<FormUpdateEvent> = new Subject();
 
     constructor(
@@ -138,6 +154,12 @@ export class ReactiveFormAssistant {
         this.formUpdatesSubject.next(new FormUpdateEvent(path, formArray.value));   
     }
 
+    /**
+     * A dataservice receiving realtime FormUpdateEvent messages from the backend should call this
+     * method to apply changes to the form
+     * 
+     * @param msg
+     */
     patchFormUpdateEvent(msg: FormUpdateEvent) {
         if (msg.path.length > 0) {
             // Patching of individual controls
