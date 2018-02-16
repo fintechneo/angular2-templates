@@ -95,7 +95,7 @@ export class BookTableComponent implements CanvasTableSelectListener,OnInit {
             ).subscribe((res: BookData[]) => {
                 this.rowdata = res;
                 this.updateCanvasTableData();
-                this.canvastable.autoAdjustColumnWidths();
+                this.canvastable.autoAdjustColumnWidths(50, 400);
             });
     }
     

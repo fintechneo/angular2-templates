@@ -472,10 +472,18 @@ export class AnimationFrameThrottler {
     }
   
     public autoAdjustColumnWidths(minwidth: number, maxwidth: number) {
-      
-      this.columns.forEach(c =>
-        c.width = Math.round(this.ctx.measureText(c.name).width + 20)
-      );
+      const padding = this.colpaddingleft + this.colpaddingright;
+      const devicePixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
+
+      this.columns.forEach(c => {
+        let newwidth = devicePixelRatio * Math.round(this.ctx.measureText(c.name).width + padding);
+        if(newwidth > maxwidth) {
+          newwidth = maxwidth;
+        }
+        if(newwidth > minwidth) {
+          c.width = newwidth;
+        }
+      });
       
       for(let rowindex = this.topindex; rowindex < 
           this.topindex + this.canv.height / this.rowheight && 
@@ -484,14 +492,18 @@ export class AnimationFrameThrottler {
           {
             const row = this.rows[rowindex];
             this.columns.forEach(c => {
-              const valueWidth = Math.round(
-                this.ctx.measureText(
+              let valueWidth = Math.round(
+                (this.ctx.measureText(
                   c.getFormattedValue ?
                     c.getFormattedValue(c.getValue(row)):
                     c.getValue(row)                
-                ).width + 20
+                ).width + padding) * devicePixelRatio
               );
               
+              if(valueWidth > maxwidth) {
+                valueWidth = maxwidth;
+              }
+
               if(valueWidth > c.width) {
                 c.width = valueWidth;
               }
