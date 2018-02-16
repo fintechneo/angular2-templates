@@ -9,6 +9,7 @@ import { AnimationFrameThrottler,CanvasTableSelectListener,CanvasTableColumn,Can
 import { MatDialog,MatDialogRef } from '@angular/material';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { XLSXService } from '../xlsxservice/xlsx.service';
 
 export class BookData {
     id: string;
@@ -32,7 +33,8 @@ export class BookTableComponent implements CanvasTableSelectListener,OnInit {
     rowdata: BookData[] = [];
 
     constructor(        
-            private http: HttpClient
+            private http: HttpClient,
+            private xlsxservice: XLSXService
         ) {
                         
     }
@@ -71,7 +73,11 @@ export class BookTableComponent implements CanvasTableSelectListener,OnInit {
                 name: 'price',
                 getValue: (book: BookData) => book.price,
                 width: 100,
-                sortColumn: 2
+                textAlign: 1,
+                sortColumn: 2,
+                compareValue: (a, b) => a-b,
+                getFormattedValue: v => v ?
+                    typeof v === 'number' ? Math.round(v).toLocaleString('nb') : v : ''
             },
             {
                 name: 'category',
@@ -120,13 +126,16 @@ export class BookTableComponent implements CanvasTableSelectListener,OnInit {
         }
     }
     
+
     sort() {
         let column = this.canvastablecontainer.sortColumn;
         let getValue : (rowobj : any) => string = this.canvastable.columns[column].getValue;
+            
         let compareFunction: (a: any, b: any) => number = 
             this.canvastable.columns[column].compareValue ? 
                 this.canvastable.columns[column].compareValue :
-                (a: any,b: any) => (""+a).localeCompare(b);
+                (a: any,b: any) => 
+                    (a+'').localeCompare(b);
 
         if (this.canvastablecontainer.sortDescending) {
             this.canvastable.rows.sort((a : any, b : any) => 
@@ -151,4 +160,8 @@ export class BookTableComponent implements CanvasTableSelectListener,OnInit {
     isBoldRow(rowObj : any) : boolean {
         return false;
     }                    
+
+    exportExcel() {
+        this.xlsxservice.exportCanvasTableToExcel(this.canvastable, 'books', 'books');
+    }
 }

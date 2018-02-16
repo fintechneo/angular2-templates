@@ -34,6 +34,7 @@ import { SVGLineChartComponent as LineChartComponent } from './chart/linechart.c
 import { ReactiveFormsDemoComponent } from './reactiveforms/reactiveformsdemo.component';
 import { BookTableModule } from './booktable/booktable.module';
 import { BookTableComponent } from './booktable/booktable.component';
+import { XLSXModule } from './xlsxservice/xlsx.module';
 
 @NgModule({
   imports:      [ BrowserModule,HttpModule,JsonpModule,FormsModule,
@@ -45,6 +46,7 @@ import { BookTableComponent } from './booktable/booktable.component';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     BookTableModule,
+    XLSXModule,
     MatExpansionModule,
     DACModule,
     RouterModule.forRoot([

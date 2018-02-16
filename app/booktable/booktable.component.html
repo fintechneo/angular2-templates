@@ -1,7 +1,8 @@
 <mat-toolbar style="display: flex; padding-top: 20px;">        
     <mat-input-container style="flex-grow: 1; margin-right: 20px;">
         <input matInput placeholder="search" [(ngModel)]="searchtext" />
-    </mat-input-container>              
+    </mat-input-container>     
+    <button mat-raised-button (click)="exportExcel()">Export to Excel</button>         
 </mat-toolbar>
 <div style="position: absolute; top: 128px; bottom: 5px; left: 8px; right: 8px; overflow-x: auto; -webkit-user-select: none; user-select: none;">
     <canvastablecontainer [canvastableselectlistener]="this" (sortToggled)="sort()"></canvastablecontainer>
