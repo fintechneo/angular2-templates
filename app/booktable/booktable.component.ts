@@ -132,19 +132,20 @@ export class BookTableComponent implements CanvasTableSelectListener,OnInit {
         let column = this.canvastablecontainer.sortColumn;
         let getValue : (rowobj : any) => string = this.canvastable.columns[column].getValue;
             
+        const collator = new Intl.Collator('nb', {ignorePunctuation: true});
         let compareFunction: (a: any, b: any) => number = 
             this.canvastable.columns[column].compareValue ? 
                 this.canvastable.columns[column].compareValue :
-                (a: any,b: any) => 
-                    (a+'').localeCompare(b);
+                (a: string, b: string) => 
+                    collator.compare(a, b);
 
         if (this.canvastablecontainer.sortDescending) {
             this.canvastable.rows.sort((a : any, b : any) => 
-                    compareFunction(getValue(a),getValue(b))
+                    compareFunction(getValue(a), getValue(b))
                 );        
         } else {
             this.canvastable.rows.sort((a : any, b : any) => 
-                    compareFunction(getValue(b),getValue(a))
+                    compareFunction(getValue(b), getValue(a))
                 );        
         }
         this.canvastable.hasChanges = true;
