@@ -32,7 +32,9 @@ import { QlyzeService } from './qlyze/qlyze.service';
 import { ShowChartComponent } from './chart/showchart.component';
 import { SVGLineChartComponent as LineChartComponent } from './chart/linechart.component';
 import { ReactiveFormsDemoComponent } from './reactiveforms/reactiveformsdemo.component';
- 
+import { BookTableModule } from './booktable/booktable.module';
+import { BookTableComponent } from './booktable/booktable.component';
+
 @NgModule({
   imports:      [ BrowserModule,HttpModule,JsonpModule,FormsModule,
     MatSidenavModule,
@@ -42,6 +44,7 @@ import { ReactiveFormsDemoComponent } from './reactiveforms/reactiveformsdemo.co
     CanvasTableModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    BookTableModule,
     MatExpansionModule,
     DACModule,
     RouterModule.forRoot([
@@ -70,6 +73,10 @@ import { ReactiveFormsDemoComponent } from './reactiveforms/reactiveformsdemo.co
         component: DACAdminComponent
       },
       {
+        path: "booktable",
+        component: BookTableComponent
+      },
+      {
         path: "qlyzetable",
         component: QlyzeTableComponent
       },
@@ -79,11 +86,12 @@ import { ReactiveFormsDemoComponent } from './reactiveforms/reactiveformsdemo.co
       },
       {
         path: "index_dev.html",
-        component: AccountOverviewComponent
+        component: BookTableComponent
       },
       {
-        path: "",
-        component: AccountOverviewComponent
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'chart'
       }
     ])
   ],
