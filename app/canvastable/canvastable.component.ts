@@ -471,6 +471,35 @@ export class AnimationFrameThrottler {
       this.hasChanges = true;
     }
   
+    public autoAdjustColumnWidths(minwidth: number, maxwidth: number) {
+      
+      this.columns.forEach(c =>
+        c.width = Math.round(this.ctx.measureText(c.name).width + 20)
+      );
+      
+      for(let rowindex = this.topindex; rowindex < 
+          this.topindex + this.canv.height / this.rowheight && 
+          rowindex < this.rows.length;
+          rowindex++)
+          {
+            const row = this.rows[rowindex];
+            this.columns.forEach(c => {
+              const valueWidth = Math.round(
+                this.ctx.measureText(
+                  c.getFormattedValue ?
+                    c.getFormattedValue(c.getValue(row)):
+                    c.getValue(row)                
+                ).width + 20
+              );
+              
+              if(valueWidth > c.width) {
+                c.width = valueWidth;
+              }
+            });
+        }
+        this.hasChanges = true;
+    }
+
     public scrollTop() {
       this.topindex = 0;
       this.hasChanges = true;

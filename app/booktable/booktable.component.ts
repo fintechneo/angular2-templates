@@ -95,6 +95,7 @@ export class BookTableComponent implements CanvasTableSelectListener,OnInit {
             ).subscribe((res: BookData[]) => {
                 this.rowdata = res;
                 this.updateCanvasTableData();
+                this.canvastable.autoAdjustColumnWidths();
             });
     }
     
@@ -162,6 +163,6 @@ export class BookTableComponent implements CanvasTableSelectListener,OnInit {
     }                    
 
     exportExcel() {
-        this.xlsxservice.exportCanvasTableToExcel(this.canvastable, 'books', 'books');
+        this.xlsxservice.exportCanvasTableToExcel(this.canvastable, 'books');
     }
 }
