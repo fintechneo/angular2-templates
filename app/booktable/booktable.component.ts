@@ -56,6 +56,7 @@ export class BookTableComponent implements CanvasTableSelectListener,OnInit {
     ngOnInit() {
         this.canvastable = this.canvastablecontainer.canvastable;
         this.canvastable.autoRowWrapModeWidth = 0; // No row wrapping
+        
         this.canvastable.columns = [
             {
                 name: 'author',
@@ -90,7 +91,12 @@ export class BookTableComponent implements CanvasTableSelectListener,OnInit {
             .pipe(
                 map(
                     (res: any[]) =>
-                        res.map(r => Object.assign({}, r, {price: parseFloat(r.price)}))
+                        res.map(r => ({
+                            author: r.author.trim(),
+                            title: r.title.trim(),
+                            category: r.category.replace('--','').trim(),
+                            price: parseFloat(r.price)
+                        }))
                 )
             ).subscribe((res: BookData[]) => {
                 this.rowdata = res;
@@ -136,16 +142,19 @@ export class BookTableComponent implements CanvasTableSelectListener,OnInit {
         let compareFunction: (a: any, b: any) => number = 
             this.canvastable.columns[column].compareValue ? 
                 this.canvastable.columns[column].compareValue :
-                (a: string, b: string) => 
+                (a: string, b: string) =>
+                    a.length === 0 && b.length === 0 ? 0 :
+                    a.length === 0 ? 1 :
+                    b.length === 0 ? -1 :
                     collator.compare(a, b);
 
         if (this.canvastablecontainer.sortDescending) {
             this.canvastable.rows.sort((a : any, b : any) => 
-                    compareFunction(getValue(a), getValue(b))
+                    compareFunction(getValue(b), getValue(a))
                 );        
         } else {
             this.canvastable.rows.sort((a : any, b : any) => 
-                    compareFunction(getValue(b), getValue(a))
+                    compareFunction(getValue(a), getValue(b))
                 );        
         }
         this.canvastable.hasChanges = true;
