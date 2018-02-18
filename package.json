@@ -34,7 +34,7 @@
     "express": "",
     "hammerjs": "",
     "jspm": "",
-    "ngmakelib": "git+https://github.com/fintechneo/ngmakelib.git",
+    "ngmakelib": "",
     "reflect-metadata": "",
     "rollup": "",
     "rollup-plugin-alias": "",

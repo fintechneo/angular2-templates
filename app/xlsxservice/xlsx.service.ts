@@ -5,8 +5,9 @@
 import { Injectable,NgZone } from '@angular/core';
 import { AsyncSubject } from 'rxjs/AsyncSubject';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
+
 import { CanvasTableComponent, CanvasTableColumn } from '../canvastable/canvastable.component';
+import { map } from 'rxjs/operators';
 
 declare var XLSX : any;
 
@@ -15,6 +16,8 @@ export class XLSXService {
     scriptLoadedSubject : AsyncSubject<any>;
     xlsx : any;
     
+    scriptLocation = "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.12.1/xlsx.core.min.js";
+
     constructor(private ngZone : NgZone) {
         
     }
@@ -26,7 +29,7 @@ export class XLSXService {
         this.scriptLoadedSubject = new AsyncSubject();
         this.ngZone.runOutsideAngular(() => {
             let scriptelm = document.createElement("script");
-            scriptelm.src = "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.12.1/xlsx.core.min.js";
+            scriptelm.src = this.scriptLocation;
             scriptelm.onload = () => {
                 this.ngZone.run(() => {
                     console.log("Excel script loaded");
@@ -56,7 +59,7 @@ export class XLSXService {
         for(var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
         var bstr = arr.join("");
 
-        return this.getXLSX().map((xlsx) => xlsx.read(bstr,{type: "binary"}));
+        return this.getXLSX().pipe(map((xlsx) => xlsx.read(bstr,{type: "binary"})));
     }
 
     writeAndDownload(filename : string,wb : any) {

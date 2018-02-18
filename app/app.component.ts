@@ -30,6 +30,10 @@ import { MatSidenav} from '@angular/material';
                 <mat-icon mat-list-icon>list</mat-icon>
                 <span mat-line>Qlyze table</span>
             </a>     
+            <a mat-list-item routerLink="booktable" (click)="sidemenuClose()">
+                <mat-icon mat-list-icon>list</mat-icon>
+                <span mat-line>Books</span>
+            </a>   
             <a mat-list-item routerLink="piechart" (click)="sidemenuClose()">
                 <mat-icon mat-list-icon>pie_chart</mat-icon>
                 <span mat-line>Piechart</span>
