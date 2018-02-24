@@ -23,16 +23,26 @@
           user-select: none; 
           -webkit-user-select: none;"
           (scroll)="horizScroll($event)"
-          >        
+          >   
+          <div style="position: absolute; top: 0px;" *ngIf="!canvastable.rowWrapMode && showColumnSections">
+            <div *ngFor="let colsection of canvastable.columnSections"
+              [style.width.px]="colsection.width"
+              [style.left.px]="colsection.leftPos"
+              [style.backgroundColor]="colsection.backgroundColor"
+              style="position: absolute; text-align: center;"
+            >
+              {{colsection.columnSectionName}}
+            </div>
+          </div>     
         <div [hidden]="canvastable.rowWrapMode" *ngFor="let col of canvastable.columns; let colIndex = index"          
             (touchstart)="colresizestart($event.targetTouches[0].clientX,colIndex)"
             (mousedown)="colresizestart($event.clientX,colIndex)"            
             (touchmove)="$event.preventDefault();colresize($event.targetTouches[0].clientX)"
             (touchend)="colresizeend()"            
             (click)="toggleSort(col.sortColumn)"
+            [style.top.px]="showColumnSections ? 20 : 0"
             style="
-              position: absolute;
-              top: 0px;
+              position: absolute;              
               user-select: none;
               -webkit-user-select: none;
               color: #01579B;          
@@ -52,8 +62,9 @@
                 {{sortDescending ? 'arrow_upward' : 'arrow_downward'}}
             </mat-icon>
             {{col.name}}          
-        </div>
+        </div>        
         <div [style.display]="canvastable.rowWrapMode ? 'flex':'none'">        
+          
           <div *ngFor="let col of canvastable.columns; let colIndex = index"         
               (click)="toggleSort(col.sortColumn)"
               (touchstart)="$event.preventDefault();toggleSort(col.sortColumn)" style="   
@@ -71,11 +82,13 @@
           </div>        
         </div>
         
-        <div #tablebodycontainer style="position: absolute; 
-          top: 25px; 
-          bottom: 25px; 
-          width: 100%;" 
-            [style.left]="canvastable.horizScroll+'px'">          
+        <div #tablebodycontainer 
+          
+          style="position: absolute;             
+            bottom: 25px; 
+            width: 100%;" 
+            [style.top.px]="canvastable.rowWrapMode || !showColumnSections ? 25 : 50"
+            [style.left.px]="canvastable.horizScroll">          
           <canvastable [selectListener]="canvastableselectlistener"
             (touchscroll)="tablecontainer.scrollLeft=$event;tablebodycontainer.style.left=$event+'px'">
           </canvastable>
@@ -88,9 +101,9 @@
             (click)="toggleSort(col.sortColumn)"
             class="footerColumn"
                   
-            [style.width]="col.width+'px'"
+            [style.width.px]="col.width"
             [style.backgroundColor]="col.backgroundColor ? col.backgroundColor : inherit"
-            [style.left]="(sumWidthsBefore(colIndex))+'px'"
+            [style.left.px]="sumWidthsBefore(colIndex)"
             
             >            
             <span style="padding-right: 10px">{{col.footerText}}</span>

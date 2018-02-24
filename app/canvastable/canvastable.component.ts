@@ -509,6 +509,7 @@ export class AnimationFrameThrottler {
               }
             });
         }
+        this.recalculateColumnSections();
         this.hasChanges = true;
     }
 
@@ -543,19 +544,20 @@ export class AnimationFrameThrottler {
       let leftX = 0;
       this.columnSections = this.columns.reduce((accumulated,current) => {
               let ret;
+              
               if(accumulated.length === 0 || 
                   accumulated[accumulated.length - 1].columnSectionName !== current.columnSectionName) {
                   
                   ret = accumulated.concat([
                       new CanvasTableColumnSection(current.columnSectionName, 
-                          current.width,
+                        current.width,
                           leftX,
                           current.backgroundColor)]);
               } else if(accumulated.length>0 && accumulated[accumulated.length - 1].columnSectionName === current.columnSectionName) {
-                  accumulated[accumulated.length-1].width+=current.width;
+                  accumulated[accumulated.length-1].width += current.width;
                   ret = accumulated;
               }
-              leftX+=current.width;
+              leftX += current.width;
               return ret;
           },[]);
       this.hasChanges = true;
@@ -912,7 +914,8 @@ export class AnimationFrameThrottler {
     columnResized : boolean;
     sortColumn : number = 0;
     sortDescending : boolean = false;
-  
+    showColumnSections: boolean = false;
+
     savedColumnWidths : number[] = [];
     @ViewChild(CanvasTableComponent) canvastable : CanvasTableComponent;
     @Input() configname : string = "default";
@@ -966,6 +969,7 @@ export class AnimationFrameThrottler {
                 this.canvastable.hasChanges = true;                       
                 this.columnResized = true;            
                 this.colResizePreviousX = clientX; 
+                this.canvastable.recalculateColumnSections();
                 this.saveColumnWidths();
               }
             });
