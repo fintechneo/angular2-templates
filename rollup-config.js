@@ -1,4 +1,4 @@
-import rollup      from 'rollup'
+
 import nodeResolve from 'rollup-plugin-node-resolve'
 import alias    from 'rollup-plugin-alias';
 import uglify      from 'rollup-plugin-uglify'
@@ -18,8 +18,6 @@ export default {
     file: 'aot-build.min.js', // output a single application bundle
     format: 'iife'
   },
-  
-  sourceMap: false,
   
   onwarn: function(warning) {
     // Skip certain warnings
