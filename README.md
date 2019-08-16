@@ -1,4 +1,6 @@
-#Angular 2 quick start templates
+**NOTE:** This was created long before we had the [Angular CLI](https://cli.angular.io/) which is much more recommended to use rather than the methods described here for setting up a development environment and production bundles. While the components and examples in this repository are still valid, you should rather use the [upgraded project](https://github.com/fintechneo/angular-templates).
+
+# Angular 2 quick start templates
 
 Here's a simple example [Angular 2](https://angular.io) application with [angular2-materials](https://material.angular.io/).
 We've chosen to use [JSPM](http://jspm.io/) for development setup since transpiling in the browser is convenient when developing,
